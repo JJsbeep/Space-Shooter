@@ -6,8 +6,52 @@ using System.Threading.Tasks;
 
 namespace zap_program2024.Entities
 {
-    public class AbstractEntity
+    public abstract class AbstractEntity
     {
+        protected (int, int) size;
         public virtual int Speed { get; set; } = 7;
+        public virtual int Health { get; set; } = 1;
+        public virtual int XPos { get; set; }
+        public virtual int YPos { get; set; }
+        public virtual bool OnScreen { get; set; }
+        // add spawntime
+
+        public PictureBox icon = new();
+        public AbstractEntity()
+        {
+            XPos = 0;
+            YPos = 0;
+            OnScreen = false;
+        }
+
+        public AbstractEntity(int xPos, int yPos)
+        {
+            this.XPos = xPos;
+            this.YPos = yPos;
+        }
+
+        public void SetCoordinates(int x, int y)
+        {
+            icon.Location = new Point(x, y);
+        }
+
+        public  bool GotHit(PictureBox _projectile)
+        {
+            return _projectile.Bounds.IntersectsWith(icon.Bounds);
+        }
+
+        public void DeleteObject(Form screen)
+        {
+            screen.Controls.Remove(icon);
+        }
+
+        public void SpawnEntity(Form screen)
+        {
+            screen.Controls.Add(icon);
+        }
+
+        public abstract void Shoot(PictureBox _projectile);
+        public abstract void InicializePicBox();
+        public abstract void Move();
     }
 }
