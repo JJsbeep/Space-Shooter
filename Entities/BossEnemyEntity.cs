@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace zap_program2024.Entities
 {
-    internal class BossEnemyEntity : AbstractEntity
+    public class BossEnemyEntity : AbstractEntity
     {
         public int _speed;
         public int _health;
         public int _xPos;
         public int _yPos;
+        public int _spawnPeriod;
         public bool _onScreen;
         public BossEnemyEntity()
         {
@@ -41,6 +42,12 @@ namespace zap_program2024.Entities
         public override int YPos
         {
             get => _yPos;
+            set => _yPos = value;
+        }
+        public override int SpawnPeriod
+        {
+            get => _spawnPeriod;
+            set => _spawnPeriod = value;
         }
         public override bool OnScreen
         {
@@ -51,7 +58,7 @@ namespace zap_program2024.Entities
         {
             throw new NotImplementedException();
         }
-        public override void InicializePicBox()
+        public override void InitializePicBox()
         {
             icon.Image = new Bitmap(@"images\BasicEnemyShip.png");
             icon.Location = new Point(XPos, YPos);

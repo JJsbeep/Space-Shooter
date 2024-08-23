@@ -1,6 +1,6 @@
 ﻿namespace zap_program2024
 {
-    partial class SpaceshipShooter
+    public partial class GameWindow
     {
         /// <summary>
         ///  Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SpaceshipShooter));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameWindow));
             HeroShip = new PictureBox();
             BasicEnemy = new PictureBox();
             MidEnemy = new PictureBox();
@@ -135,16 +135,17 @@
             EnemyProjectile.Image = (Image)resources.GetObject("EnemyProjectile.Image");
             EnemyProjectile.Location = new Point(632, 236);
             EnemyProjectile.Name = "EnemyProjectile";
-            EnemyProjectile.Size = new Size(10, 20);
+            EnemyProjectile.Size = new Size(19, 16);
             EnemyProjectile.SizeMode = PictureBoxSizeMode.StretchImage;
             EnemyProjectile.TabIndex = 7;
             EnemyProjectile.TabStop = false;
             // 
-            // SpaceshipShooter
+            // GameWindow
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(0, 0, 64);
+            BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             ClientSize = new Size(1282, 753);
             Controls.Add(EnemyProjectile);
             Controls.Add(pictureBox1);
@@ -154,7 +155,7 @@
             Controls.Add(BasicEnemy);
             Controls.Add(HeroShip);
             Controls.Add(HardEnemy);
-            Name = "SpaceshipShooter";
+            Name = "GameWindow";
             Text = "Form1";
             Load += spaceship_shooter_Load;
             KeyDown += KeyIsDown;

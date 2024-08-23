@@ -14,6 +14,10 @@ namespace zap_program2024.Entities
         private bool movingLeft;
         private bool autoMode;
 
+        //variables to keep track of scores
+        public int score;
+        public int scoreTime;
+
         public int _speed;
         public int _health;
         public int _xPos;
@@ -57,7 +61,7 @@ namespace zap_program2024.Entities
         {
             throw new NotImplementedException();
         }
-        public override void InicializePicBox()
+        public override void InitializePicBox()
         {
             icon.Image = new Bitmap(@"images\HeroShip.png");
             icon.Location = new Point( XPos, YPos );

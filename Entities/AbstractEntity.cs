@@ -11,6 +11,7 @@ namespace zap_program2024.Entities
         protected (int, int) size;
         public virtual int Speed { get; set; } = 7;
         public virtual int Health { get; set; } = 1;
+        public virtual int SpawnPeriod { get; set; }
         public virtual int XPos { get; set; }
         public virtual int YPos { get; set; }
         public virtual bool OnScreen { get; set; }
@@ -50,8 +51,8 @@ namespace zap_program2024.Entities
             screen.Controls.Add(icon);
         }
 
-        public abstract void Shoot(PictureBox _projectile);
-        public abstract void InicializePicBox();
+        public abstract void Shoot(PictureBox projectile);
+        public abstract void InitializePicBox();
         public abstract void Move();
     }
 }

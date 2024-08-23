@@ -1,23 +1,22 @@
+using System.Runtime.CompilerServices;
+using System.Windows.Forms;
 using zap_program2024.Entities;
+
 namespace zap_program2024
 {
-    public partial class SpaceshipShooter : Form
+    public partial class GameWindow : Form
     {
-        const int maxSizeX = 1179;
-        const int maxSIzeY = 800;
-        const int minSizeX = 10;
+        /*public HeroEntity hero = new HeroEntity();
+        
+        public List<BasicEnemyEntity> basicEnemyWave = new List<BasicEnemyEntity>();
+        public List<MidEnemyEntity> midEnemyWave = new List<MidEnemyEntity>();
+        public List<HardEnemyEntity> hardEnemyWave = new List<HardEnemyEntity>();
+        public List<BossEnemyEntity> bossEnemyEntities = new List<BossEnemyEntity>();*/
+        
 
-        bool moveR;
-        bool moveL;
-        bool isShooting;
-        bool isGameOver;
 
-        int score;
-        int bulletSpeed;
-        int heroSpeed = 12;
-        int enemySpeed = 8;
 
-        public SpaceshipShooter()
+        public GameWindow()
         {
             InitializeComponent();
             ResetGame();
@@ -27,52 +26,22 @@ namespace zap_program2024
 
         private void MainEvent(object sender, EventArgs e)
         {
-            ScoreBar.Text = score.ToString();
-            MoveEnemies();
-
-            if (moveL == true && HeroShip.Left > minSizeX)
-            {
-                HeroShip.Left -= heroSpeed;
-            }
-            if (moveR == true && HeroShip.Left < maxSizeX)
-            {
-                HeroShip.Left += heroSpeed;
-            }
-
-
+            
         }
 
         private void KeyIsDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Left)
-            {
-                moveL = true;
-            }
-            if (e.KeyCode == Keys.Right)
-            {
-                moveR = true;
-            }
+           
         }
 
         private void KeyIsUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Left)
-            {
-                moveL = false;
-            }
-            if (e.KeyCode == Keys.Right)
-            {
-                moveR = false;
-            }
-
+           
         }
 
         private void MoveEnemies()
         {
-            BasicEnemy.Top += enemySpeed;
-            MidEnemy.Top += enemySpeed;
-            HardEnemy.Top += enemySpeed;
-            BossEnemy.Top += enemySpeed;
+            
         }
 
         private void ResetGame()
