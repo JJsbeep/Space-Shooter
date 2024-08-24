@@ -6,19 +6,36 @@ namespace zap_program2024
 {
     public partial class GameWindow : Form
     {
-        /*public HeroEntity hero = new HeroEntity();
-        
-        public List<BasicEnemyEntity> basicEnemyWave = new List<BasicEnemyEntity>();
-        public List<MidEnemyEntity> midEnemyWave = new List<MidEnemyEntity>();
-        public List<HardEnemyEntity> hardEnemyWave = new List<HardEnemyEntity>();
-        public List<BossEnemyEntity> bossEnemyEntities = new List<BossEnemyEntity>();*/
-        
+        public HeroEntity hero = new HeroEntity();
+
+        const int basicEnemiesAmount = 44;
+        const int midEnemiesAmount = 13;
+        const int hardEnemiesAmount = 6;
+        const int bossEnemiesAmount = 2;
+
+        public List<BasicEnemyEntity> basicEnemyWave = new List<BasicEnemyEntity>(basicEnemiesAmount);
+        public List<MidEnemyEntity> midEnemyWave = new List<MidEnemyEntity>(midEnemiesAmount);
+        public List<HardEnemyEntity> hardEnemyWave = new List<HardEnemyEntity>(hardEnemiesAmount);
+        public List<BossEnemyEntity> bossEnemyEntities = new List<BossEnemyEntity>(bossEnemiesAmount);
 
 
+        public void LoadWindow(object sender, EventArgs e)
+        {
+            const int firstLineBasicEnemies = 19;
+            const int secondLineBasicEnemies = 29;
+            const int thirdLineBasicEnemies = 36;
+            const int secondLineMidEnemies = 7;
+            const int thirdLineMidEnemies = 3;
+            const int thirdLineHardEnemies = 4;
+        }
+        public void InitializeEnemies()
+        {
 
+        }
         public GameWindow()
         {
             InitializeComponent();
+            this.DoubleBuffered = true;
             ResetGame();
         }
 
@@ -26,22 +43,22 @@ namespace zap_program2024
 
         private void MainEvent(object sender, EventArgs e)
         {
-            
+
         }
 
         private void KeyIsDown(object sender, KeyEventArgs e)
         {
-           
+
         }
 
         private void KeyIsUp(object sender, KeyEventArgs e)
         {
-           
+
         }
 
         private void MoveEnemies()
         {
-            
+
         }
 
         private void ResetGame()
@@ -75,6 +92,11 @@ namespace zap_program2024
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ScoreBar_Click(object sender, EventArgs e)
         {
 
         }

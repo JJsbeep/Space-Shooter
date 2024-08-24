@@ -14,7 +14,7 @@ namespace zap_program2024.Entities
         private bool movingLeft;
         private bool autoMode;
 
-        //variables to keep track of scores
+        //variables to keep track of score
         public int score;
         public int scoreTime;
 
@@ -63,10 +63,12 @@ namespace zap_program2024.Entities
         }
         public override void InitializePicBox()
         {
-            icon.Image = new Bitmap(@"images\HeroShip.png");
-            icon.Location = new Point( XPos, YPos );
+            icon.Name = "HeroPicbox";
+            icon.Image = Image.FromStream(new MemoryStream(Images.HeroShip));
             icon.Size = new Size(size.Item1, size.Item2);
+            icon.Location = new Point(XPos, YPos);
             icon.SizeMode = PictureBoxSizeMode.StretchImage;
+            icon.Visible = true;
         }
         public override void Move()
         {

@@ -36,7 +36,7 @@
             HardEnemy = new PictureBox();
             BossEnemy = new PictureBox();
             ScoreBar = new Label();
-            pictureBox1 = new PictureBox();
+            HeroProjectile = new PictureBox();
             GameTimer = new System.Windows.Forms.Timer(components);
             EnemyProjectile = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)HeroShip).BeginInit();
@@ -44,14 +44,14 @@
             ((System.ComponentModel.ISupportInitialize)MidEnemy).BeginInit();
             ((System.ComponentModel.ISupportInitialize)HardEnemy).BeginInit();
             ((System.ComponentModel.ISupportInitialize)BossEnemy).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)HeroProjectile).BeginInit();
             ((System.ComponentModel.ISupportInitialize)EnemyProjectile).BeginInit();
             SuspendLayout();
             // 
             // HeroShip
             // 
             HeroShip.Image = (Image)resources.GetObject("HeroShip.Image");
-            HeroShip.Location = new Point(593, 638);
+            HeroShip.Location = new Point(590, 625);
             HeroShip.Name = "HeroShip";
             HeroShip.Size = new Size(115, 130);
             HeroShip.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -62,7 +62,7 @@
             // BasicEnemy
             // 
             BasicEnemy.Image = (Image)resources.GetObject("BasicEnemy.Image");
-            BasicEnemy.Location = new Point(357, 61);
+            BasicEnemy.Location = new Point(143, 292);
             BasicEnemy.Name = "BasicEnemy";
             BasicEnemy.Size = new Size(59, 55);
             BasicEnemy.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -73,7 +73,7 @@
             // MidEnemy
             // 
             MidEnemy.Image = (Image)resources.GetObject("MidEnemy.Image");
-            MidEnemy.Location = new Point(509, 61);
+            MidEnemy.Location = new Point(142, 214);
             MidEnemy.Name = "MidEnemy";
             MidEnemy.Size = new Size(77, 72);
             MidEnemy.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -83,7 +83,7 @@
             // HardEnemy
             // 
             HardEnemy.Image = (Image)resources.GetObject("HardEnemy.Image");
-            HardEnemy.Location = new Point(663, 49);
+            HardEnemy.Location = new Point(142, 116);
             HardEnemy.Name = "HardEnemy";
             HardEnemy.Size = new Size(109, 92);
             HardEnemy.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -93,7 +93,7 @@
             // BossEnemy
             // 
             BossEnemy.Image = (Image)resources.GetObject("BossEnemy.Image");
-            BossEnemy.Location = new Point(851, 60);
+            BossEnemy.Location = new Point(143, 4);
             BossEnemy.Name = "BossEnemy";
             BossEnemy.Size = new Size(112, 106);
             BossEnemy.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -111,18 +111,19 @@
             ScoreBar.Size = new Size(87, 21);
             ScoreBar.TabIndex = 5;
             ScoreBar.Text = "SCORE: 0\r\n";
+            ScoreBar.Click += ScoreBar_Click;
             // 
-            // pictureBox1
+            // HeroProjectile
             // 
-            pictureBox1.BackgroundImageLayout = ImageLayout.None;
-            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(641, 611);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(10, 10);
-            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox1.TabIndex = 6;
-            pictureBox1.TabStop = false;
-            pictureBox1.Click += pictureBox1_Click;
+            HeroProjectile.BackgroundImageLayout = ImageLayout.None;
+            HeroProjectile.Image = (Image)resources.GetObject("HeroProjectile.Image");
+            HeroProjectile.Location = new Point(641, 609);
+            HeroProjectile.Name = "HeroProjectile";
+            HeroProjectile.Size = new Size(10, 10);
+            HeroProjectile.SizeMode = PictureBoxSizeMode.StretchImage;
+            HeroProjectile.TabIndex = 6;
+            HeroProjectile.TabStop = false;
+            HeroProjectile.Click += pictureBox1_Click;
             // 
             // GameTimer
             // 
@@ -148,7 +149,7 @@
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             ClientSize = new Size(1282, 753);
             Controls.Add(EnemyProjectile);
-            Controls.Add(pictureBox1);
+            Controls.Add(HeroProjectile);
             Controls.Add(ScoreBar);
             Controls.Add(BossEnemy);
             Controls.Add(MidEnemy);
@@ -165,7 +166,7 @@
             ((System.ComponentModel.ISupportInitialize)MidEnemy).EndInit();
             ((System.ComponentModel.ISupportInitialize)HardEnemy).EndInit();
             ((System.ComponentModel.ISupportInitialize)BossEnemy).EndInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)HeroProjectile).EndInit();
             ((System.ComponentModel.ISupportInitialize)EnemyProjectile).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -177,7 +178,7 @@
         private PictureBox HardEnemy;
         private PictureBox BossEnemy;
         private Label ScoreBar;
-        private PictureBox pictureBox1;
+        private PictureBox HeroProjectile;
         private System.Windows.Forms.Timer GameTimer;
         public PictureBox HeroShip;
         private PictureBox EnemyProjectile;

@@ -17,7 +17,7 @@ namespace zap_program2024.Entities
         public virtual bool OnScreen { get; set; }
         // add spawntime
 
-        public PictureBox icon = new();
+        public PictureBox icon = new PictureBox();
         public AbstractEntity()
         {
             XPos = 0;

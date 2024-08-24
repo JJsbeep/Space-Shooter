@@ -61,10 +61,12 @@ namespace zap_program2024.Entities
         }
         public override void InitializePicBox()
         {
-            icon.Image = new Bitmap(@"images\MidEnemyShip.png");
-            icon.Location = new Point(XPos, YPos);
+            icon.Name = "MidEnemyPicbox";
+            icon.Image = Image.FromStream(new MemoryStream(Images.MidEnemyShip));
             icon.Size = new Size(size.Item1, size.Item2);
+            icon.Location = new Point(XPos, YPos);
             icon.SizeMode = PictureBoxSizeMode.StretchImage;
+            icon.Visible = true;
         }
         public override void Move()
         {

@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -155,7 +155,7 @@
   <data name="HardEnemy.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vwAADr8BOAVTJAAAAzhJREFUeF7tWTuO1EAQ9UFIkMghIl2iCZAIkDgAF9gjLAcACYkEaZOJOcAgLkBE
+        vAAADrwBlbxySQAAAzhJREFUeF7tWTuO1EAQ9UFIkMghIl2iCZAIkDgAF9gjLAcACYkEaZOJOcAgLkBE
         ttdAQkjsAUy/sl9RrmnbOx9Nt0096Wm6q6u76z332N7ZJhAIBAKBQCAQCATOjLbnqTjXOheFFP3ie3tq
         8XaNU9a5ONrNZiNFn2CCzuVaEl0AtGgt/NPPQwXonME6h61RBFooin5780EosaEJmucIaC7nOwOYVxWk
         sN1up8WyeJI54K9HT9r2XdO2f3qmNmI2Jzcfa9s9EotDCyPRzxV/DHPr+L16FoEWgqsydvXR3263Qvbf
@@ -175,7 +175,7 @@
   <data name="BossEnemy.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vwAADr8BOAVTJAAAAdBJREFUWEftVjFOw0AQdJM+D6AEWniFO56CxAv4Byl4hSXewS9oEBKI+vCsb47x
+        vAAADrwBlbxySQAAAdBJREFUWEftVjFOw0AQdJM+D6AEWniFO56CxAv4Byl4hSXewS9oEBKI+vCsb47x
         es9xAokEykij29vd2xk7TpzGI703KYdbgd5d+3M4QXo9O0/pvh/YM+cmkAGjfsTIWWFOJOgH0kNzbQkU
         cnGEz9UqgWLO+tu2NXJvhb6H/dgrZH7RRN42kjBicNd1RorI0CJOIodC7rGcP086ve/ENvIA1sf1uogj
         Rm4o7T7PNhw2Rx7C6g1oTc/UyP5igAdfLq5C8tASLp1TNcC9EjVcKYgHSfsQI8d6zewiAySfZJCHOHyO
@@ -186,7 +186,7 @@
         sQpt8O/ZAAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="pictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="HeroProjectile.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
         vAAADrwBlbxySQAAAIxJREFUKFNjeCuj8v+ju+z/L0Vi/3/M4fv/+zj7//+fGDAwA0jR50SJ/19rRP5/
@@ -194,19 +194,18 @@
         QIq+FIj+/xQlgYEZQA4FuQFkPEgnSPC9iRwGHvwK5f4DABNW/TGqcTaDAAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="GameTimer.TrayLocation" type="System.Drawing.Point, System.Drawing">
+  <metadata name="GameTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
-  </data>
+  </metadata>
   <data name="EnemyProjectile.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAABGdBTUEAALGPC/xhBQAAABVJREFUGFdj
-        AIL/bm5u/xnABAPDfwAtigWh9dMFKAAAAABJRU5ErkJggg==
+        iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAABGdBTUEAALGPC/xhBQAAABlJREFUGFdj
+        mMlg8P8/A8N/IGT4P5PB4D8AQpwHjSYMVzgAAAAASUVORK5CYII=
 </value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="$this.TrayHeight" type="System.Int32, mscorlib">
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>25</value>
-  </data>
+  </metadata>
   <data name="$this.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         R0lGODlh8gHyAfcAAAQCBHyECDRCBAQCiSEjBjRCjLzEDAQDSSwlDQwSBJykCFRNEgYkisTCxGRlZAYj
