@@ -8,6 +8,7 @@ namespace zap_program2024.Entities
 {
     public class HardEnemyEntity : AbstractEntity
     {
+        public int _difficulty;
         public int _speed;
         public int _health;
         public int _xPos;
@@ -16,14 +17,17 @@ namespace zap_program2024.Entities
         public bool _onScreen;
         public HardEnemyEntity()
         {
+            _difficulty = 3;
             _speed = 15;
             _health = 5;
             _xPos = 0;
             _yPos = 0;
             _onScreen = false;
-            size = (109, 92);
         }
-
+        protected override int Difficulty
+        {
+            get => _difficulty;
+        }
         public override int Speed
         {
             get => _speed;
@@ -62,7 +66,7 @@ namespace zap_program2024.Entities
         {
             icon.Name = "HardEnemyPicbox";
             icon.Image = Image.FromStream(new MemoryStream(Images.HardEnemyShip));
-            icon.Size = new Size(size.Item1, size.Item2);
+            icon.Size = new Size(size.X, size.Y);
             icon.Location = new Point(XPos, YPos);
             icon.SizeMode = PictureBoxSizeMode.StretchImage;
             icon.Visible = true;

@@ -64,7 +64,7 @@
             BasicEnemy.Image = (Image)resources.GetObject("BasicEnemy.Image");
             BasicEnemy.Location = new Point(143, 292);
             BasicEnemy.Name = "BasicEnemy";
-            BasicEnemy.Size = new Size(59, 55);
+            BasicEnemy.Size = new Size(77, 72);
             BasicEnemy.SizeMode = PictureBoxSizeMode.StretchImage;
             BasicEnemy.TabIndex = 1;
             BasicEnemy.TabStop = false;
@@ -85,7 +85,7 @@
             HardEnemy.Image = (Image)resources.GetObject("HardEnemy.Image");
             HardEnemy.Location = new Point(142, 116);
             HardEnemy.Name = "HardEnemy";
-            HardEnemy.Size = new Size(109, 92);
+            HardEnemy.Size = new Size(77, 72);
             HardEnemy.SizeMode = PictureBoxSizeMode.StretchImage;
             HardEnemy.TabIndex = 3;
             HardEnemy.TabStop = false;
@@ -93,9 +93,9 @@
             // BossEnemy
             // 
             BossEnemy.Image = (Image)resources.GetObject("BossEnemy.Image");
-            BossEnemy.Location = new Point(143, 4);
+            BossEnemy.Location = new Point(143, 38);
             BossEnemy.Name = "BossEnemy";
-            BossEnemy.Size = new Size(112, 106);
+            BossEnemy.Size = new Size(77, 72);
             BossEnemy.SizeMode = PictureBoxSizeMode.StretchImage;
             BossEnemy.TabIndex = 4;
             BossEnemy.TabStop = false;
@@ -136,7 +136,7 @@
             EnemyProjectile.Image = (Image)resources.GetObject("EnemyProjectile.Image");
             EnemyProjectile.Location = new Point(632, 236);
             EnemyProjectile.Name = "EnemyProjectile";
-            EnemyProjectile.Size = new Size(19, 16);
+            EnemyProjectile.Size = new Size(10, 10);
             EnemyProjectile.SizeMode = PictureBoxSizeMode.StretchImage;
             EnemyProjectile.TabIndex = 7;
             EnemyProjectile.TabStop = false;

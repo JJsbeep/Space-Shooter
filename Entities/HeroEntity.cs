@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,10 +9,14 @@ namespace zap_program2024.Entities
 {
     public class HeroEntity : AbstractEntity
     {
+        private Projectile projectile = new Projectile();
+
         private bool moving;
         private bool movingLeft;
         private bool autoMode;
 
+        public int _firePeriod;
+        
         //variables to keep track of score
         public int score;
         public int scoreTime;
@@ -23,17 +26,22 @@ namespace zap_program2024.Entities
         public int _xPos;
         public int _yPos;
         public bool _onScreen;
-        public HeroEntity() 
+        public HeroEntity()
         {
+            _firePeriod = 500;
             _speed = 23;
             _health = 3;
             _xPos = 593;
             _yPos = 638;
-            size = (115, 130);
+            size.X = 115;
+            size.Y = 130;
             _onScreen = true;
         }
-        
-        public override int Speed 
+        protected override int FirePeriod
+        {
+            get => _firePeriod;
+        }
+        public override int Speed
         {
             get => _speed;
             set => _speed = value;
@@ -57,15 +65,21 @@ namespace zap_program2024.Entities
             get => _onScreen; 
             set => _onScreen = value; 
         }
-        public override void Shoot(PictureBox _projectile)
+        public override void Projectile_Tick(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            projectile.icon.Top -= projectile.speed;
+            projectile.deleteOfScreen();    
         }
+        /*public override void Shoot(Form screen)
+        {
+            InitializeProjectile(screen);
+            projectile.projectileSpread.Tick += Projectile_Tick;
+        }*/
         public override void InitializePicBox()
         {
             icon.Name = "HeroPicbox";
             icon.Image = Image.FromStream(new MemoryStream(Images.HeroShip));
-            icon.Size = new Size(size.Item1, size.Item2);
+            icon.Size = new Size(size.X, size.Y);
             icon.Location = new Point(XPos, YPos);
             icon.SizeMode = PictureBoxSizeMode.StretchImage;
             icon.Visible = true;
@@ -74,7 +88,7 @@ namespace zap_program2024.Entities
         {
             if (OnScreen)
             {
-                if (autoMode)
+                if (!autoMode)
                 { 
                     if (moving && movingLeft)
                     {

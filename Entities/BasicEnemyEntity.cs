@@ -3,28 +3,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
+using System.Windows.Forms;
+using Timer = System.Windows.Forms.Timer;
 
 namespace zap_program2024.Entities
 {
     public class BasicEnemyEntity : AbstractEntity
     {
+        public Random rnd = new Random();
+
+        public int _firePeriod;
+        public int _difficulty;
         public int _speed;
         public int _health;
         public int _xPos;
         public int _yPos;
         public int _spawnPeriod;
         public bool _onScreen;
+        Projectile projectile = new Projectile();
         public BasicEnemyEntity()
         {
+            _firePeriod = 2000;
+            _difficulty = 1;
             _speed = 9;
             _health = 1;
             _xPos = 0;
             _yPos = 0;
             _spawnPeriod = 2;
             _onScreen = false;
-            size = (59, 55);
+            projectile.icon.Image = Image.FromStream(new MemoryStream(Images.enemyProjectile));
         }
-
+        protected override int FirePeriod
+        {
+            get => _firePeriod;
+        }
+        protected override int Difficulty
+        {
+            get => _difficulty;
+        }
         public override int Speed
         {
             get => _speed;
@@ -55,17 +72,13 @@ namespace zap_program2024.Entities
             get => _onScreen;
             set => _onScreen = value;
         }
-        public override void Shoot(PictureBox _projectile)
-        {
-            throw new NotImplementedException();
-        }
         public override void InitializePicBox()
         {
-            Speed = 9;
+            Speed = 3;
             Health = 1;
             icon.Name = "BasicEnemyPicbox";
             icon.Image = Image.FromStream(new MemoryStream(Images.BasicEnemyShip));
-            icon.Size = new Size(size.Item1, size.Item2);
+            icon.Size = new Size(size.X, size.Y);
             icon.Location = new Point(XPos, YPos);
             icon.SizeMode = PictureBoxSizeMode.StretchImage;
             icon.Visible = true;

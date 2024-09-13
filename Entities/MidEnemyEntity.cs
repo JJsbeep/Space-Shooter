@@ -8,7 +8,7 @@ namespace zap_program2024.Entities
 {
     public class MidEnemyEntity : AbstractEntity
     {
-
+        public int _difficulty;
         public int _speed;
         public int _health;
         public int _xPos;
@@ -17,14 +17,17 @@ namespace zap_program2024.Entities
         public bool _onScreen;
         public MidEnemyEntity()
         {
+            _difficulty = 2;
             _speed = 12;
             _health = 3;
             _xPos = 0;
             _yPos = 0;
             _onScreen = false;
-            size = (77, 72);
         }
-
+        protected override int Difficulty
+        {
+            get => _difficulty;
+        }
         public override int Speed
         {
             get => _speed;
@@ -63,7 +66,7 @@ namespace zap_program2024.Entities
         {
             icon.Name = "MidEnemyPicbox";
             icon.Image = Image.FromStream(new MemoryStream(Images.MidEnemyShip));
-            icon.Size = new Size(size.Item1, size.Item2);
+            icon.Size = new Size(size.X, size.Y);
             icon.Location = new Point(XPos, YPos);
             icon.SizeMode = PictureBoxSizeMode.StretchImage;
             icon.Visible = true;
