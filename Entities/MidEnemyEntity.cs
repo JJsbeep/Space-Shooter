@@ -9,6 +9,7 @@ namespace zap_program2024.Entities
     public class MidEnemyEntity : AbstractEntity
     {
         public int _difficulty;
+        public int _firePeriod;
         public int _speed;
         public int _health;
         public int _xPos;
@@ -18,6 +19,7 @@ namespace zap_program2024.Entities
         public MidEnemyEntity()
         {
             _difficulty = 2;
+            _firePeriod = 2000;
             _speed = 12;
             _health = 3;
             _xPos = 0;
@@ -27,6 +29,10 @@ namespace zap_program2024.Entities
         protected override int Difficulty
         {
             get => _difficulty;
+        }
+        protected override int FirePeriod
+        {
+            get => _firePeriod;
         }
         public override int Speed
         {
@@ -58,9 +64,18 @@ namespace zap_program2024.Entities
             get => _onScreen;
             set => _onScreen = value;
         }
-        public override void Shoot(PictureBox _projectile)
+        public override void Projectile_Tick(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            projectile.icon.Left += projectileDirection.X / projectile.speed ;
+            projectile.icon.Top += projectileDirection.Y / projectile.speed;
+            projectile.deleteOfScreen();
+        }
+        public override void Shoot(Form screen)
+        {
+            InitializeProjectile(screen);
+            FindShootTarget(screen);
+            projectile.projectileSpread.Tick += Projectile_Tick;
+
         }
         public override void InitializePicBox()
         {

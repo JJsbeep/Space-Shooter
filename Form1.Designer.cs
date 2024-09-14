@@ -83,7 +83,7 @@
             // HardEnemy
             // 
             HardEnemy.Image = (Image)resources.GetObject("HardEnemy.Image");
-            HardEnemy.Location = new Point(142, 116);
+            HardEnemy.Location = new Point(143, 127);
             HardEnemy.Name = "HardEnemy";
             HardEnemy.Size = new Size(77, 72);
             HardEnemy.SizeMode = PictureBoxSizeMode.StretchImage;

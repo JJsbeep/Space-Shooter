@@ -9,6 +9,7 @@ namespace zap_program2024.Entities
     public class HardEnemyEntity : AbstractEntity
     {
         public int _difficulty;
+        public int _firePeriod;
         public int _speed;
         public int _health;
         public int _xPos;
@@ -27,6 +28,10 @@ namespace zap_program2024.Entities
         protected override int Difficulty
         {
             get => _difficulty;
+        }
+        protected override int FirePeriod
+        {
+            get => _firePeriod;
         }
         public override int Speed
         {
@@ -57,10 +62,6 @@ namespace zap_program2024.Entities
         {
             get => _onScreen;
             set => _onScreen = value;
-        }
-        public override void Shoot(PictureBox _projectile)
-        {
-            throw new NotImplementedException();
         }
         public override void InitializePicBox()
         {

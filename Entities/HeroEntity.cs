@@ -9,7 +9,7 @@ namespace zap_program2024.Entities
 {
     public class HeroEntity : AbstractEntity
     {
-        private Projectile projectile = new Projectile();
+        protected Projectile projectile = new Projectile();
 
         private bool moving;
         private bool movingLeft;
@@ -70,11 +70,11 @@ namespace zap_program2024.Entities
             projectile.icon.Top -= projectile.speed;
             projectile.deleteOfScreen();    
         }
-        /*public override void Shoot(Form screen)
+        public override void Shoot(Form screen)
         {
             InitializeProjectile(screen);
             projectile.projectileSpread.Tick += Projectile_Tick;
-        }*/
+        }
         public override void InitializePicBox()
         {
             icon.Name = "HeroPicbox";

@@ -16,9 +16,10 @@ namespace zap_program2024.Entities
         protected const int windowWidth = 1300;
 
         protected Vector2d size = new (77,72);
+        protected Vector2d targetCoordinates = new Vector2d();
+        protected Vector2d projectileDirection = new Vector2d();
         protected Projectile projectile = new Projectile();
-
-
+        
         protected abstract int FirePeriod {  get; }
         protected virtual int Difficulty { get; set; } = 0;
         public virtual int Speed { get; set; } = 7;
@@ -29,6 +30,7 @@ namespace zap_program2024.Entities
         public virtual bool OnScreen { get; set; }
         // add spawntime
         public PictureBox icon = new PictureBox();
+
         public AbstractEntity()
         {
             XPos = 0;
@@ -61,19 +63,48 @@ namespace zap_program2024.Entities
         {
             screen.Controls.Add(icon);
         }
+        private bool TargetIsHero(PictureBox pictureBox)
+        {
+            if (pictureBox.Tag != null && pictureBox.Tag.ToString() == "Hero")
+            {
+                return true;
+            }
+            return false;
+        }
+        protected void FindShootTarget(Form screen)
+        {
+            foreach (var control in screen.Controls)
+            {
+                if (control is PictureBox pictureBox && TargetIsHero(pictureBox))
+                {
+                    targetCoordinates.X = pictureBox.Location.X;
+                    targetCoordinates.Y = pictureBox.Location.Y;
+                    return;
+                }
+            }
+        }
+        protected void GetDirectionVector()
+        {
+            projectileDirection.X = targetCoordinates.X - projectile.icon.Location.X;
+            projectileDirection.Y = targetCoordinates.Y - projectile.icon.Location.Y;
+        }
         protected virtual void InitializeProjectile(Form screen)
         {
             Vector2d spawnCoordinates = new((icon.Left + icon.Width) / 2, icon.Top);
             projectile.Spawn(screen, spawnCoordinates);
             projectile.projectileSpread.Interval = FirePeriod;
         }
+        public virtual void Projectile_Tick(object sender, EventArgs e)
+        {
+            projectile.icon.Left += projectileDirection.X / projectile.speed;
+            projectile.icon.Top += projectileDirection.Y / projectile.speed;
+            projectile.deleteOfScreen();
+        }
         public virtual void Shoot(Form screen)
         {
             InitializeProjectile(screen);
+            FindShootTarget(screen);
             projectile.projectileSpread.Tick += Projectile_Tick;
-        }
-        public virtual void Projectile_Tick(object sender, EventArgs e)
-        {
         }
         public abstract void InitializePicBox();
         public abstract void Move();

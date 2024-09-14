@@ -16,6 +16,11 @@ namespace zap_program2024.Entities
         public int _yPos;
         public int _spawnPeriod;
         public bool _onScreen;
+
+        public double amplitude = 50; // Amplitude of the sine wave
+        public double frequency = 0.1; // Frequency of the sine wave
+        private double timeElapsed = 0; // Time elapsed since the projectile was spawned
+
         public BossEnemyEntity()
         {
             _firePeriod = 500;
@@ -26,13 +31,13 @@ namespace zap_program2024.Entities
             _yPos = 0;
             _onScreen = false;
         }
-        protected override int FirePeriod
-        {
-            get => _firePeriod;
-        }
         protected override int Difficulty
         {
             get => _difficulty;
+        }
+        protected override int FirePeriod
+        {
+            get => _firePeriod;
         }
         public override int Speed
         {
@@ -66,14 +71,18 @@ namespace zap_program2024.Entities
         }
         public override void Projectile_Tick(object sender, EventArgs e)
         {
-            //Vector2d target = FindShootTarget;
+            timeElapsed += projectile.projectileSpread.Interval / 1000.0;
+            projectile.icon.Left += (int)(projectileDirection.X * timeElapsed); ;
+            projectile.icon.Top += (int)(amplitude * Math.Sin(frequency * timeElapsed));
             projectile.deleteOfScreen();
         }
-        /*public override void Shoot(Form screen)
+        public override void Shoot(Form screen)
         {
             InitializeProjectile(screen);
+            FindShootTarget(screen);
             projectile.projectileSpread.Tick += Projectile_Tick;
-        }*/
+            
+        }
         public override void InitializePicBox()
         {
             icon.Name = "BossEnemyPicbox";
@@ -87,28 +96,5 @@ namespace zap_program2024.Entities
         {
             throw new NotImplementedException();
         }
-        private bool TargetIsHero(PictureBox pictureBox)
-        {
-            if (pictureBox.Tag != null && pictureBox.Tag.ToString() == "Hero")
-            {
-                return true;
-            }
-            return false;
-        }
-        private Vector2d FindShootTarget(Form screen)
-        {
-            Vector2d targetCoordinates = new Vector2d();
-            foreach(var control in screen.Controls)
-            {
-                if (control is PictureBox pictureBox && TargetIsHero(pictureBox))
-                {
-                    targetCoordinates.X = pictureBox.Location.X;
-                    targetCoordinates.Y = pictureBox.Location.Y;
-                    break;
-                }
-            }
-            return targetCoordinates;
-        }
-
     }
 }
