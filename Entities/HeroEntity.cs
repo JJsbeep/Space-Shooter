@@ -4,16 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Timer = System.Windows.Forms.Timer;
 
 namespace zap_program2024.Entities
 {
     public class HeroEntity : AbstractEntity
     {
-        protected Projectile projectile = new Projectile();
 
         private bool moving;
         private bool movingLeft;
-        private bool autoMode;
+        private bool _autoMode;
 
         public int _firePeriod;
         
@@ -36,6 +36,7 @@ namespace zap_program2024.Entities
             size.X = 115;
             size.Y = 130;
             _onScreen = true;
+            _autoMode = false;
         }
         protected override int FirePeriod
         {
@@ -65,9 +66,14 @@ namespace zap_program2024.Entities
             get => _onScreen; 
             set => _onScreen = value; 
         }
+        public bool AutoMode
+        {
+            get => _autoMode;
+            set => _autoMode = value;
+        }
         public override void Projectile_Tick(object sender, EventArgs e)
         {
-            projectile.icon.Top -= projectile.speed;
+            projectile.icon.Top -= projectile.Speed;
             projectile.deleteOfScreen();    
         }
         public override void Shoot(Form screen)
@@ -84,19 +90,19 @@ namespace zap_program2024.Entities
             icon.SizeMode = PictureBoxSizeMode.StretchImage;
             icon.Visible = true;
         }
-        public override void Move()
+        public override void Move(Form screen, Timer timer)
         {
             if (OnScreen)
             {
-                if (!autoMode)
+                if (!AutoMode)
                 { 
                     if (moving && movingLeft)
                     {
-                        icon.Location = new Point(XPos - Speed, YPos);
+                        icon.Left -= Speed;
                     }
                     else if (moving && !movingLeft)
                     {
-                        icon.Location = new Point(XPos + Speed, YPos);
+                        icon.Left += Speed;
                     }
                 }
                 else

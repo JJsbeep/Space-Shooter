@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Timer = System.Windows.Forms.Timer;
+
 
 namespace zap_program2024.Entities
 {
@@ -16,6 +18,10 @@ namespace zap_program2024.Entities
         public int _yPos;
         public int _spawnPeriod;
         public bool _onScreen;
+
+        protected double _amplitude;
+        protected double _frequency;
+        protected double _timeElapsed;
         public HardEnemyEntity()
         {
             _difficulty = 3;
@@ -23,6 +29,9 @@ namespace zap_program2024.Entities
             _health = 5;
             _xPos = 0;
             _yPos = 0;
+            _amplitude = 70;
+            _frequency = 0.3;
+            _timeElapsed = 0;
             _onScreen = false;
         }
         protected override int Difficulty
@@ -32,6 +41,19 @@ namespace zap_program2024.Entities
         protected override int FirePeriod
         {
             get => _firePeriod;
+        }
+        protected override double Amplitude
+        {
+            get => _amplitude;
+        }
+        protected override double Frequency
+        {
+            get => _frequency;
+        }
+        protected override double TimeElapsed
+        {
+            get => _timeElapsed;
+            set => _timeElapsed = value;
         }
         public override int Speed
         {
@@ -73,9 +95,15 @@ namespace zap_program2024.Entities
             icon.Visible = true;
 
         }
-        public override void Move()
+        protected override void GetMovingDirection(Form screen)
         {
-            throw new NotImplementedException();
+            LocateHero(screen);
+            moveDirection.X = heroLocation.X - icon.Location.X;
+            moveDirection.Y = heroLocation.Y - icon.Location.Y;
+        }
+        public override void Move(Form screen, Timer timer)
+        {
+            base.MoveCurvy(screen, timer);
         }
     }
 }

@@ -15,10 +15,12 @@ namespace zap_program2024
         const int windowHeigth = 800;
         const int windowWidth = 1300;
 
-        public int speed = 20;
+        public int Speed { get; set; } = 8;
         public PictureBox icon = new PictureBox();
         public Timer projectileSpread = new Timer();
-
+        public double Amplitude { get; set; } = 50; // Amplitude of the sine wave
+        public double Frequency { get; set; } = 0.1; // Frequency of the sine wave
+        public double TimeElapsed { get; set; } = 0; // Time elapsed since the projectile was spawned
         public bool IsOnScreen(PictureBox icon)
         {
             if (icon.Top < 0 || icon.Top > windowHeigth || icon.Left < 0 || icon.Left > windowWidth)
@@ -35,6 +37,7 @@ namespace zap_program2024
             icon.BringToFront();
 
             screen.Controls.Add(icon);
+            projectileSpread.Interval = 16;
             projectileSpread.Start();
         }
         public void deleteOfScreen()

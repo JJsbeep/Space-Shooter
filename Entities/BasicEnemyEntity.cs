@@ -11,7 +11,6 @@ namespace zap_program2024.Entities
 {
     public class BasicEnemyEntity : AbstractEntity
     {
-        public Random rnd = new Random();
 
         public int _firePeriod;
         public int _difficulty;
@@ -21,7 +20,6 @@ namespace zap_program2024.Entities
         public int _yPos;
         public int _spawnPeriod;
         public bool _onScreen;
-        Projectile projectile = new Projectile();
         public BasicEnemyEntity()
         {
             _firePeriod = 2000;
@@ -83,9 +81,10 @@ namespace zap_program2024.Entities
             icon.SizeMode = PictureBoxSizeMode.StretchImage;
             icon.Visible = true;
         }
-        public override void Move()
+        public override void Move(Form screen, Timer timer)
         {
-           throw new NotImplementedException();
+            base.MoveStraight(screen, timer);
         }
+        //no shooting overriding since it does not shoot
     }
 }

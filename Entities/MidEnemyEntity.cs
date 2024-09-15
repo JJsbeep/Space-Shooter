@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using Timer = System.Windows.Forms.Timer;
+
 
 namespace zap_program2024.Entities
 {
@@ -64,19 +67,6 @@ namespace zap_program2024.Entities
             get => _onScreen;
             set => _onScreen = value;
         }
-        public override void Projectile_Tick(object sender, EventArgs e)
-        {
-            projectile.icon.Left += projectileDirection.X / projectile.speed ;
-            projectile.icon.Top += projectileDirection.Y / projectile.speed;
-            projectile.deleteOfScreen();
-        }
-        public override void Shoot(Form screen)
-        {
-            InitializeProjectile(screen);
-            FindShootTarget(screen);
-            projectile.projectileSpread.Tick += Projectile_Tick;
-
-        }
         public override void InitializePicBox()
         {
             icon.Name = "MidEnemyPicbox";
@@ -86,9 +76,21 @@ namespace zap_program2024.Entities
             icon.SizeMode = PictureBoxSizeMode.StretchImage;
             icon.Visible = true;
         }
-        public override void Move()
+        protected override void GetProjectileDirection()
         {
-            throw new NotImplementedException();
+            shootTargetCoordinates.X = rnd.Next(0, windowWidth);
+            shootTargetCoordinates.Y = windowHeigth;
+            base.GetProjectileDirection();
+        }
+        public override void Shoot(Form screen)
+        {
+            InitializeProjectile(screen);
+            GetProjectileDirection();
+            projectile.projectileSpread.Tick += Projectile_Tick;
+        }
+        public override void Move(Form screen, Timer timer)
+        {
+            base.MoveStraight(screen, timer);
         }
     }
 }

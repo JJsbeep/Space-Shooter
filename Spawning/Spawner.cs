@@ -7,7 +7,7 @@ using zap_program2024.Entities;
 
 namespace zap_program2024
 {
-    public class Spawner : Form
+    public class Spawner
     {
         int enemyLinesAmount = 4;
 
@@ -19,11 +19,10 @@ namespace zap_program2024
 
         Vector2d spawnCoordinates = new(initialXpos, initialYpos);
 
-        public List<BasicEnemyEntity>? basicEnemyWave = new List<BasicEnemyEntity>();
+        public List<BasicEnemyEntity> basicEnemyWave = new List<BasicEnemyEntity>();
         public List<MidEnemyEntity> midEnemyWave = new List<MidEnemyEntity>();
         public List<HardEnemyEntity> hardEnemyWave = new List<HardEnemyEntity>();
         public List<BossEnemyEntity> bossEnemyWave = new List<BossEnemyEntity>();
-
 
         //amount of enemies of each entity on each line
         public List<int[]> NumsOfEnemiesOnLines = new List<int[]>()
@@ -34,8 +33,9 @@ namespace zap_program2024
             new int[] {3, 4, 8, 3},
         };
 
-        public void AddEnemiesToList(int amount, int enemyDifficulty)
+        public void SpawnEnemyGroup(int amount, int enemyDifficulty, Form screen)
         {
+            //detect what kind of enemy is going to be spawned
             switch (enemyDifficulty)
             {
                 case 1:
@@ -75,9 +75,7 @@ namespace zap_program2024
                     for (int i = 0; i < amount; i++)
                     {
                         BossEnemyEntity entity = new BossEnemyEntity();
-                        entity.XPos = spawnCoordinates.X;
-                        entity.YPos = spawnCoordinates.Y;
-                        entity.InitializePicBox();
+                        SpawnEnemy(entity, screen);
                         bossEnemyWave.Add(entity);
                         spawnCoordinates.X += shiftX;
                     }
@@ -91,24 +89,32 @@ namespace zap_program2024
             spawnCoordinates.Y -= shiftY;
             spawnCoordinates.X = initialXpos;
         }
-        public void SpawnInitialEnemyWave(object sender, EventArgs e)
+        public void SpawnInitialEnemyWave(Form screen)
         {
             var enemyDifficutly = 0;
             var enemyCounter = 0;
             foreach (var enemyLine in NumsOfEnemiesOnLines)
             {
                 enemyDifficutly = 1;
-                foreach(var enemyAmount in enemyLine)
+                foreach (var enemyAmount in enemyLine)
                 {
-                    AddEnemiesToList(enemyAmount, enemyDifficutly);
+                    SpawnEnemyGroup(enemyAmount, enemyDifficutly, screen);
                     enemyCounter += enemyAmount;
                     enemyDifficutly++;
-                    if (enemyCounter == enemiesPerLine) 
+                    if (enemyCounter == enemiesPerLine)
                     {
                         SetNewLineCoords();
                     }
                 }
             }
         }
+        private void SpawnEnemy(AbstractEntity enemy, Form screen)
+        {
+            enemy.XPos = spawnCoordinates.X;
+            enemy.YPos = spawnCoordinates.Y;
+            enemy.InitializePicBox();
+            screen.Controls.Add(enemy.icon);
+        }
+
     }
 }

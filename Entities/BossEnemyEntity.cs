@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Timer = System.Windows.Forms.Timer;
 
 namespace zap_program2024.Entities
 {
@@ -17,9 +18,9 @@ namespace zap_program2024.Entities
         public int _spawnPeriod;
         public bool _onScreen;
 
-        public double amplitude = 50; // Amplitude of the sine wave
-        public double frequency = 0.1; // Frequency of the sine wave
-        private double timeElapsed = 0; // Time elapsed since the projectile was spawned
+        protected double _amplitude;
+        protected double _frequency;
+        protected double _timeElapsed;
 
         public BossEnemyEntity()
         {
@@ -29,6 +30,9 @@ namespace zap_program2024.Entities
             _health = 10;
             _xPos = 0;
             _yPos = 0;
+            _amplitude = 80;
+            _frequency = 0.4;
+            _timeElapsed = 0;
             _onScreen = false;
         }
         protected override int Difficulty
@@ -38,6 +42,19 @@ namespace zap_program2024.Entities
         protected override int FirePeriod
         {
             get => _firePeriod;
+        }
+        protected override double Amplitude
+        {
+            get => _amplitude;
+        }
+        protected override double Frequency
+        {
+            get => _frequency;
+        }
+        protected override double TimeElapsed 
+        {
+            get => _timeElapsed;
+            set => _timeElapsed = value;
         }
         public override int Speed
         {
@@ -71,17 +88,10 @@ namespace zap_program2024.Entities
         }
         public override void Projectile_Tick(object sender, EventArgs e)
         {
-            timeElapsed += projectile.projectileSpread.Interval / 1000.0;
-            projectile.icon.Left += (int)(projectileDirection.X * timeElapsed); ;
-            projectile.icon.Top += (int)(amplitude * Math.Sin(frequency * timeElapsed));
+            projectile.TimeElapsed += projectile.projectileSpread.Interval / 1000.0;
+            projectile.icon.Left += (int)(projectileDirection.X * projectile.TimeElapsed); ;
+            projectile.icon.Top += (int)(projectile.Amplitude * Math.Sin(projectile.Frequency * projectile.TimeElapsed));
             projectile.deleteOfScreen();
-        }
-        public override void Shoot(Form screen)
-        {
-            InitializeProjectile(screen);
-            FindShootTarget(screen);
-            projectile.projectileSpread.Tick += Projectile_Tick;
-            
         }
         public override void InitializePicBox()
         {
@@ -92,9 +102,9 @@ namespace zap_program2024.Entities
             icon.SizeMode = PictureBoxSizeMode.StretchImage;
             icon.Visible = true;
         }
-        public override void Move()
+        public override void Move(Form screen, Timer timer)
         {
-            throw new NotImplementedException();
+            base.MoveCurvy(screen, timer);
         }
     }
 }
