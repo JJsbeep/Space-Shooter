@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using zap_program2024.Entities;
+using Timer = System.Windows.Forms.Timer;
 
-namespace zap_program2024
+namespace zap_program2024.Spawning
 {
-    public class Spawner
+    public class EnemyController
     {
         int enemyLinesAmount = 4;
 
         const int initialXpos = 143;
         const int initialYpos = 292;
         const int shiftX = 77;
-        const int shiftY = 72;
-        const int enemiesPerLine = 19;
+        const int shiftY = 30;
+        const int enemiesPerLine = 15;
 
         Vector2d spawnCoordinates = new(initialXpos, initialYpos);
 
@@ -27,12 +29,11 @@ namespace zap_program2024
         //amount of enemies of each entity on each line
         public List<int[]> NumsOfEnemiesOnLines = new List<int[]>()
         {
-            new int[] {19, 0, 0, 0},
-            new int[] {10, 9, 0, 0},
-            new int[] {5, 7, 7, 0},
-            new int[] {3, 4, 8, 3},
+            new int[] {15, 0, 0, 0},
+            new int[] {8, 7, 0, 0},
+            new int[] {4, 6, 5, 0},
+            new int[] {2, 3, 6, 4},
         };
-
         public void SpawnEnemyGroup(int amount, int enemyDifficulty, Form screen)
         {
             //detect what kind of enemy is going to be spawned
@@ -42,9 +43,7 @@ namespace zap_program2024
                     for (int i = 0; i < amount; i++)
                     {
                         BasicEnemyEntity entity = new BasicEnemyEntity();
-                        entity.XPos = spawnCoordinates.X;
-                        entity.YPos = spawnCoordinates.Y;
-                        entity.InitializePicBox();
+                        SpawnEnemy(entity, screen);
                         basicEnemyWave.Add(entity);
                         spawnCoordinates.X += shiftX;
                     }
@@ -53,9 +52,7 @@ namespace zap_program2024
                     for (int i = 0; i < amount; i++)
                     {
                         MidEnemyEntity entity = new MidEnemyEntity();
-                        entity.XPos = spawnCoordinates.X;
-                        entity.YPos = spawnCoordinates.Y;
-                        entity.InitializePicBox();
+                        SpawnEnemy(entity, screen);
                         midEnemyWave.Add(entity);
                         spawnCoordinates.X += shiftX;
                     }
@@ -64,9 +61,7 @@ namespace zap_program2024
                     for (int i = 0; i < amount; i++)
                     {
                         HardEnemyEntity entity = new HardEnemyEntity();
-                        entity.XPos = spawnCoordinates.X;
-                        entity.YPos = spawnCoordinates.Y;
-                        entity.InitializePicBox();
+                        SpawnEnemy(entity, screen);
                         hardEnemyWave.Add(entity);
                         spawnCoordinates.X += shiftX;
                     }
@@ -89,6 +84,13 @@ namespace zap_program2024
             spawnCoordinates.Y -= shiftY;
             spawnCoordinates.X = initialXpos;
         }
+        private void SpawnEnemy(AbstractEntity enemy, Form screen)
+        {
+            enemy.XPos = spawnCoordinates.X;
+            enemy.YPos = spawnCoordinates.Y;
+            enemy.Initialize(screen);
+            screen.Controls.Add(enemy.icon);
+        }
         public void SpawnInitialEnemyWave(Form screen)
         {
             var enemyDifficutly = 0;
@@ -96,25 +98,39 @@ namespace zap_program2024
             foreach (var enemyLine in NumsOfEnemiesOnLines)
             {
                 enemyDifficutly = 1;
+                enemyCounter = 0;
                 foreach (var enemyAmount in enemyLine)
                 {
                     SpawnEnemyGroup(enemyAmount, enemyDifficutly, screen);
                     enemyCounter += enemyAmount;
                     enemyDifficutly++;
-                    if (enemyCounter == enemiesPerLine)
+                    if (enemyCounter >= enemiesPerLine)
                     {
                         SetNewLineCoords();
                     }
                 }
             }
         }
-        private void SpawnEnemy(AbstractEntity enemy, Form screen)
+        public void moveFirstWave(Form screen, Timer timer)
         {
-            enemy.XPos = spawnCoordinates.X;
-            enemy.YPos = spawnCoordinates.Y;
-            enemy.InitializePicBox();
-            screen.Controls.Add(enemy.icon);
+            foreach(var ship in basicEnemyWave)
+            {
+                ship.Move(screen, timer);
+            }
         }
-
+        public void EnemyShoot(Form screen)
+        {
+            foreach (var ship in midEnemyWave)
+            {
+                ship.Shoot(screen);
+            }
+        }
+        /*public void DeleteShotShips(Form screen)
+        {
+            foreach (var ship in basicEnemyWave) 
+            {
+                if (ship.GotHit())
+            }
+        }*/
     }
 }

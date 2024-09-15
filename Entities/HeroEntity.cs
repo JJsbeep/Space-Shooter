@@ -11,9 +11,9 @@ namespace zap_program2024.Entities
     public class HeroEntity : AbstractEntity
     {
 
-        private bool moving;
-        private bool movingLeft;
-        private bool _autoMode;
+        public bool moving;
+        public bool movingLeft;
+        public bool _autoMode;
 
         public int _firePeriod;
         
@@ -84,32 +84,54 @@ namespace zap_program2024.Entities
         public override void InitializePicBox()
         {
             icon.Name = "HeroPicbox";
-            icon.Image = Image.FromStream(new MemoryStream(Images.HeroShip));
+            icon.Tag = "Hero";
+            icon.Image = Image.FromFile(@"..\..\..\images\HeroShip.png");
             icon.Size = new Size(size.X, size.Y);
             icon.Location = new Point(XPos, YPos);
             icon.SizeMode = PictureBoxSizeMode.StretchImage;
             icon.Visible = true;
+            icon.BackColor = Color.Transparent;
         }
         public override void Move(Form screen, Timer timer)
         {
-            if (OnScreen)
+            if (!AutoMode)
             {
-                if (!AutoMode)
-                { 
-                    if (moving && movingLeft)
-                    {
-                        icon.Left -= Speed;
-                    }
-                    else if (moving && !movingLeft)
-                    {
-                        icon.Left += Speed;
-                    }
-                }
-                else
+                if (moving)
                 {
-                    throw new NotImplementedException();
+                    if (movingLeft)
+                    {
+                        if (icon.Left - Speed >= 0)
+                        {
+                            icon.Left -= Speed;
+                        }
+                        else
+                        {
+                            icon.Left = 0; // Ensure it doesn't go off the screen
+                        }
+                    }
+                    else
+                    {
+                        if (icon.Right + Speed <= screen.ClientSize.Width)
+                        {
+                            icon.Left += Speed;
+                        }
+                        else
+                        {
+                            icon.Left = screen.ClientSize.Width - icon.Width; // Ensure it doesn't go off the screen
+                        }
+                    }
                 }
             }
+            else
+            {
+                throw new NotImplementedException();
+            }
+
+        }
+        public override void Initialize(Form screen)
+        {
+            InitializePicBox();
+            screen.Controls.Add(icon);
         }
     }
 }

@@ -101,12 +101,12 @@ namespace zap_program2024 {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static byte[] HeroShip {
+        internal static System.Drawing.Bitmap HeroShip {
             get {
                 object obj = ResourceManager.GetObject("HeroShip", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

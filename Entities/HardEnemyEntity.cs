@@ -88,14 +88,14 @@ namespace zap_program2024.Entities
         public override void InitializePicBox()
         {
             icon.Name = "HardEnemyPicbox";
-            icon.Image = Image.FromStream(new MemoryStream(Images.HardEnemyShip));
+            icon.Image = Image.FromFile(@"..\..\..\images\HardEnemyShip.png"); ;
             icon.Size = new Size(size.X, size.Y);
             icon.Location = new Point(XPos, YPos);
             icon.SizeMode = PictureBoxSizeMode.StretchImage;
             icon.Visible = true;
-
+            icon.BackColor = Color.Transparent;
         }
-        protected override void GetMovingDirection(Form screen)
+        public override void GetMoveDirection(Form screen)
         {
             LocateHero(screen);
             moveDirection.X = heroLocation.X - icon.Location.X;

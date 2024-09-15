@@ -30,7 +30,7 @@ namespace zap_program2024.Entities
             _yPos = 0;
             _spawnPeriod = 2;
             _onScreen = false;
-            projectile.icon.Image = Image.FromStream(new MemoryStream(Images.enemyProjectile));
+            projectile.icon.Image = Image.FromFile(@"..\..\..\images\enemy_projectile.png");
         }
         protected override int FirePeriod
         {
@@ -75,11 +75,12 @@ namespace zap_program2024.Entities
             Speed = 3;
             Health = 1;
             icon.Name = "BasicEnemyPicbox";
-            icon.Image = Image.FromStream(new MemoryStream(Images.BasicEnemyShip));
+            icon.Image = Image.FromFile(@"..\..\..\images\BasicEnemyShip.png"); ;
             icon.Size = new Size(size.X, size.Y);
             icon.Location = new Point(XPos, YPos);
             icon.SizeMode = PictureBoxSizeMode.StretchImage;
             icon.Visible = true;
+            icon.BackColor = Color.Transparent;
         }
         public override void Move(Form screen, Timer timer)
         {

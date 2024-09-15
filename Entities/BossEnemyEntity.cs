@@ -96,11 +96,12 @@ namespace zap_program2024.Entities
         public override void InitializePicBox()
         {
             icon.Name = "BossEnemyPicbox";
-            icon.Image = Image.FromStream(new MemoryStream(Images.BossShip));
+            icon.Image = Image.FromFile(@"..\..\..\images\BossShip.png"); ;
             icon.Size = new Size(size.X, size.Y);
             icon.Location = new Point(XPos, YPos);
             icon.SizeMode = PictureBoxSizeMode.StretchImage;
             icon.Visible = true;
+            icon.BackColor = Color.Transparent;
         }
         public override void Move(Form screen, Timer timer)
         {

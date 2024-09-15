@@ -70,22 +70,21 @@ namespace zap_program2024.Entities
         public override void InitializePicBox()
         {
             icon.Name = "MidEnemyPicbox";
-            icon.Image = Image.FromStream(new MemoryStream(Images.MidEnemyShip));
+            icon.Image = Image.FromFile(@"..\..\..\images\MidEnemyShip.png"); ;
             icon.Size = new Size(size.X, size.Y);
             icon.Location = new Point(XPos, YPos);
             icon.SizeMode = PictureBoxSizeMode.StretchImage;
             icon.Visible = true;
+            icon.BackColor = Color.Transparent;
         }
-        protected override void GetProjectileDirection()
+        public override void GetProjectileDirection()
         {
-            shootTargetCoordinates.X = rnd.Next(0, windowWidth);
-            shootTargetCoordinates.Y = windowHeigth;
+            GetRandomTarget();
             base.GetProjectileDirection();
         }
         public override void Shoot(Form screen)
         {
             InitializeProjectile(screen);
-            GetProjectileDirection();
             projectile.projectileSpread.Tick += Projectile_Tick;
         }
         public override void Move(Form screen, Timer timer)
