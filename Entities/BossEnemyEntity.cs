@@ -17,22 +17,18 @@ namespace zap_program2024.Entities
         public int _yPos;
         public int _spawnPeriod;
         public bool _onScreen;
+        public bool _dead;
 
-        protected double _amplitude;
-        protected double _frequency;
-        protected double _timeElapsed;
 
-        public BossEnemyEntity()
+        public BossEnemyEntity(Form form) : base(form)
         {
-            _firePeriod = 500;
+            _firePeriod = 750;
             _difficulty = 4;
-            _speed = 18;
+            _speed = 8;
             _health = 10;
             _xPos = 0;
             _yPos = 0;
-            _amplitude = 80;
-            _frequency = 0.4;
-            _timeElapsed = 0;
+            _dead = false;
             _onScreen = false;
         }
         protected override int Difficulty
@@ -42,19 +38,6 @@ namespace zap_program2024.Entities
         protected override int FirePeriod
         {
             get => _firePeriod;
-        }
-        protected override double Amplitude
-        {
-            get => _amplitude;
-        }
-        protected override double Frequency
-        {
-            get => _frequency;
-        }
-        protected override double TimeElapsed 
-        {
-            get => _timeElapsed;
-            set => _timeElapsed = value;
         }
         public override int Speed
         {
@@ -86,11 +69,14 @@ namespace zap_program2024.Entities
             get => _onScreen;
             set => _onScreen = value;
         }
+        public override bool Dead
+        {
+            get => _dead;
+            set => _dead = value;
+        }
         public override void Projectile_Tick(object sender, EventArgs e)
         {
-            projectile.TimeElapsed += projectile.projectileSpread.Interval / 1000.0;
-            projectile.icon.Left += (int)(projectileDirection.X * projectile.TimeElapsed); ;
-            projectile.icon.Top += (int)(projectile.Amplitude * Math.Sin(projectile.Frequency * projectile.TimeElapsed));
+            base.MoveCurvy(projectile.icon, shootShifts);
             projectile.deleteOfScreen();
         }
         public override void InitializePicBox()
@@ -103,9 +89,9 @@ namespace zap_program2024.Entities
             icon.Visible = true;
             icon.BackColor = Color.Transparent;
         }
-        public override void Move(Form screen, Timer timer)
+        public override void Move_Tick(object sender, EventArgs e)
         {
-            base.MoveCurvy(screen, timer);
+            base.MoveCurvy(icon, moveShifts);
         }
     }
 }

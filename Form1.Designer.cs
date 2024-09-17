@@ -49,7 +49,7 @@
             // GameTimer
             // 
             GameTimer.Enabled = true;
-            GameTimer.Interval = 60;
+            GameTimer.Interval = 40;
             GameTimer.Tick += MainEvent;
             // 
             // GameWindow

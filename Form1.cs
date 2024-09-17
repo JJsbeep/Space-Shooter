@@ -10,26 +10,26 @@ namespace zap_program2024
         public const int width = 1300;
         public const int heigth = 800;
 
-        public EnemyController enemyController = new EnemyController();
+        public EnemyController enemyController;
 
-        public HeroEntity hero = new HeroEntity();
-
-        public void spaceship_shooter_Load(object sender, EventArgs e)
-        {
-            hero.Initialize(this);
-            enemyController.SpawnInitialEnemyWave(this);
-            this.Controls.Add(hero.icon);
-        }
+        public HeroEntity hero;
         public GameWindow()
         {
-            InitializeComponent();
             this.DoubleBuffered = true;
-            ResetGame();
+            InitializeComponent();
+            hero = new HeroEntity(this);
+            enemyController = new EnemyController(this);
+        }
+        public void spaceship_shooter_Load(object sender, EventArgs e)
+        {
+            hero.Initialize();
+            enemyController.SpawnInitialEnemyWave(this);
+            this.Controls.Add(hero.icon);
+            enemyController.InitializeController();
         }
         private void MainEvent(object sender, EventArgs e)
         {
-            enemyController.moveFirstWave(this, GameTimer);
-            hero.Move(this, GameTimer);
+            hero.Move();
         }
 
         private void KeyIsDown(object sender, KeyEventArgs e)

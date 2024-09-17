@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
 
@@ -18,20 +19,16 @@ namespace zap_program2024.Entities
         public int _yPos;
         public int _spawnPeriod;
         public bool _onScreen;
-
-        protected double _amplitude;
-        protected double _frequency;
-        protected double _timeElapsed;
-        public HardEnemyEntity()
+        public bool _dead;
+        public HardEnemyEntity(Form form) : base(form)
         {
+            _firePeriod = 1500;
             _difficulty = 3;
-            _speed = 15;
+            _speed = 6;
             _health = 5;
             _xPos = 0;
             _yPos = 0;
-            _amplitude = 70;
-            _frequency = 0.3;
-            _timeElapsed = 0;
+            _dead = false;
             _onScreen = false;
         }
         protected override int Difficulty
@@ -41,19 +38,6 @@ namespace zap_program2024.Entities
         protected override int FirePeriod
         {
             get => _firePeriod;
-        }
-        protected override double Amplitude
-        {
-            get => _amplitude;
-        }
-        protected override double Frequency
-        {
-            get => _frequency;
-        }
-        protected override double TimeElapsed
-        {
-            get => _timeElapsed;
-            set => _timeElapsed = value;
         }
         public override int Speed
         {
@@ -85,6 +69,11 @@ namespace zap_program2024.Entities
             get => _onScreen;
             set => _onScreen = value;
         }
+        public override bool Dead
+        {
+            get => _dead;
+            set => _dead = value;
+        }
         public override void InitializePicBox()
         {
             icon.Name = "HardEnemyPicbox";
@@ -95,15 +84,15 @@ namespace zap_program2024.Entities
             icon.Visible = true;
             icon.BackColor = Color.Transparent;
         }
-        public override void GetMoveDirection(Form screen)
+        public override void GetMoveDirection()
         {
-            LocateHero(screen);
+            LocateHero();
             moveDirection.X = heroLocation.X - icon.Location.X;
             moveDirection.Y = heroLocation.Y - icon.Location.Y;
         }
-        public override void Move(Form screen, Timer timer)
+        public override void Move_Tick(object sender, EventArgs e)
         {
-            base.MoveCurvy(screen, timer);
+            base.MoveCurvy(icon, moveShifts);
         }
     }
 }

@@ -19,14 +19,17 @@ namespace zap_program2024.Entities
         public int _yPos;
         public int _spawnPeriod;
         public bool _onScreen;
-        public MidEnemyEntity()
+        public bool _dead;
+
+        public MidEnemyEntity(Form form) : base(form)
         {
             _difficulty = 2;
-            _firePeriod = 2000;
-            _speed = 12;
+            _firePeriod = 1000;
+            _speed = 4;
             _health = 3;
             _xPos = 0;
             _yPos = 0;
+            _dead = false;
             _onScreen = false;
         }
         protected override int Difficulty
@@ -67,6 +70,11 @@ namespace zap_program2024.Entities
             get => _onScreen;
             set => _onScreen = value;
         }
+        public override bool Dead
+        {
+            get => _dead;
+            set => _dead = value;
+        }
         public override void InitializePicBox()
         {
             icon.Name = "MidEnemyPicbox";
@@ -82,14 +90,21 @@ namespace zap_program2024.Entities
             GetRandomTarget();
             base.GetProjectileDirection();
         }
-        public override void Shoot(Form screen)
+        public override void Shoot(object sender, EventArgs e)
         {
-            InitializeProjectile(screen);
+            if (projectile == null || projectile.icon == null)
+            {
+                // Handle the null case, possibly reinitialize or log an error
+                return;
+            }
+            InitializeProjectile();
+            GetRandomTarget();
+            GetProjectileDirection();
             projectile.projectileSpread.Tick += Projectile_Tick;
         }
-        public override void Move(Form screen, Timer timer)
+        public override void Move_Tick(object sender, EventArgs e)
         {
-            base.MoveStraight(screen, timer);
+            base.MoveStraight(icon, moveShifts);
         }
     }
 }

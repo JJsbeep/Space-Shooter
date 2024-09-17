@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,29 +12,58 @@ namespace zap_program2024.Spawning
 {
     public class EnemyController
     {
-        int enemyLinesAmount = 4;
+        private const int enemiesAmount = 12;
+        private const int enemyLinesAmount = 4;
+        private int currShipIndex = 0;
+        int lineCounter = 0;
 
-        const int initialXpos = 143;
-        const int initialYpos = 292;
-        const int shiftX = 77;
-        const int shiftY = 30;
-        const int enemiesPerLine = 15;
+        private const int initialXpos = 500;
+        private const int initialYpos = 292;
+        private const int shiftX = 77;
+        private const int shiftY = 30;
+        private const int enemiesPerLine = 3;
 
-        Vector2d spawnCoordinates = new(initialXpos, initialYpos);
+        private Vector2d spawnCoordinates = new(initialXpos, initialYpos);
 
-        public List<BasicEnemyEntity> basicEnemyWave = new List<BasicEnemyEntity>();
-        public List<MidEnemyEntity> midEnemyWave = new List<MidEnemyEntity>();
-        public List<HardEnemyEntity> hardEnemyWave = new List<HardEnemyEntity>();
-        public List<BossEnemyEntity> bossEnemyWave = new List<BossEnemyEntity>();
+        private List<AbstractEntity> Enemies = new List<AbstractEntity>();
 
+        private int movingPeriod = 1500;
         //amount of enemies of each entity on each line
         public List<int[]> NumsOfEnemiesOnLines = new List<int[]>()
         {
-            new int[] {15, 0, 0, 0},
-            new int[] {8, 7, 0, 0},
-            new int[] {4, 6, 5, 0},
-            new int[] {2, 3, 6, 4},
+            new int[] {3, 0, 0, 0},
+            new int[] {1, 2, 0, 0},
+            new int[] {1, 1, 1, 0},
+            new int[] {0, 1, 1, 1},
         };
+
+        Timer EntityControlTimer = new Timer();
+        Form screen;
+        
+        public EnemyController(Form form)
+        {
+            screen = form;
+        }
+        public void ResetIndexing()
+        {
+            if(currShipIndex == enemiesAmount)
+            {
+                currShipIndex = 0;
+            }
+        }
+        public void InitializeController()
+        {
+            EntityControlTimer.Interval = movingPeriod;
+            EntityControlTimer.Enabled = true;
+            EntityControlTimer.Start();
+            EntityControlTimer.Tick += EntityControllerTimer_Tick;
+        }
+        public void EntityControllerTimer_Tick(object sender, EventArgs e)
+        {
+            moveEnemy();
+            currShipIndex++;
+            ResetIndexing();
+        }
         public void SpawnEnemyGroup(int amount, int enemyDifficulty, Form screen)
         {
             //detect what kind of enemy is going to be spawned
@@ -42,36 +72,36 @@ namespace zap_program2024.Spawning
                 case 1:
                     for (int i = 0; i < amount; i++)
                     {
-                        BasicEnemyEntity entity = new BasicEnemyEntity();
+                        BasicEnemyEntity entity = new BasicEnemyEntity(screen);
                         SpawnEnemy(entity, screen);
-                        basicEnemyWave.Add(entity);
+                        Enemies.Add(entity);
                         spawnCoordinates.X += shiftX;
                     }
                     break;
                 case 2:
                     for (int i = 0; i < amount; i++)
                     {
-                        MidEnemyEntity entity = new MidEnemyEntity();
+                        MidEnemyEntity entity = new MidEnemyEntity(screen);
                         SpawnEnemy(entity, screen);
-                        midEnemyWave.Add(entity);
+                        Enemies.Add(entity);
                         spawnCoordinates.X += shiftX;
                     }
                     break;
                 case 3:
                     for (int i = 0; i < amount; i++)
                     {
-                        HardEnemyEntity entity = new HardEnemyEntity();
+                        HardEnemyEntity entity = new HardEnemyEntity(screen);
                         SpawnEnemy(entity, screen);
-                        hardEnemyWave.Add(entity);
+                        Enemies.Add(entity);
                         spawnCoordinates.X += shiftX;
                     }
                     break;
                 case 4:
                     for (int i = 0; i < amount; i++)
                     {
-                        BossEnemyEntity entity = new BossEnemyEntity();
+                        BossEnemyEntity entity = new BossEnemyEntity(screen);
                         SpawnEnemy(entity, screen);
-                        bossEnemyWave.Add(entity);
+                        Enemies.Add(entity);
                         spawnCoordinates.X += shiftX;
                     }
                     break;
@@ -88,7 +118,7 @@ namespace zap_program2024.Spawning
         {
             enemy.XPos = spawnCoordinates.X;
             enemy.YPos = spawnCoordinates.Y;
-            enemy.Initialize(screen);
+            enemy.Initialize();
             screen.Controls.Add(enemy.icon);
         }
         public void SpawnInitialEnemyWave(Form screen)
@@ -111,26 +141,12 @@ namespace zap_program2024.Spawning
                 }
             }
         }
-        public void moveFirstWave(Form screen, Timer timer)
+        public void moveEnemy()
         {
-            foreach(var ship in basicEnemyWave)
+            if (!Enemies[currShipIndex].Dead)
             {
-                ship.Move(screen, timer);
+                Enemies[currShipIndex].InitializeTimers();
             }
         }
-        public void EnemyShoot(Form screen)
-        {
-            foreach (var ship in midEnemyWave)
-            {
-                ship.Shoot(screen);
-            }
-        }
-        /*public void DeleteShotShips(Form screen)
-        {
-            foreach (var ship in basicEnemyWave) 
-            {
-                if (ship.GotHit())
-            }
-        }*/
     }
 }

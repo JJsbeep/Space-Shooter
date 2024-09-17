@@ -12,18 +12,15 @@ namespace zap_program2024
 {
     public class Projectile
     {
-        const int windowHeigth = 800;
+        const int windowHeight = 800;
         const int windowWidth = 1300;
 
-        public int Speed { get; set; } = 8;
+        public int Speed { get; set; } = 4;
         public PictureBox icon = new PictureBox();
         public Timer projectileSpread = new Timer();
-        public double Amplitude { get; set; } = 50; // Amplitude of the sine wave
-        public double Frequency { get; set; } = 0.1; // Frequency of the sine wave
-        public double TimeElapsed { get; set; } = 0; // Time elapsed since the projectile was spawned
-        public bool IsOnScreen(PictureBox icon)
+        public bool IsOnScreen(PictureBox pictureBox)
         {
-            if (icon.Top < 0 || icon.Top > windowHeigth || icon.Left < 0 || icon.Left > windowWidth)
+            if (windowHeight >= pictureBox.Top && pictureBox.Bottom >= 0 && windowWidth >= pictureBox.Left && pictureBox.Right >= 0)
             {
                 return true;
             }
@@ -32,17 +29,18 @@ namespace zap_program2024
         public void Spawn(Form screen, Vector2d coordinates)
         {
             icon.Location = new Point(coordinates.X, coordinates.Y);
-            icon.Size = new Size(10, 10);
+            icon.Size = new Size(15, 15);
             icon.Tag = "projectile";
+            icon.SizeMode = PictureBoxSizeMode.StretchImage;
             icon.BringToFront();
 
             screen.Controls.Add(icon);
-            projectileSpread.Interval = 16;
+            projectileSpread.Interval = Speed;
             projectileSpread.Start();
         }
         public void deleteOfScreen()
         {
-            if (IsOnScreen(icon))
+            if (!IsOnScreen(icon))
             {
                 projectileSpread.Stop();
                 projectileSpread.Dispose();

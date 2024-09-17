@@ -26,13 +26,15 @@ namespace zap_program2024.Entities
         public int _xPos;
         public int _yPos;
         public bool _onScreen;
-        public HeroEntity()
+        public bool _dead;
+        public HeroEntity(Form form) : base(form)
         {
             _firePeriod = 500;
             _speed = 23;
             _health = 3;
             _xPos = 593;
             _yPos = 638;
+            _dead = false;
             size.X = 115;
             size.Y = 130;
             _onScreen = true;
@@ -71,14 +73,19 @@ namespace zap_program2024.Entities
             get => _autoMode;
             set => _autoMode = value;
         }
+        public override bool Dead
+        {
+            get => _dead;
+            set => _dead = value;
+        }
         public override void Projectile_Tick(object sender, EventArgs e)
         {
             projectile.icon.Top -= projectile.Speed;
             projectile.deleteOfScreen();    
         }
-        public override void Shoot(Form screen)
+        public override void Shoot(object sender, EventArgs e)
         {
-            InitializeProjectile(screen);
+            InitializeProjectile();
             projectile.projectileSpread.Tick += Projectile_Tick;
         }
         public override void InitializePicBox()
@@ -92,7 +99,7 @@ namespace zap_program2024.Entities
             icon.Visible = true;
             icon.BackColor = Color.Transparent;
         }
-        public override void Move(Form screen, Timer timer)
+        public void Move()
         {
             if (!AutoMode)
             {
@@ -128,7 +135,7 @@ namespace zap_program2024.Entities
             }
 
         }
-        public override void Initialize(Form screen)
+        public override void Initialize()
         {
             InitializePicBox();
             screen.Controls.Add(icon);
