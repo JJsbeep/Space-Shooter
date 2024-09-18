@@ -23,7 +23,7 @@ namespace zap_program2024
         public void spaceship_shooter_Load(object sender, EventArgs e)
         {
             hero.Initialize();
-            enemyController.SpawnInitialEnemyWave(this);
+            enemyController.SpawnInitialEnemyWave();
             this.Controls.Add(hero.icon);
             enemyController.InitializeController();
         }

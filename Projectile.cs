@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 using zap_program2024.Entities;
 using System.Diagnostics.Metrics;
+using System.Diagnostics.Eventing.Reader;
 
 namespace zap_program2024
 {
@@ -20,6 +21,8 @@ namespace zap_program2024
         }
         const int windowHeight = 800;
         const int windowWidth = 1300;
+        const string heroTag = "Hero";
+        const string enemyTag = "Enenmy";
 
         private int counter = 1;
         private int sign = 1;
@@ -31,8 +34,8 @@ namespace zap_program2024
         public Vector2d curveCheckpoints = new(1, 12);
         public Vector2d targetCoords = new Vector2d();
         public Vector2d directionVector = new Vector2d();
-
         public bool Off { get; set; } = false;
+
         private bool GotRightTarget(string targetTag, PictureBox target)
         {
             if (target.Tag != null && target.Tag.ToString() == targetTag)
@@ -41,22 +44,36 @@ namespace zap_program2024
             }
             return false;
         }
-        private bool CheckHit(string targetTag)
+        private bool GotHit(string targetTag)
         {
-            if (!Off)
-            {
-                foreach (var control in screen.Controls)
-                {
-                    if (control is PictureBox pictureBox && GotRightTarget(targetTag, pictureBox))
+            foreach(var control in screen.Controls)
                     {
-                        if (pictureBox.Bounds.IntersectsWith(icon.Bounds))
-                        {
-                            return true;
-                        }
+                if (control is PictureBox pictureBox && GotRightTarget(targetTag, pictureBox))
+                {
+                    if (pictureBox.Bounds.IntersectsWith(icon.Bounds))
+                    {
+                        Off = true;
+                        return true;
                     }
                 }
             }
             return false;
+        }
+        private bool CheckHit(string targetTag)
+        {
+            if (icon is not null)
+            {
+                if (!Off)
+                {
+                    return GotHit(targetTag);
+                }
+                else { return true; }
+            }
+            else 
+            {
+                projectileSpread?.Stop();
+                return true;
+            }
         }
         public bool IsOnScreen(PictureBox pictureBox)
         {
@@ -66,15 +83,16 @@ namespace zap_program2024
             }
             return false;
         }
-        public void Spawn(Vector2d coordinates, Vector2d size)
+        public void Spawn(Vector2d coordinates, Vector2d size, int projectileSpeed)
         {
+            Speed = projectileSpeed;
             icon.Location = new Point(coordinates.X, coordinates.Y);
             icon.Size = new Size(size.X, size.Y);
             //icon.Tag = "Projectile";
             icon.SizeMode = PictureBoxSizeMode.StretchImage;
             icon.BringToFront();
             screen.Controls.Add(icon);
-            projectileSpread.Interval = Speed;
+            projectileSpread.Interval = projectileSpeed;
         }
         public void Delete(bool force = false)
         {
@@ -110,6 +128,10 @@ namespace zap_program2024
                     Delete();
                 }
             }
+            else
+            {
+                projectileSpread?.Stop();
+            }
         }
         private void MoveStraight()
         {
@@ -136,7 +158,7 @@ namespace zap_program2024
         {
             if (!Off)
             {
-                hit = CheckHit("Hero");
+                hit = CheckHit(heroTag);
                 if (hit)
                 {
                     Delete(true);
@@ -150,7 +172,7 @@ namespace zap_program2024
         }
         public void TravelUp(object sender, EventArgs e)
         {
-            hit = CheckHit("Enemy");
+            hit = CheckHit(enemyTag);
             if (hit)
             {
                 Delete(true);

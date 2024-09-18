@@ -19,23 +19,25 @@ namespace zap_program2024.Entities
 
         public bool moving;
         public bool movingLeft;
-        public bool _autoMode;
+        private bool _autoMode;
 
-        public int _firePeriod;
-        
+        private int _firePeriod;
+        private int _projectileSpeed;
+
         //variables to keep track of score
-        public int score;
-        public int scoreTime;
+        private int score;
+        private int scoreTime;
 
-        public int _speed;
-        public int _health;
-        public int _xPos;
-        public int _yPos;
-        public bool _onScreen;
-        public bool _dead;
+        private int _speed;
+        private int _health;
+        private int _xPos;
+        private int _yPos;
+        private bool _onScreen;
+        private bool _dead;
         public HeroEntity(Form form) : base(form)
         {
             _firePeriod = 500;
+            _projectileSpeed = 12;
             _speed = 10;
             _health = 3;
             _xPos = 593;
@@ -54,6 +56,11 @@ namespace zap_program2024.Entities
         protected override int FirePeriod
         {
             get => _firePeriod;
+        }
+        protected override int ProjectileSpeed
+        {
+            get => _projectileSpeed;
+            set => _projectileSpeed = value;
         }
         public override int Speed
         {
@@ -152,7 +159,7 @@ namespace zap_program2024.Entities
             Vector2d spawnCoordinates = new((icon.Left + icon.Width / 2), icon.Bottom);
             projectileToSet.icon.Image = Image.FromFile(@"..\..\..\images\projectile.png");
             projectileToSet.icon.Tag = "ProjectileHero";
-            projectileToSet.Spawn(spawnCoordinates, ProjectileSize);
+            projectileToSet.Spawn(spawnCoordinates, ProjectileSize, ProjectileSpeed);
             projectileToSet.projectileSpread.Tick += projectileToSet.TravelUp;
             projectileToSet.projectileSpread.Start();
         }
@@ -167,7 +174,7 @@ namespace zap_program2024.Entities
         }
         protected override bool IsAlive()
         {
-            if (GotHit("ProjectileEnemy") /*|| GotHit("Enemy")*/)
+            if (GotHit("ProjectileEnemy") || GotHit("Enemy"))
             {
                 Health--;
                 if (Health == 0)

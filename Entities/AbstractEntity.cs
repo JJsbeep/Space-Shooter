@@ -37,6 +37,7 @@ namespace zap_program2024.Entities
         private int aliveCheckPeriod = 1;
 
         protected virtual int FirePeriod { get; } = 2000;
+        protected virtual int ProjectileSpeed { get; set; }
         protected virtual int Difficulty { get; set; } = 0;
         public virtual int Speed { get; set; } = 1;
         public virtual int Health { get; set; } = 1;
@@ -90,7 +91,8 @@ namespace zap_program2024.Entities
                     if (control is PictureBox pictureBox && CausedByEnemy(hitObjectTag, pictureBox))
                     {
                         if (pictureBox.Bounds.IntersectsWith(icon.Bounds))
-                        {
+                        { 
+                            screen.Controls.Remove(pictureBox);                            
                             return true;
                         }
                     }
@@ -111,15 +113,6 @@ namespace zap_program2024.Entities
                 moveTimer.Stop();
                 moveTimer.Dispose();
                 screen.Controls.Remove(icon);
-                //icon.Dispose();
-                /*shootTimer.Stop();
-                shootTimer.Dispose();
-                moveTimer.Stop();
-                moveTimer.Dispose();
-
-                moveTimer = null;
-                shootTimer = null;
-                icon = null;*/
                 Dead = true;
             }
         }
@@ -204,7 +197,7 @@ namespace zap_program2024.Entities
         {
             Vector2d spawnCoordinates = new((icon.Left + icon.Width / 2), icon.Bottom);
             projectileToSet.icon.Image = Image.FromFile(@"..\..\..\images\enemy_projectile.png");
-            projectileToSet.Spawn(spawnCoordinates, ProjectileSize);
+            projectileToSet.Spawn(spawnCoordinates, ProjectileSize, ProjectileSpeed);
             projectileToSet.icon.Tag = "ProjectileEnemy";
             GetProjectileDirection(projectileToSet);
             shootDistance = GetDistance(projectileDirection);
@@ -227,7 +220,7 @@ namespace zap_program2024.Entities
 
         protected void MoveStraight(PictureBox pictureBox, Vector2d shifts)
         {
-            if (!Dead)
+            if (IsAlive())
             {
                 GotHit("ProjectileHero");
                 pictureBox.Left += shifts.X;
@@ -237,7 +230,7 @@ namespace zap_program2024.Entities
         }
         protected virtual void MoveCurvy(PictureBox pictureBox, Vector2d shifts)
         {
-            if (!Dead)
+            if (IsAlive())
             {
                 //GetMoveDirection();
                 if (curveCheckpoints.X <= counter && counter < curveCheckpoints.Y / 2)
@@ -277,21 +270,21 @@ namespace zap_program2024.Entities
             moveTimer.Tick += Move_Tick;
             moveTimer.Start();
         }
-        protected void InitializeAliveTimer()
+        public void InitializeLifeTimer()
         {
             aliveTimer.Interval = aliveCheckPeriod;
             aliveTimer.Tick += AliveCheck_Tick;
             aliveTimer.Start();
         }
-        public virtual void InitializeTimers()
+        public virtual void StartOperating()
         {
-            InitializeAliveTimer();
+            InitializeLifeTimer();
             InitializeMovingTimer();
             InitializeShootingTimer();
         }
         protected void AliveCheck_Tick(object sender, EventArgs e)
         {
-            GotHit("ProjectileHero");
+            IsAlive();
         }
         protected virtual bool IsAlive()
         {

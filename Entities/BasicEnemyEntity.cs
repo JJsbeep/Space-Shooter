@@ -92,9 +92,9 @@ namespace zap_program2024.Entities
             }
         }
         //no shooting overriding since it does not shoot
-        public override void InitializeTimers()
+        public override void StartOperating()
         {
-            InitializeAliveTimer();
+            InitializeLifeTimer();
             InitializeMovingTimer();
         }
     }
