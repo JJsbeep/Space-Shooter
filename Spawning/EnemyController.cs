@@ -22,12 +22,13 @@ namespace zap_program2024.Spawning
         private const int shiftX = 77;
         private const int shiftY = 30;
         private const int enemiesPerLine = 3;
+        private bool enemyGone = false;
 
         private Vector2d spawnCoordinates = new(initialXpos, initialYpos);
 
         private List<AbstractEntity> Enemies = new List<AbstractEntity>();
 
-        private int movingPeriod = 1500;
+        private int movingPeriod = 2000;
         //amount of enemies of each entity on each line
         public List<int[]> NumsOfEnemiesOnLines = new List<int[]>()
         {
@@ -48,6 +49,7 @@ namespace zap_program2024.Spawning
         {
             if(currShipIndex == enemiesAmount)
             {
+                enemyGone = true;
                 currShipIndex = 0;
             }
         }
@@ -109,7 +111,7 @@ namespace zap_program2024.Spawning
                     throw new ArgumentException("Invalid enemy difficulty");
             }
         }
-        private void SetNewLineCoords()
+        private void SetNewLineCoordinates()
         {
             spawnCoordinates.Y -= shiftY;
             spawnCoordinates.X = initialXpos;
@@ -136,14 +138,14 @@ namespace zap_program2024.Spawning
                     enemyDifficutly++;
                     if (enemyCounter >= enemiesPerLine)
                     {
-                        SetNewLineCoords();
+                        SetNewLineCoordinates();
                     }
                 }
             }
         }
         public void moveEnemy()
         {
-            if (!Enemies[currShipIndex].Dead)
+            if (!enemyGone)
             {
                 Enemies[currShipIndex].InitializeTimers();
             }

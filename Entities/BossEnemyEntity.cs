@@ -18,18 +18,19 @@ namespace zap_program2024.Entities
         public int _spawnPeriod;
         public bool _onScreen;
         public bool _dead;
-
+        public Vector2d _projectileSize;
 
         public BossEnemyEntity(Form form) : base(form)
         {
-            _firePeriod = 750;
+            _firePeriod = 1000;
             _difficulty = 4;
-            _speed = 8;
+            _speed = 5;
             _health = 10;
             _xPos = 0;
             _yPos = 0;
             _dead = false;
             _onScreen = false;
+            _projectileSize = new Vector2d(64, 12);
         }
         protected override int Difficulty
         {
@@ -74,24 +75,34 @@ namespace zap_program2024.Entities
             get => _dead;
             set => _dead = value;
         }
-        public override void Projectile_Tick(object sender, EventArgs e)
+        protected override Vector2d ProjectileSize
         {
-            base.MoveCurvy(projectile.icon, shootShifts);
-            projectile.deleteOfScreen();
+            get => _projectileSize;
+            set => _projectileSize = value;
         }
         public override void InitializePicBox()
         {
             icon.Name = "BossEnemyPicbox";
+            icon.Tag = "BossEnemy";
+            icon.Tag = "Enemy";
             icon.Image = Image.FromFile(@"..\..\..\images\BossShip.png"); ;
-            icon.Size = new Size(size.X, size.Y);
-            icon.Location = new Point(XPos, YPos);
-            icon.SizeMode = PictureBoxSizeMode.StretchImage;
-            icon.Visible = true;
-            icon.BackColor = Color.Transparent;
+            base.InitializePicBox();
+        }
+        public override void GetMoveDirection()
+        {
+            LocateHero();
+            moveDirection.X = heroLocation.X - icon.Location.X;
+            moveDirection.Y = heroLocation.Y - icon.Location.Y;
+        }
+        protected override void MoveCurvy(PictureBox pictureBox, Vector2d shifts)
+        {
+            PrepareMovingToHero();
+            base.MoveCurvy(icon, moveShifts);
         }
         public override void Move_Tick(object sender, EventArgs e)
         {
-            base.MoveCurvy(icon, moveShifts);
+            MoveCurvy(icon, moveShifts);
         }
     }
 }
+ 

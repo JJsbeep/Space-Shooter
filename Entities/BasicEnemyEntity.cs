@@ -25,7 +25,6 @@ namespace zap_program2024.Entities
         
         public BasicEnemyEntity(Form form) : base(form)
         {
-            _firePeriod = 2000;
             _difficulty = 1;
             _speed = 2;
             _health = 1;
@@ -34,11 +33,6 @@ namespace zap_program2024.Entities
             _spawnPeriod = 2;
             _onScreen = false;
             _dead = false;
-            projectile.icon.Image = Image.FromFile(@"..\..\..\images\enemy_projectile.png");
-        }
-        protected override int FirePeriod
-        {
-            get => _firePeriod;
         }
         protected override int Difficulty
         {
@@ -81,15 +75,10 @@ namespace zap_program2024.Entities
         }
         public override void InitializePicBox()
         {
-            Speed = 3;
-            Health = 1;
             icon.Name = "BasicEnemyPicbox";
+            icon.Tag = "Enemy";
             icon.Image = Image.FromFile(@"..\..\..\images\BasicEnemyShip.png"); ;
-            icon.Size = new Size(size.X, size.Y);
-            icon.Location = new Point(XPos, YPos);
-            icon.SizeMode = PictureBoxSizeMode.StretchImage;
-            icon.Visible = true;
-            icon.BackColor = Color.Transparent;
+            base.InitializePicBox();
         }
         public override void GetMoveDirection()
         {
@@ -97,11 +86,15 @@ namespace zap_program2024.Entities
         }
         public override void Move_Tick(object sender, EventArgs e)
         {
-            base.MoveStraight(icon, moveShifts);
+            if (IsAlive())
+            {
+                base.MoveStraight(icon, moveShifts);
+            }
         }
         //no shooting overriding since it does not shoot
         public override void InitializeTimers()
         {
+            InitializeAliveTimer();
             InitializeMovingTimer();
         }
     }

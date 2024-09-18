@@ -22,9 +22,9 @@ namespace zap_program2024.Entities
         public bool _dead;
         public HardEnemyEntity(Form form) : base(form)
         {
-            _firePeriod = 1500;
+            _firePeriod = 1000;
             _difficulty = 3;
-            _speed = 6;
+            _speed = 4;
             _health = 5;
             _xPos = 0;
             _yPos = 0;
@@ -77,12 +77,10 @@ namespace zap_program2024.Entities
         public override void InitializePicBox()
         {
             icon.Name = "HardEnemyPicbox";
-            icon.Image = Image.FromFile(@"..\..\..\images\HardEnemyShip.png"); ;
-            icon.Size = new Size(size.X, size.Y);
-            icon.Location = new Point(XPos, YPos);
-            icon.SizeMode = PictureBoxSizeMode.StretchImage;
-            icon.Visible = true;
-            icon.BackColor = Color.Transparent;
+            icon.Tag = "HardEnemy";
+            icon.Tag = "Enemy";
+            icon.Image = Image.FromFile(@"..\..\..\images\HardEnemyShip.png");
+            base.InitializePicBox();
         }
         public override void GetMoveDirection()
         {
@@ -92,7 +90,10 @@ namespace zap_program2024.Entities
         }
         public override void Move_Tick(object sender, EventArgs e)
         {
-            base.MoveCurvy(icon, moveShifts);
+            if (IsAlive())
+            {
+                base.MoveStraight(icon, moveShifts);
+            }
         }
     }
 }

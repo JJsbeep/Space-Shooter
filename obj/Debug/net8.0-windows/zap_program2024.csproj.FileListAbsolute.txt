@@ -1,8 +1,3 @@
-C:\Users\juraj\source\repos\zap_program2024\bin\Debug\net8.0-windows\zap_program2024.exe
-C:\Users\juraj\source\repos\zap_program2024\bin\Debug\net8.0-windows\zap_program2024.deps.json
-C:\Users\juraj\source\repos\zap_program2024\bin\Debug\net8.0-windows\zap_program2024.runtimeconfig.json
-C:\Users\juraj\source\repos\zap_program2024\bin\Debug\net8.0-windows\zap_program2024.dll
-C:\Users\juraj\source\repos\zap_program2024\bin\Debug\net8.0-windows\zap_program2024.pdb
 C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\zap_program2024.GameWindow.resources
 C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\zap_program2024.Properties.Resources.resources
 C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\zap_program2024.csproj.GenerateResource.cache
@@ -11,9 +6,13 @@ C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\zap_program
 C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\zap_program2024.AssemblyInfo.cs
 C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\zap_program2024.csproj.CoreCompileInputs.cache
 C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\zap_program2024.sourcelink.json
+C:\Users\juraj\source\repos\zap_program2024\bin\Debug\net8.0-windows\zap_program2024.exe
+C:\Users\juraj\source\repos\zap_program2024\bin\Debug\net8.0-windows\zap_program2024.deps.json
+C:\Users\juraj\source\repos\zap_program2024\bin\Debug\net8.0-windows\zap_program2024.runtimeconfig.json
+C:\Users\juraj\source\repos\zap_program2024\bin\Debug\net8.0-windows\zap_program2024.dll
+C:\Users\juraj\source\repos\zap_program2024\bin\Debug\net8.0-windows\zap_program2024.pdb
 C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\zap_program2024.dll
 C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\refint\zap_program2024.dll
 C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\zap_program2024.pdb
 C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\zap_program2024.genruntimeconfig.cache
 C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\ref\zap_program2024.dll
-C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\zap_program2024.Images.resources

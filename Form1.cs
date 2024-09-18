@@ -44,6 +44,14 @@ namespace zap_program2024
                 hero.moving = true;
                 hero.movingLeft = true;
             }
+            if (e.KeyCode == Keys.Space)
+            {
+                hero.ShootingReady = hero.FireReady();
+                if (hero.ShootingReady)
+                {
+                    hero.HeroShoot();
+                }
+            }
         }
 
         private void KeyIsUp(object sender, KeyEventArgs e)
@@ -60,37 +68,12 @@ namespace zap_program2024
             }
         }
 
-        private void MoveEnemies()
-        {
-
-        }
-
         private void ResetGame()
         {
             GameTimer.Start();
         }
 
         private void GameOver()
-        {
-
-        }
-
-        private void HeroShip_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void BasicEnemy_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void BossEnemy_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
         {
 
         }

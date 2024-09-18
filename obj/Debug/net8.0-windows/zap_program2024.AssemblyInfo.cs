@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("zap_program2024")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6f22eafb5fe7f380265db153dffeac2ef0bb0cfb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d21912a7806f97818814bba9e392b00d6d04e3e3")]
 [assembly: System.Reflection.AssemblyProductAttribute("zap_program2024")]
 [assembly: System.Reflection.AssemblyTitleAttribute("zap_program2024")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

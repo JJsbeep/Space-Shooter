@@ -24,8 +24,8 @@ namespace zap_program2024.Entities
         public MidEnemyEntity(Form form) : base(form)
         {
             _difficulty = 2;
-            _firePeriod = 1000;
-            _speed = 4;
+            _firePeriod = 1250;
+            _speed = 3;
             _health = 3;
             _xPos = 0;
             _yPos = 0;
@@ -78,33 +78,24 @@ namespace zap_program2024.Entities
         public override void InitializePicBox()
         {
             icon.Name = "MidEnemyPicbox";
+            icon.Tag = "MidEnemy";
+            icon.Tag = "Enemy";
             icon.Image = Image.FromFile(@"..\..\..\images\MidEnemyShip.png"); ;
-            icon.Size = new Size(size.X, size.Y);
-            icon.Location = new Point(XPos, YPos);
-            icon.SizeMode = PictureBoxSizeMode.StretchImage;
-            icon.Visible = true;
-            icon.BackColor = Color.Transparent;
-        }
-        public override void GetProjectileDirection()
-        {
-            GetRandomTarget();
-            base.GetProjectileDirection();
+            base.InitializePicBox();
         }
         public override void Shoot(object sender, EventArgs e)
         {
-            if (projectile == null || projectile.icon == null)
-            {
-                // Handle the null case, possibly reinitialize or log an error
-                return;
-            }
-            InitializeProjectile();
+            Projectile projectile = new Projectile(screen);
+            firedProjectiles.Add(projectile);
             GetRandomTarget();
-            GetProjectileDirection();
-            projectile.projectileSpread.Tick += Projectile_Tick;
+            InitializeProjectile(projectile);
         }
         public override void Move_Tick(object sender, EventArgs e)
         {
-            base.MoveStraight(icon, moveShifts);
+            if (IsAlive())
+            {
+                base.MoveStraight(icon, moveShifts);
+            }
         }
     }
 }
