@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 using System.Runtime.CompilerServices;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 namespace zap_program2024.Entities
 {
     public record struct Vector2d(int X, int Y);
@@ -36,7 +37,7 @@ namespace zap_program2024.Entities
         private int sign = 1;
         private int aliveCheckPeriod = 1;
 
-        protected virtual int FirePeriod { get; } = 2000;
+        protected virtual int FirePeriod { get; set; } = 2000;
         protected virtual int ProjectileSpeed { get; set; }
         protected virtual int Difficulty { get; set; } = 0;
         public virtual int Speed { get; set; } = 1;
@@ -52,13 +53,22 @@ namespace zap_program2024.Entities
         public Timer shootTimer = new Timer();
         public Timer moveTimer = new Timer();
         public Timer aliveTimer = new Timer();
-        public Form screen;
-
+        public GameWindow screen;
         public List<Projectile> firedProjectiles = new List<Projectile>();
-        public AbstractEntity(Form form)
+        const int one = 1;
+
+        protected Dictionary<string, int> diffiCultyDict = new Dictionary<string, int>()
+        {
+            {"BasicEnemyPicbox", 1 },
+            {"MidEnemyPicbox", 2 },
+            {"HardEnemyPicbox", 3 },
+            {"BossEnemyPicbox", 4 },
+        };
+        public AbstractEntity(GameWindow form)
         {
             screen = form;
         }
+
         public bool IsOnScreen(PictureBox pictureBox)
         {
             if (!Dead)
@@ -69,6 +79,7 @@ namespace zap_program2024.Entities
                 }
             }
             return false;
+            
         }
         public void SetCoordinates(int x, int y)
         {
@@ -76,8 +87,15 @@ namespace zap_program2024.Entities
         }
         private bool CausedByEnemy(string hitObjectTag, PictureBox pictureBox)
         {
+            var tag  = hitObjectTag;
+            var thing = pictureBox;
+            if (tag == "ProjectileEnemy")
+            {
+                Console.WriteLine();
+            }
             if (pictureBox.Tag != null && pictureBox.Tag.ToString() == hitObjectTag)
             {
+                
                 return true;
             }
             return false;
@@ -91,7 +109,11 @@ namespace zap_program2024.Entities
                     if (control is PictureBox pictureBox && CausedByEnemy(hitObjectTag, pictureBox))
                     {
                         if (pictureBox.Bounds.IntersectsWith(icon.Bounds))
-                        { 
+                        {
+                            if (hitObjectTag == "ProjectileEnemy")
+                            {
+                                Console.WriteLine();
+                            }
                             screen.Controls.Remove(pictureBox);                            
                             return true;
                         }
@@ -169,11 +191,11 @@ namespace zap_program2024.Entities
             moveDestination.Y = windowHeight;
         }
 
-        protected void PrepareMovingToHero()
+        protected virtual void PrepareMovingToHero()
         {
             LocateHero();
-            moveDestination.X += heroLocation.X;
-            moveDestination.Y += heroLocation.Y;
+            moveDestination.X = heroLocation.X;
+            moveDestination.Y+= heroLocation.Y;
             GetMoveDirection();
             GetDistance(moveDirection);
             moveShifts = GetShifts(moveDistance, Speed, moveDirection);
@@ -203,7 +225,7 @@ namespace zap_program2024.Entities
             shootDistance = GetDistance(projectileDirection);
             shootShifts = GetShifts(shootDistance, projectileToSet.Speed, projectileDirection);
             projectileToSet.SetShifts(shootShifts);
-            projectileToSet.projectileSpread.Tick += projectileToSet.TravelStraight;
+            projectileToSet.projectileSpread.Tick += projectileToSet.MoveStraight;
             projectileToSet.projectileSpread.Start();
         }
         public virtual void Shoot(object sender, EventArgs e)
@@ -227,6 +249,16 @@ namespace zap_program2024.Entities
                 pictureBox.Top += shifts.Y;
                 DeleteObject();
             }
+            /*else
+            {
+                foreach(var control in screen.Controls)
+                {
+                    if (control is Label label)
+                    {
+                        label.Text = 
+                    }
+                }
+            }*/
         }
         protected virtual void MoveCurvy(PictureBox pictureBox, Vector2d shifts)
         {
@@ -278,7 +310,7 @@ namespace zap_program2024.Entities
         }
         public virtual void StartOperating()
         {
-            InitializeLifeTimer();
+            //InitializeLifeTimer();
             InitializeMovingTimer();
             InitializeShootingTimer();
         }
@@ -293,6 +325,7 @@ namespace zap_program2024.Entities
                 Health--;
                 if(Health == 0)
                 {
+                    screen.scoreBar.Update();
                     Dead = true;
                     DeleteObject(true);
                     return false;

@@ -19,10 +19,11 @@ namespace zap_program2024
         {
             screen = form;
         }
+        
         const int windowHeight = 800;
         const int windowWidth = 1300;
         const string heroTag = "Hero";
-        const string enemyTag = "Enenmy";
+        const string enemyTag = "Enemy";
 
         private int counter = 1;
         private int sign = 1;
@@ -34,6 +35,7 @@ namespace zap_program2024
         public Vector2d curveCheckpoints = new(1, 12);
         public Vector2d targetCoords = new Vector2d();
         public Vector2d directionVector = new Vector2d();
+
         public bool Off { get; set; } = false;
 
         private bool GotRightTarget(string targetTag, PictureBox target)
@@ -114,7 +116,7 @@ namespace zap_program2024
         }
         public void TravelStraight(object sender, EventArgs e)
         {
-            if (!Off)
+            /*if (!Off)
             {
                 hit = CheckHit("Hero");
                 if (hit)
@@ -131,9 +133,12 @@ namespace zap_program2024
             else
             {
                 projectileSpread?.Stop();
-            }
+            }*/
+            icon.Left += travelShifts.X;
+            icon.Top += travelShifts.Y;
+            Delete();
         }
-        private void MoveStraight()
+        public void MoveStraight(object sender, EventArgs e)
         {
             icon.Left += travelShifts.X;
             icon.Top += travelShifts.Y;

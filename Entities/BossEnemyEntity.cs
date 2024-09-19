@@ -9,30 +9,30 @@ namespace zap_program2024.Entities
 {
     public class BossEnemyEntity : AbstractEntity
     {
-        private int _difficulty;
-        private int _firePeriod;
-        private int _projectileSpeed;
-        private int _speed;
-        private int _health;
-        private int _xPos;
-        private int _yPos;
-        private int _spawnPeriod;
-        private bool _onScreen;
-        private bool _dead;
-        private Vector2d _projectileSize;
+        public int _difficulty;
+        public int _firePeriod;
+        public int _projectileSpeed;
+        public int _speed;
+        public int _health;
+        public int _xPos;
+        public int _yPos;
+        public int _spawnPeriod;
+        public bool _onScreen;
+        public bool _dead;
+        public Vector2d _projectileSize;
 
-        public BossEnemyEntity(Form form) : base(form)
+        public BossEnemyEntity(GameWindow form) : base(form)
         {
-            _firePeriod = 1500;
+            _firePeriod = 1800;
             _projectileSpeed = 9;
             _difficulty = 4;
             _speed = 5;
-            _health = 10;
+            _health = 6;
             _xPos = 0;
             _yPos = 0;
             _dead = false;
             _onScreen = false;
-            _projectileSize = new Vector2d(52, 8);
+            _projectileSize = new Vector2d(39, 10);
         }
         protected override int Difficulty
         {
@@ -41,6 +41,7 @@ namespace zap_program2024.Entities
         protected override int FirePeriod
         {
             get => _firePeriod;
+            set => _firePeriod = value;
         }
         protected override int ProjectileSpeed
         {

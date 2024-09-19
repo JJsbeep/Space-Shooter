@@ -30,21 +30,8 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameWindow));
-            ScoreBar = new Label();
             GameTimer = new System.Windows.Forms.Timer(components);
             SuspendLayout();
-            // 
-            // ScoreBar
-            // 
-            ScoreBar.AutoSize = true;
-            ScoreBar.Font = new Font("Stencil", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            ScoreBar.ForeColor = Color.Maroon;
-            ScoreBar.Location = new Point(50, 49);
-            ScoreBar.Name = "ScoreBar";
-            ScoreBar.Size = new Size(87, 21);
-            ScoreBar.TabIndex = 5;
-            ScoreBar.Text = "SCORE: 0\r\n";
-            ScoreBar.Click += ScoreBar_Click;
             // 
             // GameTimer
             // 
@@ -59,18 +46,15 @@
             BackColor = Color.FromArgb(0, 0, 64);
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             ClientSize = new Size(1282, 753);
-            Controls.Add(ScoreBar);
             Name = "GameWindow";
             Text = "Form1";
             Load += spaceship_shooter_Load;
             KeyDown += KeyIsDown;
             KeyUp += KeyIsUp;
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
-        private Label ScoreBar;
         private System.Windows.Forms.Timer GameTimer;
     }
 }

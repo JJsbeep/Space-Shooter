@@ -23,10 +23,10 @@ namespace zap_program2024.Entities
         public bool _dead;
 
         
-        public BasicEnemyEntity(Form form) : base(form)
+        public BasicEnemyEntity(GameWindow form) : base(form)
         {
             _difficulty = 1;
-            _speed = 2;
+            _speed = 4;
             _health = 1;
             _xPos = 0;
             _yPos = 0;
@@ -94,7 +94,7 @@ namespace zap_program2024.Entities
         //no shooting overriding since it does not shoot
         public override void StartOperating()
         {
-            InitializeLifeTimer();
+            //InitializeLifeTimer();
             InitializeMovingTimer();
         }
     }

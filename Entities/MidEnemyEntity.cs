@@ -9,26 +9,27 @@ using Timer = System.Windows.Forms.Timer;
 
 namespace zap_program2024.Entities
 {
+    
     public class MidEnemyEntity : AbstractEntity
     {
-        private int _difficulty;
-        private int _firePeriod;
-        private int _projectileSpeed;
-        private int _speed;
-        private int _health;
-        private int _xPos;
-        private int _yPos;
-        private int _spawnPeriod;
-        private bool _onScreen;
-        private bool _dead;
+        public int _difficulty;
+        public int _health;
+        public int _firePeriod;
+        public int _projectileSpeed;
+        public int _speed;
+        public int _xPos;
+        public int _yPos;
+        public int _spawnPeriod;
+        public bool _onScreen;
+        public bool _dead;
 
-        public MidEnemyEntity(Form form) : base(form)
+        public MidEnemyEntity(GameWindow form) : base(form)
         {
             _difficulty = 2;
             _projectileSpeed = 6;
-            _firePeriod = 2000;
-            _speed = 3;
-            _health = 3;
+            _firePeriod = 2500;
+            _speed = 4;
+            _health = 2;
             _xPos = 0;
             _yPos = 0;
             _dead = false;
@@ -41,6 +42,7 @@ namespace zap_program2024.Entities
         protected override int FirePeriod
         {
             get => _firePeriod;
+            set => _firePeriod = value;
         }
         protected override int ProjectileSpeed
         {

@@ -45,7 +45,6 @@ namespace zap_program2024.Spawning
                         return value.Item1;
                     }
                 }
-
             }
             return -1;
         }

@@ -9,27 +9,55 @@ namespace zap_program2024
     {
         public const int width = 1300;
         public const int heigth = 800;
-
+        public readonly int[] upgradeCodes = { 0, 1, 2, 3 };
         public EnemyController enemyController;
-
+        public ScoreLabel scoreBar;
+        public UpgradeMessage upgradeMessage;
         public HeroEntity hero;
+        public Coin coin;
+        public bool upgradeAvailable = false;
+        public bool coinAppeared = false;
+        public bool coinPicked = false;
         public GameWindow()
         {
-            this.DoubleBuffered = true;
             InitializeComponent();
+            this.DoubleBuffered = true;
             hero = new HeroEntity(this);
             enemyController = new EnemyController(this);
+            scoreBar = new ScoreLabel(this);
+            upgradeMessage = new UpgradeMessage(this);
+            coin = new Coin(this);
         }
         public void spaceship_shooter_Load(object sender, EventArgs e)
         {
             hero.Initialize();
-            enemyController.SpawnInitialEnemyWave();
-            this.Controls.Add(hero.icon);
+            scoreBar.Initialize();
             enemyController.InitializeController();
+            upgradeMessage.Initialize();
+            coin.Initilaize();
+            enemyController.SpawnInitialEnemyWave();
+            //this.Controls.Add(hero.icon);
         }
         private void MainEvent(object sender, EventArgs e)
         {
             hero.Move();
+            scoreBar.CheckUpgrade();
+            if (scoreBar.UpgradeReady)
+            {
+                 coinPicked = coin.PickedUp();
+                //scoreBar.Update();
+                if (!coin.Availablable && !coinAppeared)
+                {
+                    coin.Appear();
+                    coinAppeared = true;
+                }
+                else if (coin.PickedUp() && coinAppeared)
+                {
+                    upgradeMessage.Show();
+                    upgradeAvailable = true;
+                    //coinAppeared = false;
+                }
+            }
         }
 
         private void KeyIsDown(object sender, KeyEventArgs e)
@@ -50,6 +78,36 @@ namespace zap_program2024
                 if (hero.ShootingReady)
                 {
                     hero.HeroShoot();
+                }
+            }
+            if (e.KeyCode == Keys.D1 || e.KeyCode == Keys.NumPad1)
+            {
+                if (scoreBar.UpgradeReady && upgradeAvailable)
+                {
+                    hero.PerformUpgrade(upgradeCodes[1]);
+                    scoreBar.UpgradeReady = false;
+                    upgradeMessage.Hide();
+                    coinAppeared = false;
+                }
+            }
+            if (e.KeyCode == Keys.D2 || e.KeyCode == Keys.NumPad2)
+            {
+                if (scoreBar.UpgradeReady && upgradeAvailable)
+                {
+                    hero.PerformUpgrade(upgradeCodes[2]);
+                    scoreBar.UpgradeReady = false;
+                    upgradeMessage.Hide();
+                    coinAppeared = false;
+                }
+            }
+            if (e.KeyCode == Keys.D3 || e.KeyCode == Keys.NumPad3)
+            {
+                if (scoreBar.UpgradeReady && upgradeAvailable)
+                {
+                    hero.PerformUpgrade(upgradeCodes[3]);
+                    scoreBar.UpgradeReady = false;
+                    upgradeMessage.Hide();
+                    coinAppeared = false;
                 }
             }
         }
@@ -79,6 +137,11 @@ namespace zap_program2024
         }
 
         private void ScoreBar_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
         {
 
         }

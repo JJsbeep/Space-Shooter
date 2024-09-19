@@ -11,23 +11,23 @@ namespace zap_program2024.Entities
 {
     public class HardEnemyEntity : AbstractEntity
     {
-        private int _difficulty;
-        private int _firePeriod;
-        private int _projectileSpeed;
-        private int _speed;
-        private int _health;
-        private int _xPos;
-        private int _yPos;
-        private int _spawnPeriod;
-        private bool _onScreen;
-        private bool _dead;
-        public HardEnemyEntity(Form form) : base(form)
+        public int _difficulty;
+        public int _firePeriod;
+        public int _projectileSpeed;
+        public int _speed;
+        public int _health;
+        public int _xPos;
+        public int _yPos;
+        public int _spawnPeriod;
+        public bool _onScreen;
+        public bool _dead;
+        public HardEnemyEntity(GameWindow form) : base(form)
         {
-            _firePeriod = 1700;
+            _firePeriod = 2000;
             _projectileSpeed = 8;
             _difficulty = 3;
             _speed = 3;
-            _health = 5;
+            _health = 3;
             _xPos = 0;
             _yPos = 0;
             _dead = false;
@@ -40,6 +40,7 @@ namespace zap_program2024.Entities
         protected override int FirePeriod
         {
             get => _firePeriod;
+            set => _firePeriod = value;
         }
         protected override int ProjectileSpeed
         {
@@ -84,7 +85,6 @@ namespace zap_program2024.Entities
         public override void InitializePicBox()
         {
             icon.Name = "HardEnemyPicbox";
-            icon.Tag = "HardEnemy";
             icon.Tag = "Enemy";
             icon.Image = Image.FromFile(@"..\..\..\images\HardEnemyShip.png");
             base.InitializePicBox();

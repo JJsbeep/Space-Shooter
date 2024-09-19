@@ -2,6 +2,7 @@
 using Microsoft.VisualBasic.Devices;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Text;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -12,13 +13,17 @@ using Timer = System.Windows.Forms.Timer;
 
 namespace zap_program2024.Entities
 {
+    public record struct EnemyData(string Name, Vector2d moveShootVector);
+
     public class HeroEntity : AbstractEntity
     {
         private DateTime lastShotTime = DateTime.MinValue;
         private TimeSpan shotCooldown = TimeSpan.FromSeconds(0.5);
+        
 
         public bool moving;
         public bool movingLeft;
+        private bool upgradeReady;
         private bool _autoMode;
 
         private int _firePeriod;
@@ -34,11 +39,24 @@ namespace zap_program2024.Entities
         private int _yPos;
         private bool _onScreen;
         private bool _dead;
-        public HeroEntity(Form form) : base(form)
+
+        //Automode variables
+        private Dictionary<EnemyData, Vector2d> foundEnemies; //values will be vector that determines enenemy's movement
+        private bool canShoot = true;
+        private Vector2d moveShoot = new Vector2d(); // Item.1 - Amount of moves(+to the right, -to the left), Item.2 - Amount of moves after which heor shoots
+        private int shortestDistance = 0;
+        private const int stepsAhead = 100;
+        private const string enemyTag = "Enemy";
+        private const string enemyProjectileTag = "ProjectileEnemy";
+        private readonly Vector2d zeroVector = new Vector2d(0, 0);
+        private EnemyData closestEnemyData;
+
+
+        public HeroEntity(GameWindow form) : base(form)
         {
             _firePeriod = 500;
             _projectileSpeed = 12;
-            _speed = 10;
+            _speed = 15;
             _health = 3;
             _xPos = 593;
             _yPos = 638;
@@ -47,6 +65,8 @@ namespace zap_program2024.Entities
             size.Y = 130;
             _onScreen = true;
             _autoMode = false;
+            //foundEnemies = new Dictionary<EnemyData, Vector2d>();
+            closestEnemyData = new EnemyData("no data", zeroVector);
         }
         public bool ShootingReady
         {
@@ -201,5 +221,133 @@ namespace zap_program2024.Entities
         {
             InitializePicBox();
         }
+        private void UpgradeSpeed()
+        {
+            Speed++;
+        }
+        private void UpgradeHealth()
+        {
+            Health++;
+        }
+        private void UpgradeProjectileSpeed()
+        {
+            ProjectileSpeed++;
+        }
+        public void PerformUpgrade(int upgradeCode)
+        {
+            switch(upgradeCode)
+            {
+                case 1:
+                    UpgradeSpeed();
+                    break;
+                case 2:
+                    UpgradeHealth();
+                    break;
+                case 3:
+                    UpgradeProjectileSpeed();
+                    break;
+                default:
+                    throw new Exception("No upgrade for given code");
+            }
+        }
+        private void CalculateNextMove()
+        {
+            var enemyToFocus = 0; // enemy that would take the least time to kill
+
+        }
+        private void FindClosestEnemy()
+        {
+            foreach (var control in screen.Controls)
+            {
+                if (control is PictureBox pictureBox)
+                {
+                    if (pictureBox.Tag is not null && pictureBox.Tag.ToString() == enemyTag)
+                    {
+                        /*EnemyData enemyData = new EnemyData
+                        {
+                            Tag = pictureBox.Tag?.ToString(),
+                            Location = new Vector2d(pictureBox.Location.X, pictureBox.Location.Y),
+                        };
+                        if (foundEnemies.Keys.Contains(enemyData) && foundEnemies[key: enemyData] == zeroVector)
+                        {
+                            enemyData.
+                        }*/
+                        //Vector2d enemyLocation = (pictureBox)
+                        SetClosestEnemyData(pictureBox);
+                    }
+                }
+            }
+        }
+        private void SetClosestEnemyData(PictureBox pictureBox)
+        {
+            var newEnemyMoveShootVector = CalculateMoveShootDistance(pictureBox);
+            var distanceNewEnemy = GetAbsoluteDistance(newEnemyMoveShootVector);
+            if (closestEnemyData.Name == "no data")
+            {
+                closestEnemyData.Name = pictureBox.Name;
+                closestEnemyData.moveShootVector = newEnemyMoveShootVector;
+            }
+            else
+            {
+                if (distanceNewEnemy < shortestDistance)
+                {
+                    closestEnemyData.moveShootVector = newEnemyMoveShootVector;
+                    closestEnemyData.Name = pictureBox.Name;
+
+                }
+                else if (distanceNewEnemy == shortestDistance)
+                {
+                    if (closestEnemyData.Name != pictureBox.Name)
+                    {
+                        closestEnemyData.Name = CompareEnemies(closestEnemyData.Name, pictureBox.Name);
+                    }
+                }
+            }
+        }
+        private string CompareEnemies(string name1,  string name2)
+        {
+            if (diffiCultyDict[name1] >= diffiCultyDict[name2])
+            {
+                return name1;
+            }
+            return name2;
+        }
+        /*private Vector2d DetermineShorterDistance(Vector2d vector1,  Vector2d vector2)
+        {
+            var distance1 = GetAbsoluteDistance(CalculateMoveShootDistance(vector1));
+            var distance2 = GetAbsoluteDistance(CalculateMoveShootDistance(vector2));
+            if (distance1 == distance2)
+            {
+                if (vector1.Y <= vector2.Y)
+                {
+                    return vector1;
+                }
+                else if (vector1.Y > vector2.Y)
+                {
+                    return vector1;
+                }
+            }
+        }*/
+        private Vector2d CalculateMoveShootDistance(PictureBox pictureBox)
+        {
+            Vector2d result = new Vector2d();
+            if (pictureBox.Left >= icon.Right)
+            {
+                result.X = (pictureBox.Left - icon.Left) / Speed + 2;
+            }
+            else if (pictureBox.Right < icon.Left)
+            {
+                result.X = (pictureBox.Right - icon.Left) / Speed - 2;
+            }
+            result.Y = (pictureBox.Bottom - icon.Top) / ProjectileSpeed + 1;
+            return result;
+        }  
+        private int GetAbsoluteDistance(Vector2d moveVector)
+        {
+            var result = 0;
+            result = Math.Abs(moveVector.X) + Math.Abs(moveVector.Y);
+            return result;
+        }
+
     }
 }
