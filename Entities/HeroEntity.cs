@@ -41,13 +41,18 @@ namespace zap_program2024.Entities
         private bool _dead;
 
         //Automode variables
-        private Dictionary<EnemyData, Vector2d> foundEnemies; //values will be vector that determines enenemy's movement
+        private Dictionary<int, PictureBox> foundEnemies; //values will be vector that determines enenemy's movement
         private bool canShoot = true;
         private Vector2d moveShoot = new Vector2d(); // Item.1 - Amount of moves(+to the right, -to the left), Item.2 - Amount of moves after which heor shoots
         private int shortestDistance = 0;
+        private int coinXCoord = -1;
         private const int stepsAhead = 100;
         private const string enemyTag = "Enemy";
         private const string enemyProjectileTag = "ProjectileEnemy";
+        private static readonly List<string> dangerTags = new List<string>() { enemyTag, enemyProjectileTag};
+
+    private const int maxEnemyProjectileSpeed = 9;
+        private const int shootBound = 5;
         private readonly Vector2d zeroVector = new Vector2d(0, 0);
         private EnemyData closestEnemyData;
 
@@ -64,8 +69,8 @@ namespace zap_program2024.Entities
             size.X = 115;
             size.Y = 130;
             _onScreen = true;
-            _autoMode = false;
-            //foundEnemies = new Dictionary<EnemyData, Vector2d>();
+            _autoMode = true;
+            foundEnemies = new Dictionary<int, PictureBox>();
             closestEnemyData = new EnemyData("no data", zeroVector);
         }
         public bool ShootingReady
@@ -166,7 +171,7 @@ namespace zap_program2024.Entities
             {
                 if (AutoModeOn)
                 {
-                    throw new NotImplementedException();
+                    Action();
                 }
                 else
                 {
@@ -250,15 +255,89 @@ namespace zap_program2024.Entities
                     throw new Exception("No upgrade for given code");
             }
         }
-        private void CalculateNextMove()
-        {
-            var enemyToFocus = 0; // enemy that would take the least time to kill
 
+        //automode
+        private void Action()
+        {
+            if (coinAvailable())
+            {
+                MoveForCoin();
+            }
+            else
+            {
+                var nextMove = CalculateNextMove();
+                icon.Left += nextMove;
+            }
+            if (CanShoot() && FireReady())
+            {
+                HeroShoot();
+            }
+        }
+        private bool CanShoot()
+        {
+            if ((closestEnemyData.moveShootVector.X * Speed / FirePeriod) >= 1 || closestEnemyData.moveShootVector.X < shootBound)
+            {
+                return true;
+            }
+            return false;
+        }
+        private int CalculateNextMove()
+        {
+            var nextMove = 0;
+            FindClosestEnemy(); // enemy that would take the least time to kill
+
+            if (closestEnemyData.moveShootVector.X > 0)
+            {
+                nextMove = Speed;
+                moveShoot.X = closestEnemyData.moveShootVector.X - 1;
+            }
+            else if (closestEnemyData.moveShootVector.X < 0)
+            {
+                nextMove = -Speed;
+                moveShoot.X = closestEnemyData.moveShootVector.X + 1;
+
+            }
+            moveShoot.Y = closestEnemyData.moveShootVector.Y;
+            closestEnemyData.moveShootVector = moveShoot;
+            return nextMove;
+        }
+        private void MoveForEnemy()
+        {
+            var nextMove = CalculateNextMove();
+            while (!AreaSafe(nextMove)) 
+            { 
+                nextMove = FindSafeMove();
+            }
+            icon.Left += nextMove;
+        }
+        private void MoveForCoin()
+        {
+            var nextMove = 0;
+            if (coinXCoord < icon.Left)
+            {
+                if (!AreaSafe(-Speed))
+                {
+                    nextMove = FindSafeMove();
+                    icon.Left += nextMove;
+                }
+                else { icon.Left -= Speed; }
+                
+            }
+            else
+            {
+                if (!AreaSafe(Speed))
+                {
+                    nextMove = FindSafeMove();
+                    icon.Left += nextMove;
+                }
+                else { icon.Left += Speed; }
+            }
         }
         private void FindClosestEnemy()
         {
             foreach (var control in screen.Controls)
             {
+                var closest = 4000;
                 if (control is PictureBox pictureBox)
                 {
                     if (pictureBox.Tag is not null && pictureBox.Tag.ToString() == enemyTag)
@@ -271,9 +350,10 @@ namespace zap_program2024.Entities
                         if (foundEnemies.Keys.Contains(enemyData) && foundEnemies[key: enemyData] == zeroVector)
                         {
                             enemyData.
-                        }*/
-                        //Vector2d enemyLocation = (pictureBox)
+                        }
+                        //Vector2d enemyLocation = (pictureBox)*/
                         SetClosestEnemyData(pictureBox);
+                        Console.WriteLine("EnemyFound");
                     }
                 }
             }
@@ -282,64 +362,79 @@ namespace zap_program2024.Entities
         {
             var newEnemyMoveShootVector = CalculateMoveShootDistance(pictureBox);
             var distanceNewEnemy = GetAbsoluteDistance(newEnemyMoveShootVector);
+            /*if (!foundEnemies.ContainsKey(distanceNewEnemy))
+            {
+                foundEnemies.Add(distanceNewEnemy, pictureBox);
+            }*/
+            /*if (shortestDistance != 0 && foundEnemies[shortestDistance] ==  null)
+            {
+                foundEnemies.Remove(shortestDistance);
+                shortestDistance = 4000;
+            }*/
+            
             if (closestEnemyData.Name == "no data")
             {
                 closestEnemyData.Name = pictureBox.Name;
                 closestEnemyData.moveShootVector = newEnemyMoveShootVector;
+                shortestDistance = distanceNewEnemy;
             }
             else
             {
-                if (distanceNewEnemy < shortestDistance)
+                DislocateDead();
+                if (distanceNewEnemy < GetAbsoluteDistance(closestEnemyData.moveShootVector))
                 {
                     closestEnemyData.moveShootVector = newEnemyMoveShootVector;
                     closestEnemyData.Name = pictureBox.Name;
-
+                    shortestDistance = distanceNewEnemy;
                 }
-                else if (distanceNewEnemy == shortestDistance)
+                else if (distanceNewEnemy == GetAbsoluteDistance(closestEnemyData.moveShootVector))
                 {
                     if (closestEnemyData.Name != pictureBox.Name)
                     {
                         closestEnemyData.Name = CompareEnemies(closestEnemyData.Name, pictureBox.Name);
+                        if (closestEnemyData.Name == pictureBox.Name)
+                        {
+                            closestEnemyData.moveShootVector = newEnemyMoveShootVector;
+                        }
                     }
                 }
             }
         }
         private string CompareEnemies(string name1,  string name2)
         {
+            if (!diffiCultyDict.ContainsKey(name1) || !diffiCultyDict.ContainsKey(name2))
+            {
+                return null;
+            }
             if (diffiCultyDict[name1] >= diffiCultyDict[name2])
             {
                 return name1;
             }
             return name2;
         }
-        /*private Vector2d DetermineShorterDistance(Vector2d vector1,  Vector2d vector2)
-        {
-            var distance1 = GetAbsoluteDistance(CalculateMoveShootDistance(vector1));
-            var distance2 = GetAbsoluteDistance(CalculateMoveShootDistance(vector2));
-            if (distance1 == distance2)
-            {
-                if (vector1.Y <= vector2.Y)
-                {
-                    return vector1;
-                }
-                else if (vector1.Y > vector2.Y)
-                {
-                    return vector1;
-                }
-            }
-        }*/
         private Vector2d CalculateMoveShootDistance(PictureBox pictureBox)
         {
-            Vector2d result = new Vector2d();
+            var result = new Vector2d();
             if (pictureBox.Left >= icon.Right)
             {
-                result.X = (pictureBox.Left - icon.Left) / Speed + 2;
+                result.X = ((pictureBox.Left - icon.Right) / Speed) + 2; //+ icon.Width / 3;
+                Console.WriteLine(result.X);
             }
-            else if (pictureBox.Right < icon.Left)
+            else if (pictureBox.Right <= icon.Left)
             {
-                result.X = (pictureBox.Right - icon.Left) / Speed - 2;
+                result.X = ((pictureBox.Right - icon.Left ) / Speed) - 2;// - icon.Width / 3;
+                Console.WriteLine(result.X);
             }
-            result.Y = (pictureBox.Bottom - icon.Top) / ProjectileSpeed + 1;
+            else if (pictureBox.Right <= icon.Right)
+            {
+                result.X = (pictureBox.Right - icon.Right) / Speed;
+            }
+            else if (pictureBox.Left >= icon.Left)
+            {
+                result.X = (pictureBox.Left - icon.Left) / Speed;
+            }
+            result.Y = (icon.Top - pictureBox.Bottom) / ProjectileSpeed + 2;
+            Console.WriteLine("ygkhfkythcgt");
             return result;
         }  
         private int GetAbsoluteDistance(Vector2d moveVector)
@@ -348,6 +443,80 @@ namespace zap_program2024.Entities
             result = Math.Abs(moveVector.X) + Math.Abs(moveVector.Y);
             return result;
         }
-
+        private void DislocateDead()
+        {
+            var focusPoint = new Point(icon.Left + closestEnemyData.moveShootVector.X, icon.Top - closestEnemyData.moveShootVector.Y - 2);
+            foreach (var control in screen.Controls)
+            {
+                if (control != null && control is PictureBox pictureBox && pictureBox.Name == "Enemy")
+                {
+                    if (pictureBox.Bounds.Contains(focusPoint))
+                    {
+                        return;
+                    }
+                }
+            }
+            closestEnemyData.Name = "no data";
+        }
+        private bool AreaSafe(int moveToMake)
+        {
+            int[,] nextShipEdges =
+            {
+                { icon.Right + moveToMake, icon.Top + maxEnemyProjectileSpeed},
+                { icon.Right + moveToMake, icon.Bottom + maxEnemyProjectileSpeed},
+                { icon.Left + moveToMake, icon.Top + maxEnemyProjectileSpeed},
+                { icon.Left + moveToMake, icon.Bottom },
+            };
+            for (int i = 0; i < nextShipEdges.GetLength(0); i++)
+            {
+                Point newPoint = new Point(nextShipEdges[i, 0], nextShipEdges[i, 1]);
+                if (DangerInWay(newPoint))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        private bool DangerInWay(Point pointToCheck)
+        {
+            foreach (var control in screen.Controls)
+            {
+                if (control != null && control is PictureBox pictureBox && dangerTags.Contains(pictureBox.Tag?.ToString()))
+                {
+                    if (pictureBox.Bounds.Contains(pointToCheck))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        private bool coinAvailable()
+        {
+            foreach (var control in screen.Controls)
+            {
+                if (control != null && control is PictureBox pictureBox && pictureBox.Tag?.ToString() == "Coin")
+                {
+                    coinXCoord = pictureBox.Bounds.X;
+                    return true;
+                }
+            }
+            return false;
+        }
+        private int FindSafeMove()
+        {
+            if (AreaSafe(Speed))
+            {
+                return Speed;
+            }
+            else if (AreaSafe(-Speed))
+            {
+                return -Speed;
+            }
+            else
+            {
+                return 0;
+            }
+        }
     }
 }

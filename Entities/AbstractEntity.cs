@@ -110,10 +110,6 @@ namespace zap_program2024.Entities
                     {
                         if (pictureBox.Bounds.IntersectsWith(icon.Bounds))
                         {
-                            if (hitObjectTag == "ProjectileEnemy")
-                            {
-                                Console.WriteLine();
-                            }
                             screen.Controls.Remove(pictureBox);                            
                             return true;
                         }

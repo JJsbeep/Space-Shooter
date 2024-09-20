@@ -87,7 +87,6 @@ namespace zap_program2024.Entities
         public override void InitializePicBox()
         {
             icon.Name = "MidEnemyPicbox";
-            icon.Tag = "MidEnemy";
             icon.Tag = "Enemy"; 
             icon.Image = Image.FromFile(@"..\..\..\images\MidEnemyShip.png"); ;
             base.InitializePicBox();

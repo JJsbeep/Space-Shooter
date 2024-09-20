@@ -91,7 +91,6 @@ namespace zap_program2024.Entities
         public override void InitializePicBox()
         {
             icon.Name = "BossEnemyPicbox";
-            icon.Tag = "BossEnemy";
             icon.Tag = "Enemy";
             icon.Image = Image.FromFile(@"..\..\..\images\BossShip.png"); ;
             base.InitializePicBox();

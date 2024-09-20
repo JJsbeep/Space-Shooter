@@ -35,6 +35,7 @@ namespace zap_program2024
         public void Initilaize()
         {
             GetRandomLocation();
+            icon.Tag = "Coin";
             icon.Image = icon.Image = Image.FromFile(@"..\..\..\images\coin.gif");
             icon.Location = new Point(location.X, location.Y);
             icon.SizeMode = PictureBoxSizeMode.AutoSize;

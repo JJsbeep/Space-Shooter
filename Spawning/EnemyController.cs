@@ -30,7 +30,7 @@ namespace zap_program2024.Spawning
         private const int shiftY = 30;
         private const int enemiesPerLine = 3;
 
-        private List<(int, int)> enemyDifficulutyChanceToSpawn = new List<(int, int)>()
+        private static List<(int, int)> enemyDifficulutyChanceToSpawn = new List<(int, int)>()
         {
             (1, 65),
             (2, 20),
@@ -42,8 +42,8 @@ namespace zap_program2024.Spawning
 
         private List<AbstractEntity> Enemies = new List<AbstractEntity>();
 
-        private int movingPeriod = 1750;
-        private int spawnPeriod = 4000;
+        private int movingPeriod = 1500;
+        private int spawnPeriod = 2500;
         private int deathsCheckInterval = 1;
         //amount of enemies of each entity on each line
         public List<int[]> NumsOfEnemiesOnLines = new List<int[]>()
@@ -213,6 +213,37 @@ namespace zap_program2024.Spawning
                     enemy.shootTimer.Stop();
                 }
             }
+        }
+        public void IncreaseDIfficulty()
+        {
+            var j = 0;
+            var increment = 3;
+            for (var i = 0; i < enemyDifficulutyChanceToSpawn.Count; i++)
+            {
+                if (enemyDifficulutyChanceToSpawn[i].Item2 > 0)
+                {
+                    j = i;     
+                    if (enemyDifficulutyChanceToSpawn[i].Item2 < increment)
+                    {
+                        increment = enemyDifficulutyChanceToSpawn[i].Item2;
+                        
+                    }
+                    var newDifficultyChance = (enemyDifficulutyChanceToSpawn[i].Item1, enemyDifficulutyChanceToSpawn[i].Item2 - increment);
+                    enemyDifficulutyChanceToSpawn[i] = newDifficultyChance;
+                    break;
+                }
+            }
+            for (var i = j; i < enemyDifficulutyChanceToSpawn.Count; i++)
+            {
+                if (increment > 0)
+                {
+                    var newDifficultyChance = (enemyDifficulutyChanceToSpawn[i].Item1, enemyDifficulutyChanceToSpawn[i].Item2 + 1);
+                    enemyDifficulutyChanceToSpawn[i] = newDifficultyChance;
+                    increment--;
+                }
+                else { break; }
+            }
+            spawnPeriod -= 25;
         }
 
     }

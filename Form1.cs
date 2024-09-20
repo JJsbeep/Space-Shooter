@@ -44,6 +44,7 @@ namespace zap_program2024
             scoreBar.CheckUpgrade();
             if (scoreBar.UpgradeReady)
             {
+                 
                  coinPicked = coin.PickedUp();
                 //scoreBar.Update();
                 if (!coin.Availablable && !coinAppeared)
@@ -133,7 +134,7 @@ namespace zap_program2024
 
         private void GameOver()
         {
-
+            MessageBox.Show($"GAME OVER\nSCORE: {scoreBar.ScoreCount}");
         }
 
         private void ScoreBar_Click(object sender, EventArgs e)

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using zap_program2024.Spawning;
 
 namespace zap_program2024
 {
     public  class ScoreLabel
     {
-        Form screen;
+        GameWindow screen;
         public ScoreLabel(GameWindow form) 
         {
             screen = form;
@@ -42,6 +43,7 @@ namespace zap_program2024
             {
                 UpgradeReady = true;
                 upgradeCheckpoint += checkpointsDistance;
+                screen.enemyController.IncreaseDIfficulty();
             }
 
         }
