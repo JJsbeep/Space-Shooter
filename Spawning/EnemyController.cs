@@ -18,7 +18,7 @@ namespace zap_program2024.Spawning
         {
             screen = form;
         }
-
+        private const int enemyWidth = 77;
         private const int enemiesAmount = 12;
         private const int enemyLinesAmount = 4;
         private int currShipIndex = 0;
@@ -29,6 +29,8 @@ namespace zap_program2024.Spawning
         private const int shiftX = 77;
         private const int shiftY = 30;
         private const int enemiesPerLine = 3;
+        private const int difficultyIncrement = 100;
+        private const int periodBound = 750;
 
         private static List<(int, int)> enemyDifficulutyChanceToSpawn = new List<(int, int)>()
         {
@@ -45,7 +47,6 @@ namespace zap_program2024.Spawning
         private int movingPeriod = 1500;
         private int spawnPeriod = 2500;
         private int deathsCheckInterval = 1;
-        //amount of enemies of each entity on each line
         public List<int[]> NumsOfEnemiesOnLines = new List<int[]>()
         {
             new int[] {3, 0, 0, 0},
@@ -56,8 +57,6 @@ namespace zap_program2024.Spawning
 
         Timer MoveControlTimer = new Timer();
         Timer SpawnControlTimer = new Timer();
-        //Timer DeathsTimer = new Timer();
-
 
         public void ResetIndexing()
         {
@@ -80,18 +79,10 @@ namespace zap_program2024.Spawning
             SpawnControlTimer.Start();
             SpawnControlTimer.Tick += SpawnTimer_Tick;
         }
-        /*private void InitializeDeatsTimer()
-        {
-            DeathsTimer.Interval = deathsCheckInterval;
-            DeathsTimer.Enabled = true;
-            DeathsTimer.Start();
-            DeathsTimer.Tick += DeleteDead;
-        }*/
         public void InitializeController()
         {
             InitializeMoveTimer();
             InitializeSpawnTimer();
-            //InitializeDeatsTimer();
         }
         private void DeleteDead()
         {
@@ -99,7 +90,6 @@ namespace zap_program2024.Spawning
             {
                 if (Enemies[i].Dead)
                 {
-                    //screen.Controls.Remove(Enemies[i].icon);
                     Enemies.RemoveAt(i);
                 }
             }
@@ -193,7 +183,7 @@ namespace zap_program2024.Spawning
         }
         public void GetRandomSpawnCoords()
         {
-            spawnCoordinates.X = rnd.Next(0, screen.Width);
+            spawnCoordinates.X = rnd.Next(enemyWidth, screen.Width - enemyWidth);
             spawnCoordinates.Y = rnd.Next(0, screen.Height / 2);
         }
         private void Respawn()
@@ -233,7 +223,7 @@ namespace zap_program2024.Spawning
                     break;
                 }
             }
-            for (var i = j; i < enemyDifficulutyChanceToSpawn.Count; i++)
+            for (var i = j + 1; i < enemyDifficulutyChanceToSpawn.Count; i++)
             {
                 if (increment > 0)
                 {
@@ -243,8 +233,15 @@ namespace zap_program2024.Spawning
                 }
                 else { break; }
             }
-            spawnPeriod -= 25;
+            QuickenSpawning();
         }
-
+        private void QuickenSpawning()
+        {
+            if (SpawnControlTimer.Interval >= periodBound && MoveControlTimer.Interval >= periodBound)
+            {
+                SpawnControlTimer.Interval -= difficultyIncrement;
+                MoveControlTimer.Interval -= difficultyIncrement;
+            }
+        }
     }
 }

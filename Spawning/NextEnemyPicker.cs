@@ -38,9 +38,11 @@ namespace zap_program2024.Spawning
             if (ValidProbability(valueProbabilityDoubles))
             {
                 var pickedNumber = rnd.Next(0, requiredProbability);
+                var checkpoint = 0;
                 foreach (var value in valueProbabilityDoubles)
                 {
-                    if (pickedNumber <= requiredProbability)
+                    checkpoint += value.Item2;
+                    if (pickedNumber <= checkpoint)
                     {
                         return value.Item1;
                     }

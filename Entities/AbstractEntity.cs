@@ -79,8 +79,15 @@ namespace zap_program2024.Entities
                 }
             }
             return false;
-            
         }
+        public void GetBackUp()
+        {
+            if (!IsOnScreen(icon))
+            {
+                icon.Top = 0;
+            }
+        }
+
         public void SetCoordinates(int x, int y)
         {
             icon.Location = new Point(x, y);
@@ -243,6 +250,7 @@ namespace zap_program2024.Entities
                 GotHit("ProjectileHero");
                 pictureBox.Left += shifts.X;
                 pictureBox.Top += shifts.Y;
+                GetBackUp();
                 DeleteObject();
             }
             /*else
@@ -272,6 +280,7 @@ namespace zap_program2024.Entities
                     counter++;
                 }
                 else { counter = 1; }
+                GetBackUp();
                 DeleteObject();
 
             }

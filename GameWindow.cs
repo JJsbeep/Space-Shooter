@@ -28,6 +28,10 @@ namespace zap_program2024
             upgradeMessage = new UpgradeMessage(this);
             coin = new Coin(this);
         }
+        public void SetAutoMode(bool isOn)
+        {
+            hero.AutoModeOn = isOn;
+        }
         public void spaceship_shooter_Load(object sender, EventArgs e)
         {
             hero.Initialize();
@@ -56,6 +60,7 @@ namespace zap_program2024
                 {
                     upgradeMessage.Show();
                     upgradeAvailable = true;
+                    hero.AutoUpgrade();
                     //coinAppeared = false;
                 }
             }
@@ -63,6 +68,7 @@ namespace zap_program2024
 
         private void KeyIsDown(object sender, KeyEventArgs e)
         {
+            if (hero.AutoModeOn) { return; }
             if (e.KeyCode == Keys.D || e.KeyCode == Keys.Right)
             {
                 hero.moving = true;
@@ -86,9 +92,7 @@ namespace zap_program2024
                 if (scoreBar.UpgradeReady && upgradeAvailable)
                 {
                     hero.PerformUpgrade(upgradeCodes[1]);
-                    scoreBar.UpgradeReady = false;
-                    upgradeMessage.Hide();
-                    coinAppeared = false;
+                    SetAfterCoinPicked();
                 }
             }
             if (e.KeyCode == Keys.D2 || e.KeyCode == Keys.NumPad2)
@@ -96,9 +100,7 @@ namespace zap_program2024
                 if (scoreBar.UpgradeReady && upgradeAvailable)
                 {
                     hero.PerformUpgrade(upgradeCodes[2]);
-                    scoreBar.UpgradeReady = false;
-                    upgradeMessage.Hide();
-                    coinAppeared = false;
+                    SetAfterCoinPicked();
                 }
             }
             if (e.KeyCode == Keys.D3 || e.KeyCode == Keys.NumPad3)
@@ -106,13 +108,16 @@ namespace zap_program2024
                 if (scoreBar.UpgradeReady && upgradeAvailable)
                 {
                     hero.PerformUpgrade(upgradeCodes[3]);
-                    scoreBar.UpgradeReady = false;
-                    upgradeMessage.Hide();
-                    coinAppeared = false;
+                    SetAfterCoinPicked();
                 }
             }
         }
-
+        public void SetAfterCoinPicked()
+        {
+            scoreBar.UpgradeReady = false;
+            upgradeMessage.Hide();
+            coinAppeared = false;
+        }
         private void KeyIsUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.D || e.KeyCode == Keys.Right)

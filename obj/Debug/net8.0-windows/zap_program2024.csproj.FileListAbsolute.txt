@@ -1,9 +1,10 @@
 C:\Users\juraj\source\repos\zap_program2024\bin\Debug\net8.0-windows\zap_program2024.exe
+C:\Users\juraj\source\repos\zap_program2024\bin\Debug\net8.0-windows\zap_program2024.dll
 C:\Users\juraj\source\repos\zap_program2024\bin\Debug\net8.0-windows\zap_program2024.deps.json
 C:\Users\juraj\source\repos\zap_program2024\bin\Debug\net8.0-windows\zap_program2024.runtimeconfig.json
-C:\Users\juraj\source\repos\zap_program2024\bin\Debug\net8.0-windows\zap_program2024.dll
 C:\Users\juraj\source\repos\zap_program2024\bin\Debug\net8.0-windows\zap_program2024.pdb
 C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\zap_program2024.GameWindow.resources
+C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\zap_program2024.MainMenu.resources
 C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\zap_program2024.Properties.Resources.resources
 C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\zap_program2024.csproj.GenerateResource.cache
 C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\zap_program2024.GeneratedMSBuildEditorConfig.editorconfig

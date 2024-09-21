@@ -2,6 +2,7 @@
 using Microsoft.VisualBasic.Devices;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing.Text;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -51,10 +52,11 @@ namespace zap_program2024.Entities
         private const string enemyProjectileTag = "ProjectileEnemy";
         private static readonly List<string> dangerTags = new List<string>() { enemyTag, enemyProjectileTag};
 
-    private const int maxEnemyProjectileSpeed = 9;
+        private const int maxEnemyProjectileSpeed = 9;
         private const int shootBound = 5;
         private readonly Vector2d zeroVector = new Vector2d(0, 0);
         private EnemyData closestEnemyData;
+        private int lastEvenlyUpgrade = 0;
 
 
         public HeroEntity(GameWindow form) : base(form)
@@ -265,8 +267,7 @@ namespace zap_program2024.Entities
             }
             else
             {
-                var nextMove = CalculateNextMove();
-                icon.Left += nextMove;
+                MoveForEnemy();
             }
             if (CanShoot() && FireReady())
             {
@@ -304,11 +305,23 @@ namespace zap_program2024.Entities
         private void MoveForEnemy()
         {
             var nextMove = CalculateNextMove();
-            while (!AreaSafe(nextMove)) 
-            { 
+            if (!AreaSafe(nextMove)) 
+            {
                 nextMove = FindSafeMove();
             }
-            icon.Left += nextMove;
+            DoMove(nextMove);
+            //icon.Left += nextMove;
+        }
+        private void DoMove(int move)
+        {
+            if (move > 0)
+            {
+                MoveRight();
+            }
+            else
+            {
+                MoveLeft();
+            }
         }
         private void MoveForCoin()
         {
@@ -318,7 +331,7 @@ namespace zap_program2024.Entities
                 if (!AreaSafe(-Speed))
                 {
                     nextMove = FindSafeMove();
-                    icon.Left += nextMove;
+                    DoMove(nextMove);
                 }
                 else { icon.Left -= Speed; }
                 
@@ -328,7 +341,7 @@ namespace zap_program2024.Entities
                 if (!AreaSafe(Speed))
                 {
                     nextMove = FindSafeMove();
-                    icon.Left += nextMove;
+                    DoMove(nextMove);
                 }
                 else { icon.Left += Speed; }
             }
@@ -460,30 +473,24 @@ namespace zap_program2024.Entities
         }
         private bool AreaSafe(int moveToMake)
         {
-            int[,] nextShipEdges =
+            Point newPoint = new Point();
+            PictureBox newIcon = new PictureBox();
+            newIcon.Size = new Size(icon.Size.Width + (Math.Abs(2 * moveToMake)), icon.Size.Height + maxEnemyProjectileSpeed);
+            newIcon.Left = icon.Left + moveToMake;
+            newIcon.Top = icon.Top + maxEnemyProjectileSpeed;
+            if (!DangerInWay(newIcon))
             {
-                { icon.Right + moveToMake, icon.Top + maxEnemyProjectileSpeed},
-                { icon.Right + moveToMake, icon.Bottom + maxEnemyProjectileSpeed},
-                { icon.Left + moveToMake, icon.Top + maxEnemyProjectileSpeed},
-                { icon.Left + moveToMake, icon.Bottom },
-            };
-            for (int i = 0; i < nextShipEdges.GetLength(0); i++)
-            {
-                Point newPoint = new Point(nextShipEdges[i, 0], nextShipEdges[i, 1]);
-                if (DangerInWay(newPoint))
-                {
-                    return false;
-                }
+                return true;
             }
-            return true;
+            return false;
         }
-        private bool DangerInWay(Point pointToCheck)
+        private bool DangerInWay(PictureBox Area)
         {
             foreach (var control in screen.Controls)
             {
                 if (control != null && control is PictureBox pictureBox && dangerTags.Contains(pictureBox.Tag?.ToString()))
                 {
-                    if (pictureBox.Bounds.Contains(pointToCheck))
+                    if (pictureBox.Bounds.IntersectsWith(Area.Bounds))
                     {
                         return true;
                     }
@@ -505,18 +512,43 @@ namespace zap_program2024.Entities
         }
         private int FindSafeMove()
         {
-            if (AreaSafe(Speed))
+            var moveVector = zeroVector;
+            var move = 0;
+            /*for (int i = 0; i < 30; i++)
+            {*/
+                if (AreaSafe(Speed))
+                {
+                    move = Speed;
+                }
+                else if (AreaSafe(-Speed))
+                {
+                    move = -Speed;
+                }
+                return move;
+            /*}
+
+            closestEnemyData.moveShootVector = moveVector;*/
+        }
+        public void AutoUpgrade()
+        {
+            if (Health <= 3)
             {
-                return Speed;
-            }
-            else if (AreaSafe(-Speed))
-            {
-                return -Speed;
+                UpgradeHealth();
             }
             else
             {
-                return 0;
+                UpgradeEvenly();
             }
+            screen.SetAfterCoinPicked();
+        }
+        private void UpgradeEvenly()
+        {
+            if (lastEvenlyUpgrade == 0  || lastEvenlyUpgrade == 1)
+            {
+                UpgradeProjectileSpeed();
+                return;
+            }
+            UpgradeSpeed();
         }
     }
 }
