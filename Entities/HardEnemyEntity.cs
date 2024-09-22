@@ -11,15 +11,15 @@ namespace zap_program2024.Entities
 {
     public class HardEnemyEntity : AbstractEntity
     {
-        public int _difficulty;
-        public int _firePeriod;
-        public int _projectileSpeed;
-        public int _speed;
-        public int _health;
-        public int _xPos;
-        public int _yPos;
-        public bool _onScreen;
-        public bool _dead;
+        private int _difficulty;
+        private int _firePeriod;
+        private int _projectileSpeed;
+        private int _speed;
+        private int _health;
+        private int _xPos;
+        private int _yPos;
+        private bool _onScreen;
+        private bool _dead;
         public HardEnemyEntity(GameWindow form) : base(form)
         {
             _firePeriod = 2000;
@@ -31,12 +31,12 @@ namespace zap_program2024.Entities
             _dead = false;
             _onScreen = false;
         }
-        protected override int FirePeriod
+        public override int FirePeriod
         {
             get => _firePeriod;
             set => _firePeriod = value;
         }
-        protected override int ProjectileSpeed
+        public override int ProjectileSpeed
         {
             get => _projectileSpeed;
             set => _projectileSpeed = value;

@@ -12,14 +12,14 @@ namespace zap_program2024.Entities
     public class BasicEnemyEntity : AbstractEntity
     {
 
-        public int _firePeriod;
-        public int _difficulty;
-        public int _speed;
-        public int _health;
-        public int _xPos;
-        public int _yPos;
-        public bool _onScreen;
-        public bool _dead;
+        private int _firePeriod;
+        private int _difficulty;
+        private int _speed;
+        private int _health;
+        private int _xPos;
+        private int _yPos;
+        private bool _onScreen;
+        private bool _dead;
 
         
         public BasicEnemyEntity(GameWindow form) : base(form)

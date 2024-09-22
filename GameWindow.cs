@@ -60,7 +60,7 @@ namespace zap_program2024
                 {
                     upgradeMessage.Show();
                     upgradeAvailable = true;
-                    hero.AutoUpgrade();
+                    if (hero.AutoModeOn) { hero.AutoUpgrade(); }
                 }
             }
         }

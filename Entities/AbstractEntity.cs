@@ -31,12 +31,12 @@ namespace zap_program2024.Entities
         protected int moveDistance;
         protected int shootDistance;
 
-        private int counter = 1;//counts horizontal and vertical movements
-        private int sign = 1;
-        private int aliveCheckPeriod = 1;
+        protected int counter = 1;//counts horizontal and vertical movements
+        protected int sign = 1;
+        protected int aliveCheckPeriod = 1;
         private const int maxShootPos = windowHeight * 3 / 4; // closest position to hero, when it is possible to fire
-        protected virtual int FirePeriod { get; set; } = 2000;
-        protected virtual int ProjectileSpeed { get; set; }
+        public virtual int FirePeriod { get; set; } = 2000;
+        public virtual int ProjectileSpeed { get; set; }
         public virtual int Speed { get; set; } = 1;
         public virtual int Health { get; set; } = 1;
         public virtual int XPos { get; set; } = 0;
@@ -62,7 +62,7 @@ namespace zap_program2024.Entities
             screen = form;
         }
 
-        private bool IsOnScreen(PictureBox pictureBox)
+        protected bool IsOnScreen(PictureBox pictureBox)
         {
             if (!Dead)
             { 
@@ -76,7 +76,7 @@ namespace zap_program2024.Entities
         }
 
         //gets projectile back to the top of a screen if it falls out of it
-        private void GetBackUp()
+        protected void GetBackUp()
         {
             if (!IsOnScreen(icon))
             {
@@ -84,9 +84,9 @@ namespace zap_program2024.Entities
                 icon.Left = windowWidth - icon.Left;
             }
         }
-        
+
         //checks if given picturebox is hit by an enemy based on enemy tag
-        private bool CausedByEnemy(string hitObjectTag, PictureBox pictureBox)
+        protected bool CausedByEnemy(string hitObjectTag, PictureBox pictureBox)
         {
             var tag  = hitObjectTag;
             var thing = pictureBox;
@@ -129,7 +129,7 @@ namespace zap_program2024.Entities
             screen.Controls.Remove(icon);
             Dead = true;
         }
-        private bool TargetIsHero(PictureBox pictureBox)
+        protected bool TargetIsHero(PictureBox pictureBox)
         {
             if (pictureBox.Tag != null && pictureBox.Tag.ToString() == "Hero")
             {
@@ -149,7 +149,7 @@ namespace zap_program2024.Entities
                 }
             }
         }
-        private void AimForHero()
+        protected void AimForHero()
         {
             LocateHero();
             shootTargetCoordinates.X = heroLocation.X;
@@ -160,7 +160,7 @@ namespace zap_program2024.Entities
             shootTargetCoordinates.X = rnd.Next(0, windowWidth);
             shootTargetCoordinates.Y = windowHeight;
         }
-        private void GetProjectileDirection(Projectile projectile)
+        protected void GetProjectileDirection(Projectile projectile)
         {
             projectileDirection.X = shootTargetCoordinates.X - projectile.icon.Location.X;
             projectileDirection.Y = shootTargetCoordinates.Y - projectile.icon.Location.Y;
@@ -172,7 +172,7 @@ namespace zap_program2024.Entities
             moveDirection.X = moveDestination.X - icon.Location.X;
             moveDirection.Y = moveDestination.Y - icon.Location.Y;
         }
-        private void GetRandomMoveDestination()
+        protected void GetRandomMoveDestination()
         {
             moveDestination.X = rnd.Next(0, windowWidth);
             moveDestination.Y = windowHeight;
@@ -187,14 +187,14 @@ namespace zap_program2024.Entities
             GetDistance(moveDirection);
             moveShifts = GetShifts(moveDistance, Speed, moveDirection);
         }
-        private int GetDistance(Vector2d directionVector)
+        protected int GetDistance(Vector2d directionVector)
         {
             var distance = 0;
             distance = (int)Math.Sqrt(Math.Pow(directionVector.X, 2) + Math.Pow(directionVector.Y, 2));
             return distance;
         }
         //returns X and Y shifts of movement
-        private Vector2d GetShifts(int distance, int speed, Vector2d directionVector)
+        protected Vector2d GetShifts(int distance, int speed, Vector2d directionVector)
         {
             Vector2d shifts = new Vector2d();
             var movesAmount = 0;
@@ -231,11 +231,14 @@ namespace zap_program2024.Entities
                 Projectile projectile = new Projectile(screen);
                 AimForHero();
                 InitializeProjectile(projectile);
+            }
+            else if(Dead)
+            {
                 DeleteObject();
             }
         }
 
-        protected void MoveStraight(PictureBox pictureBox, Vector2d shifts)
+        public void MoveStraight(PictureBox pictureBox, Vector2d shifts)
         {
             if (IsAlive())
             {
@@ -243,10 +246,13 @@ namespace zap_program2024.Entities
                 pictureBox.Left += shifts.X;
                 pictureBox.Top += shifts.Y;
                 GetBackUp();
+            }
+            else
+            {
                 DeleteObject();
             }
         }
-        protected virtual void MoveCurvy(PictureBox pictureBox, Vector2d shifts)
+        public virtual void MoveCurvy(PictureBox pictureBox, Vector2d shifts)
         {
             if (IsAlive())
             {
@@ -262,10 +268,13 @@ namespace zap_program2024.Entities
                 }
                 else { counter = 1; }
                 GetBackUp();
-                DeleteObject();
 
             }
-            else { counter = 1; }
+            else 
+            { 
+                counter = 1;
+                DeleteObject();
+            }
         }
         public virtual void Initialize()
         {
@@ -276,13 +285,13 @@ namespace zap_program2024.Entities
             moveDistance = GetDistance(moveDirection);
             moveShifts = GetShifts(moveDistance, Speed, moveDirection);
         }
-        private void InitializeShootingTimer()
+        public void InitializeShootingTimer()
         {
             shootTimer.Interval = FirePeriod;
             shootTimer.Tick += Shoot;
             shootTimer.Start();
         }
-        protected void InitializeMovingTimer()
+        public void InitializeMovingTimer()
         {
             moveTimer.Interval = Speed;
             moveTimer.Tick += Move_Tick;
@@ -299,7 +308,7 @@ namespace zap_program2024.Entities
             InitializeMovingTimer();
             InitializeShootingTimer();
         }
-        private void AliveCheck_Tick(object sender, EventArgs e)
+        public void AliveCheck_Tick(object sender, EventArgs e)
         {
             IsAlive();
         }

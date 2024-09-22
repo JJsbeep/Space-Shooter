@@ -33,6 +33,7 @@ namespace zap_program2024
         public Timer projectileSpread = new Timer();
         private Vector2d travelShifts = new Vector2d(); //shift in X and Y position in travel
         private Vector2d curveCheckpoints = new(1, 12); //size of curves for curvy movement
+        public Vector2d directionVector = new Vector2d();
         public bool Off { get; set; } = false;
 
         private bool GotRightTarget(string targetTag, PictureBox target)
@@ -119,7 +120,7 @@ namespace zap_program2024
             icon.Top += travelShifts.Y;
             Delete();
         }
-        private void MoveCurve()
+        public void MoveCurve()
         {
             if (curveCheckpoints.X <= counter && counter < curveCheckpoints.Y / 2)
             {

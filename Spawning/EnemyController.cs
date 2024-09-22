@@ -176,7 +176,7 @@ namespace zap_program2024.Spawning
                 }
             }
         }
-        public void SpawnWave(int amount)
+        private void SpawnWave(int amount)
         {
             for (int i = 0; i < amount; i++)
             {

@@ -19,8 +19,8 @@ namespace zap_program2024.Entities
 
     public class HeroEntity : AbstractEntity
     {
-        private DateTime lastShotTime = DateTime.MinValue;
-        private TimeSpan shotCooldown = TimeSpan.FromSeconds(0.5);
+        public DateTime lastShotTime = DateTime.MinValue;
+        public TimeSpan shotCooldown = TimeSpan.FromSeconds(0.5);
         
 
         public bool moving;
@@ -28,7 +28,7 @@ namespace zap_program2024.Entities
         private bool upgradeReady;
         private bool _autoMode;
 
-        private int _firePeriod;
+        public int _firePeriod;
         private int _projectileSpeed;
 
         //variables to keep track of score
@@ -90,11 +90,11 @@ namespace zap_program2024.Entities
             get;
             set;
         } = true;
-        protected override int FirePeriod
+        public override int FirePeriod
         {
             get => _firePeriod;
         }
-        protected override int ProjectileSpeed
+        public override int ProjectileSpeed
         {
             get => _projectileSpeed;
             set => _projectileSpeed = value;
@@ -232,6 +232,10 @@ namespace zap_program2024.Entities
             {
                 Projectile projectile = new Projectile(screen);
                 InitializeProjectile(projectile);
+
+            }
+            else
+            {
                 DeleteObject();
             }
         }
@@ -479,7 +483,7 @@ namespace zap_program2024.Entities
         {
             foreach (var control in screen.Controls)
             {
-                if (control != null && control is PictureBox pictureBox && dangerTags.Contains(item: pictureBox.Tag?.ToString()))
+                if (control != null && control is PictureBox pictureBox && dangerTags.Contains(pictureBox.Tag?.ToString()))
                 {
                     if (pictureBox.Bounds.IntersectsWith(Area.Bounds))
                     {

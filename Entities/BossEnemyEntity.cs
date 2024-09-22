@@ -31,12 +31,12 @@ namespace zap_program2024.Entities
             _onScreen = false;
             _projectileSize = new Vector2d(39, 10);
         }
-        protected override int FirePeriod
+        public override int FirePeriod
         {
             get => _firePeriod;
             set => _firePeriod = value;
         }
-        protected override int ProjectileSpeed
+        public override int ProjectileSpeed
         {
             get => _projectileSpeed;
             set => _projectileSpeed = value;
@@ -89,7 +89,7 @@ namespace zap_program2024.Entities
             moveDirection.X = heroLocation.X - icon.Location.X;
             moveDirection.Y = heroLocation.Y - icon.Location.Y;
         }
-        protected override void MoveCurvy(PictureBox pictureBox, Vector2d shifts)
+        public override void MoveCurvy(PictureBox pictureBox, Vector2d shifts)
         {
             PrepareMovingToHero();
             base.MoveCurvy(icon, moveShifts);

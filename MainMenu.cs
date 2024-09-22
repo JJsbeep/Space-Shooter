@@ -83,19 +83,19 @@ namespace zap_program2024
         private void ManualModeButton_Click(object sender, EventArgs e)
         {
             GameWindow gameWindow = new GameWindow();
-            this.Hide();
+            Hide();
             gameWindow.SetAutoMode(false);
             gameWindow.ShowDialog();
-            this.Close();
+            Close();
         }
 
         private void AutoModeButton_Click(object sender, EventArgs e)
         {
             GameWindow gameWindow = new GameWindow();
-            this.Hide();
+            Hide();
             gameWindow.SetAutoMode(true);
             gameWindow.ShowDialog();
-            this.Close();
+            Close();
         }
     }
 }
