@@ -48,7 +48,7 @@ namespace zap_program2024
         private bool GotHit(string targetTag)
         {
             foreach(var control in screen.Controls)
-                    {
+            {
                 if (control is PictureBox pictureBox && GotRightTarget(targetTag, pictureBox))
                 {
                     if (pictureBox.Bounds.IntersectsWith(icon.Bounds))
@@ -114,7 +114,7 @@ namespace zap_program2024
             travelShifts.Y = shifts.Y;
         }
         //enemy travel
-        public void MoveStraight(object sender, EventArgs e)
+        public void MoveStraight(object? sender, EventArgs e)
         {
             icon.Left += travelShifts.X;
             icon.Top += travelShifts.Y;
@@ -152,7 +152,7 @@ namespace zap_program2024
             else { counter = 1; }
         }
         //hero travel
-        public void TravelUp(object sender, EventArgs e)
+        public void TravelUp(object? sender, EventArgs e)
         {
             hit = CheckHit(enemyTag);
             if (hit)

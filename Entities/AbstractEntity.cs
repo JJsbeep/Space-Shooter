@@ -34,7 +34,7 @@ namespace zap_program2024.Entities
         protected int counter = 1;//counts horizontal and vertical movements
         protected int sign = 1;
         protected int aliveCheckPeriod = 1;
-        private const int maxShootPos = windowHeight * 3 / 4; // closest position to hero, when it is possible to fire
+        private const int maxShootPos = windowHeight / 2; // closest position to hero, when it is possible to fire
         public virtual int FirePeriod { get; set; } = 2000;
         public virtual int ProjectileSpeed { get; set; }
         public virtual int Speed { get; set; } = 1;
@@ -196,7 +196,7 @@ namespace zap_program2024.Entities
         //returns X and Y shifts of movement
         protected Vector2d GetShifts(int distance, int speed, Vector2d directionVector)
         {
-            Vector2d shifts = new Vector2d();
+            var shifts = new Vector2d();
             var movesAmount = 0;
             movesAmount = distance / speed;
             shifts.X = directionVector.X / movesAmount;
@@ -220,15 +220,15 @@ namespace zap_program2024.Entities
         {
             if (icon.Bottom <= maxShootPos)
             {
-                return false;
+                return true;
             }
-            return true;
+            return false;
         }
-        public virtual void Shoot(object sender, EventArgs e)
+        public virtual void Shoot(object? sender, EventArgs e)
         {
             if (!Dead && IsPositionToShoot())
             {
-                Projectile projectile = new Projectile(screen);
+                var projectile = new Projectile(screen);
                 AimForHero();
                 InitializeProjectile(projectile);
             }
@@ -308,7 +308,7 @@ namespace zap_program2024.Entities
             InitializeMovingTimer();
             InitializeShootingTimer();
         }
-        public void AliveCheck_Tick(object sender, EventArgs e)
+        public void AliveCheck_Tick(object? sender, EventArgs e)
         {
             IsAlive();
         }
@@ -337,6 +337,6 @@ namespace zap_program2024.Entities
             icon.Size = new Size(size.X, size.Y);
             screen.Controls.Add(icon);
         }
-        public virtual void Move_Tick(object sender, EventArgs e) { }
+        public virtual void Move_Tick(object? sender, EventArgs e) { }
     }
 }

@@ -25,15 +25,13 @@ namespace zap_program2024.Entities
 
         public bool moving;
         public bool movingLeft;
-        private bool upgradeReady;
+
         private bool _autoMode;
 
         public int _firePeriod;
         private int _projectileSpeed;
 
         //variables to keep track of score
-        private int score;
-        private int scoreTime;
 
         private int _speed;
         private int _health;
@@ -45,9 +43,7 @@ namespace zap_program2024.Entities
         //Automode variables
         private Dictionary<int, PictureBox> foundEnemies; //values will be vector that determines enenemy's movement
         private Dictionary<string, int> upgradeCodes;
-        private bool canShoot = true;
         private Vector2d moveShoot = new Vector2d(); // Item.1 - Amount of moves(+to the right, -to the left), Item.2 - Amount of moves after which heor shoots
-        private int shortestDistance = 0;
         private int coinXCoord = -1; //negative value if it is not present on the screen initially
         private const int critHealthAmount = 3;
         private const string enemyTag = "Enemy";
@@ -386,7 +382,6 @@ namespace zap_program2024.Entities
             {
                 closestEnemyData.Name = pictureBox.Name;
                 closestEnemyData.moveShootVector = newEnemyMoveShootVector;
-                shortestDistance = distanceNewEnemy;
             }
             else
             {
@@ -395,7 +390,6 @@ namespace zap_program2024.Entities
                 {
                     closestEnemyData.moveShootVector = newEnemyMoveShootVector;
                     closestEnemyData.Name = pictureBox.Name;
-                    shortestDistance = distanceNewEnemy;
                 }
                 else if (distanceNewEnemy == GetAbsoluteDistance(closestEnemyData.moveShootVector)) //target as far as found object
                 {
@@ -457,7 +451,7 @@ namespace zap_program2024.Entities
             var focusPoint = new Point(icon.Left + closestEnemyData.moveShootVector.X, icon.Top - closestEnemyData.moveShootVector.Y - 2);
             foreach (var control in screen.Controls)
             {
-                if (control != null && control is PictureBox pictureBox && pictureBox.Name == "Enemy")
+                if (control is PictureBox { Name: "Enemy" } pictureBox)
                 {
                     if (pictureBox.Bounds.Contains(focusPoint))
                     {
@@ -469,10 +463,10 @@ namespace zap_program2024.Entities
         }
         private bool AreaSafe(int moveToMake)
         {
-            PictureBox newIcon = new PictureBox();
-            newIcon.Size = new Size(icon.Size.Width + (Math.Abs(2 * moveToMake)), icon.Size.Height);
-            newIcon.Left = icon.Left + moveToMake;
-            newIcon.Top = icon.Top + maxEnemyProjectileSpeed;
+            var newIcon = new PictureBox();
+            newIcon.Size = new Size(icon.Size.Width + Math.Abs(moveToMake) , icon.Size.Height + 2 * maxEnemyProjectileSpeed);
+            newIcon.Left = icon.Left +  2 * moveToMake;
+            newIcon.Top = icon.Top + 2 * maxEnemyProjectileSpeed;
             if (!DangerInWay(newIcon))
             {
                 return true;
@@ -483,7 +477,7 @@ namespace zap_program2024.Entities
         {
             foreach (var control in screen.Controls)
             {
-                if (control != null && control is PictureBox pictureBox && dangerTags.Contains(pictureBox.Tag?.ToString()))
+                if (control is PictureBox pictureBox && dangerTags.Contains(pictureBox.Tag?.ToString()))
                 {
                     if (pictureBox.Bounds.IntersectsWith(Area.Bounds))
                     {
@@ -507,13 +501,12 @@ namespace zap_program2024.Entities
         }
         private int FindSafeMove() // check whether it is safe to move to right, left, or stay at place
         {
-            var moveVector = zeroVector;
             var move = 0;
-            if (AreaSafe(Speed))
+            if (AreaSafe( 3 * Speed))
             {
                 move = Speed;
             }
-            else if (AreaSafe(-Speed))
+            else if (AreaSafe(- 3 * Speed))
             {
                 move = -Speed;
             }

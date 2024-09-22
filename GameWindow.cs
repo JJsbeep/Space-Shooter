@@ -7,8 +7,6 @@ namespace zap_program2024
 {
     public partial class GameWindow : Form
     {
-        public const int width = 1300;
-        public const int heigth = 800;
         public readonly int[] upgradeCodes = { 0, 1, 2, 3 };
         public EnemyController enemyController;
         public ScoreLabel scoreBar;
@@ -41,7 +39,7 @@ namespace zap_program2024
             healthBar.Initialize();
             enemyController.InitializeController();
             upgradeMessage.Initialize();
-            coin.Initilaize();
+            coin.Initialize();
             enemyController.SpawnInitialEnemyWave();
         }
         private void MainEvent(object sender, EventArgs e)
@@ -51,7 +49,7 @@ namespace zap_program2024
             if (scoreBar.UpgradeReady)
             {
                 coinPicked = coin.PickedUp();
-                if (!coin.Availablable && !coinAppeared)
+                if (!coin.Available && !coinAppeared)
                 {
                     coin.Appear();
                     coinAppeared = true;
@@ -60,20 +58,23 @@ namespace zap_program2024
                 {
                     upgradeMessage.Show();
                     upgradeAvailable = true;
-                    if (hero.AutoModeOn) { hero.AutoUpgrade(); }
+                    if (hero.AutoModeOn) 
+                    {
+                        hero.AutoUpgrade();
+                    }
                 }
             }
         }
 
-        private void KeyIsDown(object sender, KeyEventArgs e)
+        private void KeyIsDown(object? sender, KeyEventArgs e)
         {
             if (hero.AutoModeOn) { return; }
-            if (e.KeyCode == Keys.D || e.KeyCode == Keys.Right)
+            if (e.KeyCode is Keys.D or Keys.Right)
             {
                 hero.moving = true;
                 hero.movingLeft = false;
             }
-            if (e.KeyCode == Keys.A || e.KeyCode == Keys.Left)
+            if (e.KeyCode is Keys.A or Keys.Left)
             {
                 hero.moving = true;
                 hero.movingLeft = true;
@@ -86,7 +87,7 @@ namespace zap_program2024
                     hero.HeroShoot();
                 }
             }
-            if (e.KeyCode == Keys.D1 || e.KeyCode == Keys.NumPad1)
+            if (e.KeyCode is Keys.D1 or Keys.NumPad1)
             {
                 if (scoreBar.UpgradeReady && upgradeAvailable)
                 {
@@ -94,7 +95,7 @@ namespace zap_program2024
                     SetAfterCoinPicked();
                 }
             }
-            if (e.KeyCode == Keys.D2 || e.KeyCode == Keys.NumPad2)
+            if (e.KeyCode is Keys.D2 or Keys.NumPad2)
             {
                 if (scoreBar.UpgradeReady && upgradeAvailable)
                 {
@@ -102,7 +103,7 @@ namespace zap_program2024
                     SetAfterCoinPicked();
                 }
             }
-            if (e.KeyCode == Keys.D3 || e.KeyCode == Keys.NumPad3)
+            if (e.KeyCode is Keys.D3 or Keys.NumPad3)
             {
                 if (scoreBar.UpgradeReady && upgradeAvailable)
                 {
@@ -119,21 +120,16 @@ namespace zap_program2024
         }
         private void KeyIsUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.D || e.KeyCode == Keys.Right)
+            if (e.KeyCode is Keys.D or Keys.Right)
             {
                 hero.moving = false;
                 hero.movingLeft = false;
             }
-            if (e.KeyCode == Keys.A || e.KeyCode == Keys.Left)
+            if (e.KeyCode is Keys.A or Keys.Left)
             {
                 hero.moving = false;
                 hero.movingLeft = false;
             }
-        }
-
-        private void ResetGame()
-        {
-            GameTimer.Start();
         }
 
         public void GameOver()

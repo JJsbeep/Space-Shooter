@@ -24,7 +24,7 @@ namespace zap_program2024
         public Timer pickTimer = new Timer();
         private const int timeToPick = 3200;
         private int heroWidth;
-        public bool Availablable { get; set; } = false;
+        public bool Available { get; set; } = false;
         
         public Coin(GameWindow form) 
         {
@@ -37,7 +37,7 @@ namespace zap_program2024
             location.Y = floorLocation;
             location.X = rnd.Next(heroWidth, screen.Width - heroWidth);
         }
-        public void Initilaize()
+        public void Initialize()
         {
             GetRandomLocation();
             icon.Tag = "Coin";
@@ -54,16 +54,16 @@ namespace zap_program2024
             screen.Controls.Add(icon);
             icon.Visible = true;
             pickTimer.Interval = timeToPick;
-            pickTimer.Tick += Dissappear;
+            pickTimer.Tick += Disappear;
             pickTimer.Start();
-            Availablable = true;
+            Available = true;
         }
-        private void Dissappear(object sender, EventArgs e)
+        private void Disappear(object? sender, EventArgs e)
         {
             icon.Visible = false;
             screen.Controls.Remove(icon);
             pickTimer.Stop();
-            Availablable = false;
+            Available = false;
             screen.coinAppeared = false;
             screen.scoreBar.UpgradeReady = false;
         }
@@ -72,9 +72,9 @@ namespace zap_program2024
             screen.Controls.Remove(icon);
             icon.Visible = false;
             pickTimer.Stop();
-            Availablable = false;
+            Available = false;
         }
-        public bool IsHero(PictureBox pictureBox)
+        private static bool IsHero(PictureBox pictureBox)
         {
             if (pictureBox is not null && pictureBox.Tag?.ToString() == heroTag)
             {
@@ -86,9 +86,9 @@ namespace zap_program2024
         {
             foreach (var control in screen.Controls)
             {
-                if (control is PictureBox picturebox && IsHero(picturebox))
+                if (control is PictureBox pictureBox && IsHero(pictureBox))
                 {
-                    if (picturebox.Bounds.IntersectsWith(icon.Bounds))
+                    if (pictureBox.Bounds.IntersectsWith(icon.Bounds))
                     {
                         Take();
                         return true;

@@ -12,7 +12,6 @@ namespace zap_program2024.Entities
     
     public class MidEnemyEntity : AbstractEntity
     {
-        private int _difficulty;
         private int _health;
         private int _firePeriod;
         private int _projectileSpeed;
@@ -25,8 +24,8 @@ namespace zap_program2024.Entities
         public MidEnemyEntity(GameWindow form) : base(form)
         {
             _projectileSpeed = 6;
-            _firePeriod = 2000;
-            _speed = 4;
+            _firePeriod = 2750;
+            _speed = 3;
             _health = 2;
             _xPos = 0;
             _yPos = 0;

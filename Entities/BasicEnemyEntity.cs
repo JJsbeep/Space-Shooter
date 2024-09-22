@@ -11,9 +11,6 @@ namespace zap_program2024.Entities
 {
     public class BasicEnemyEntity : AbstractEntity
     {
-
-        private int _firePeriod;
-        private int _difficulty;
         private int _speed;
         private int _health;
         private int _xPos;

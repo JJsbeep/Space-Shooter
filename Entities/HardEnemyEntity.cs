@@ -11,7 +11,6 @@ namespace zap_program2024.Entities
 {
     public class HardEnemyEntity : AbstractEntity
     {
-        private int _difficulty;
         private int _firePeriod;
         private int _projectileSpeed;
         private int _speed;
@@ -22,9 +21,9 @@ namespace zap_program2024.Entities
         private bool _dead;
         public HardEnemyEntity(GameWindow form) : base(form)
         {
-            _firePeriod = 2000;
+            _firePeriod = 2250;
             _projectileSpeed = 8;
-            _speed = 3;
+            _speed = 4;
             _health = 3;
             _xPos = 0;
             _yPos = 0;

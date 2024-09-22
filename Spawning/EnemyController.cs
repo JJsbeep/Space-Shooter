@@ -12,43 +12,42 @@ namespace zap_program2024.Spawning
 {
     public class EnemyController
     {
-        GameWindow screen;
+        readonly GameWindow _screen;
 
         public EnemyController(GameWindow form)
         {
-            screen = form;
+            _screen = form;
         }
-        private const int enemyWidth = 77;
-        private const int enemyHeight = 72;
-        private const int enemiesAmount = 12;
-        private const int enemyLinesAmount = 4;
-        private int currShipIndex = 0;
-        NextEnemyPicker nextEnemyPicker = new NextEnemyPicker();
-        Random rnd = new Random();
-        private const int initialXpos = 500;
-        private const int initialYpos = 292;
-        private const int shiftX = 77;
-        private const int shiftY = 30;
-        private const int enemiesPerLine = 3;
-        private const int difficultyIncrement = 150;
-        private const int periodBound = 300;
-        private const int lowestAmount = 2;
-        private const int waveAmount = 6;
+        private const int EnemyWidth = 77;
+        private const int EnemyHeight = 72;
+        private const int EnemiesAmount = 12;
+        private int _currShipIndex = 0;
+        readonly NextEnemyPicker _nextEnemyPicker = new NextEnemyPicker();
+        readonly Random _rnd = new Random();
+        private const int InitialXpos = 500;
+        private const int InitialYpos = 292;
+        private const int ShiftX = 77;
+        private const int ShiftY = 30;
+        private const int EnemiesPerLine = 3;
+        private const int DifficultyIncrement = 50;
+        private const int PeriodBound = 500;
+        private const int LowestAmount = 3;
+        private const int WaveAmount = 5;
 
-        private static List<(int, int)> enemyDifficulutyChanceToSpawn = new List<(int, int)>()
-        {
+        private static readonly List<(int, int)> EnemyDifficulutyChanceToSpawn =
+        [
             (1, 65),
             (2, 20),
             (3, 10),
-            (4, 5),
-        };
+            (4, 5)
+        ];
 
-        private Vector2d spawnCoordinates = new(initialXpos, initialYpos);
+        private Vector2d _spawnCoordinates = new(InitialXpos, InitialYpos);
 
-        private List<AbstractEntity> Enemies = new List<AbstractEntity>();
+        private readonly List<AbstractEntity> _enemies = [];
 
-        private int movingPeriod = 2000;
-        private int spawnPeriod = 3000;
+        private readonly int _movingPeriod = 2500;
+        private readonly int _spawnPeriod = 3500;
 
         public List<int[]> NumsOfEnemiesOnLines = new List<int[]>() //each column determines type of enemies and value in it amount of enemies that will be spawned in lines
         {
@@ -58,29 +57,29 @@ namespace zap_program2024.Spawning
             new int[] {0, 1, 1, 1},
         };
 
-        Timer MoveControlTimer = new Timer();
-        Timer SpawnControlTimer = new Timer();
+        private readonly Timer _moveControlTimer = new Timer();
+        private readonly Timer _spawnControlTimer = new Timer();
 
         public void ResetIndexing()
         {
-            if(currShipIndex == enemiesAmount)
+            if(_currShipIndex == EnemiesAmount)
             {
-                currShipIndex = 0;
+                _currShipIndex = 0;
             }
         }
         private void InitializeMoveTimer()
         {
-            MoveControlTimer.Interval = movingPeriod;
-            MoveControlTimer.Enabled = true;
-            MoveControlTimer.Start();
-            MoveControlTimer.Tick += MoveTimer_Tick;
+            _moveControlTimer.Interval = _movingPeriod;
+            _moveControlTimer.Enabled = true;
+            _moveControlTimer.Start();
+            _moveControlTimer.Tick += MoveTimer_Tick;
         }
         private void InitializeSpawnTimer()
         {
-            SpawnControlTimer.Interval = spawnPeriod;
-            SpawnControlTimer.Enabled = true;
-            SpawnControlTimer.Start();
-            SpawnControlTimer.Tick += SpawnTimer_Tick;
+            _spawnControlTimer.Interval = _spawnPeriod;
+            _spawnControlTimer.Enabled = true;
+            _spawnControlTimer.Start();
+            _spawnControlTimer.Tick += SpawnTimer_Tick;
         }
         public void InitializeController()
         {
@@ -89,47 +88,48 @@ namespace zap_program2024.Spawning
         }
         private void DeleteDead()
         {
-            for (int i = 0; i < Enemies.Count; i++)
+            for (int i = 0; i < _enemies.Count; i++)
             {
-                if (Enemies[i].Dead)
+                if (_enemies[i].Dead)
                 {
-                    Enemies.RemoveAt(i);
+                    _enemies.RemoveAt(i);
                 }
             }
         }
-        public void MoveTimer_Tick(object sender, EventArgs e)
+        public void MoveTimer_Tick(object? sender, EventArgs e)
         {
+            DeleteDead();
             MoveEnemy();
-            currShipIndex++;
+            _currShipIndex++;
             ResetIndexing();
         }
-        public void SpawnTimer_Tick(object sender, EventArgs e)
+        public void SpawnTimer_Tick(object? sender, EventArgs e)
         {
-            if (Enemies.Count <= lowestAmount)
+            if (_enemies.Count <= LowestAmount)
             {
-                SpawnWave(waveAmount);
+                SpawnWave(WaveAmount);
             }
             Respawn();
         }
-        private AbstractEntity CreateEnemy(int enemydifficulty)
+        private AbstractEntity CreateEnemy(int enemyDifficulty)
         {
             AbstractEntity enemy;
-            switch (enemydifficulty)
+            switch (enemyDifficulty)
             {
                 case 1:
-                    enemy = new BasicEnemyEntity(screen);
+                    enemy = new BasicEnemyEntity(_screen);
                     break;
                 case 2:
-                    enemy = new MidEnemyEntity(screen);
+                    enemy = new MidEnemyEntity(_screen);
                     break;
                 case 3:
-                    enemy = new HardEnemyEntity(screen);
+                    enemy = new HardEnemyEntity(_screen);
                     break;
                 case 4:
-                    enemy = new BossEnemyEntity(screen);
+                    enemy = new BossEnemyEntity(_screen);
                     break;
                 default:
-                    throw new Exception($"Unknown difficulty: {enemydifficulty}");
+                    throw new Exception($"Unknown difficulty: {enemyDifficulty}");
             }
             return enemy;
         }
@@ -139,37 +139,37 @@ namespace zap_program2024.Spawning
             {
                 var newEnemy = CreateEnemy(enemyDifficulty);
                 SpawnEnemy(newEnemy);
-                Enemies.Add(newEnemy);
-                spawnCoordinates.X += shiftX;
+                _enemies.Add(newEnemy);
+                _spawnCoordinates.X += ShiftX;
             }
         }
         private void SetNewLineCoordinates()
         {
-            spawnCoordinates.Y -= shiftY;
-            spawnCoordinates.X = initialXpos;
+            _spawnCoordinates.Y -= ShiftY;
+            _spawnCoordinates.X = InitialXpos;
         }
         private void SpawnEnemy(AbstractEntity enemy)
         {
-            enemy.XPos = spawnCoordinates.X;
-            enemy.YPos = spawnCoordinates.Y;
+            enemy.XPos = _spawnCoordinates.X;
+            enemy.YPos = _spawnCoordinates.Y;
             enemy.Initialize();
-            screen.Controls.Add(enemy.icon);
+            _screen.Controls.Add(enemy.icon);
             enemy.InitializeLifeTimer();
         }
         public void SpawnInitialEnemyWave()
         {
-            var enemyDifficutly = 0;
+            var enemyDifficulty = 0;
             var enemyCounter = 0;
             foreach (var enemyLine in NumsOfEnemiesOnLines)
             {
-                enemyDifficutly = 1;
+                enemyDifficulty = 1;
                 enemyCounter = 0;
                 foreach (var enemyAmount in enemyLine)
                 {
-                    SpawnInitialEnemyGroup(enemyAmount, enemyDifficutly);
+                    SpawnInitialEnemyGroup(enemyAmount, enemyDifficulty);
                     enemyCounter += enemyAmount;
-                    enemyDifficutly++;
-                    if (enemyCounter >= enemiesPerLine)
+                    enemyDifficulty++;
+                    if (enemyCounter >= EnemiesPerLine)
                     {
                         SetNewLineCoordinates();
                     }
@@ -185,17 +185,17 @@ namespace zap_program2024.Spawning
         }
         private void FindValidIndex()
         {
-            for (int i = 0; i < Enemies.Count; i++)
+            for (int i = 0; i < _enemies.Count; i++)
             {
-                if (Enemies[i] != null && !Enemies[i].Dead)
+                if (_enemies[i] != null && !_enemies[i].Dead)
                 {
-                    currShipIndex = i;
+                    _currShipIndex = i;
                 }
             }
         }
         public void ValidateIndex()
         {
-            if(currShipIndex > Enemies.Count - 1)
+            if(_currShipIndex > _enemies.Count - 1)
             {
                 FindValidIndex();
             }
@@ -204,50 +204,39 @@ namespace zap_program2024.Spawning
         {
             DeleteDead();
             ValidateIndex();
-            Enemies[currShipIndex].StartOperating();
+            _enemies[_currShipIndex].StartOperating();
         }
         public void GetRandomSpawnCoords()
         {
-            spawnCoordinates.X = rnd.Next(enemyWidth, screen.Width - enemyWidth);
-            spawnCoordinates.Y = rnd.Next(enemyHeight, screen.Height / 3);
+            _spawnCoordinates.X = _rnd.Next(EnemyWidth, _screen.Width - EnemyWidth);
+            _spawnCoordinates.Y = _rnd.Next(EnemyHeight, _screen.Height / 3);
         }
         private void Respawn()
         {
-            var newEnemyDifficulty = nextEnemyPicker.GetBasedOnProbability(enemyDifficulutyChanceToSpawn);
+            var newEnemyDifficulty = _nextEnemyPicker.GetBasedOnProbability(EnemyDifficulutyChanceToSpawn);
             var newEnemy = CreateEnemy(newEnemyDifficulty);
             GetRandomSpawnCoords();
             SpawnEnemy(newEnemy);
-            Enemies.Add(newEnemy);
+            _enemies.Add(newEnemy);
         }
-        public void Pause()
-        {
-            foreach (var enemy in Enemies)
-            {
-                if (enemy != null)
-                {
-                    enemy.moveTimer.Stop();
-                    enemy.shootTimer.Stop();
-                }
-            }
-        }
-        public void IncreaseDIfficulty()
+        public void IncreaseDifficulty()
         {
             var j = 0;
             var increment = 3; //value that determines shift in chances of spawning enemy, based on their strength
-            for (var i = 0; i < enemyDifficulutyChanceToSpawn.Count; i++)
+            for (var i = 0; i < EnemyDifficulutyChanceToSpawn.Count; i++)
             {
-                if (enemyDifficulutyChanceToSpawn[i].Item2 > 0)
+                if (EnemyDifficulutyChanceToSpawn[i].Item2 > 0)
                 {
                     j = i;     
-                    if (enemyDifficulutyChanceToSpawn[i].Item2 < increment)
+                    if (EnemyDifficulutyChanceToSpawn[i].Item2 < increment)
                     {
-                        increment = enemyDifficulutyChanceToSpawn[i].Item2;
+                        increment = EnemyDifficulutyChanceToSpawn[i].Item2;
                     }
                     ShiftSpawnChances(i, -increment); //chances to spawn a weaker ship will dencrease
                     break;
                 }
             }
-            for (var i = j + 1; i < enemyDifficulutyChanceToSpawn.Count; i++)
+            for (var i = j + 1; i < EnemyDifficulutyChanceToSpawn.Count; i++)
             {
                 if (increment > 0)
                 {
@@ -261,21 +250,21 @@ namespace zap_program2024.Spawning
         }
         private void ShiftSpawnChances(int index, int shift)
         {
-            var newDifficultyChance = (enemyDifficulutyChanceToSpawn[index].Item1, enemyDifficulutyChanceToSpawn[index].Item2 + shift);
-            enemyDifficulutyChanceToSpawn[index] = newDifficultyChance;
+            var newDifficultyChance = (EnemyDifficulutyChanceToSpawn[index].Item1, EnemyDifficulutyChanceToSpawn[index].Item2 + shift);
+            EnemyDifficulutyChanceToSpawn[index] = newDifficultyChance;
         }
         private void QuickenSpawning()
         {
-            if (SpawnControlTimer.Interval >= periodBound && MoveControlTimer.Interval >= periodBound)
+            if (_spawnControlTimer.Interval >= PeriodBound && _moveControlTimer.Interval >= PeriodBound)
             {
-                SpawnControlTimer.Interval -= difficultyIncrement;
-                MoveControlTimer.Interval -= difficultyIncrement;
+                _spawnControlTimer.Interval -= DifficultyIncrement;
+                _moveControlTimer.Interval -= DifficultyIncrement;
             }
         }
         public void Stop()
         {
-            SpawnControlTimer.Stop();
-            MoveControlTimer.Stop();
+            _spawnControlTimer.Stop();
+            _moveControlTimer.Stop();
         }
     }
 }

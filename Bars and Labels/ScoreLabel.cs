@@ -43,7 +43,7 @@ namespace zap_program2024
             {
                 UpgradeReady = true;
                 upgradeCheckpoint += checkpointsDistance;
-                screen.enemyController.IncreaseDIfficulty();
+                screen.enemyController.IncreaseDifficulty();
             }
 
         }

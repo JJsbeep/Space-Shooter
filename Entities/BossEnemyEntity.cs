@@ -21,7 +21,7 @@ namespace zap_program2024.Entities
 
         public BossEnemyEntity(GameWindow form) : base(form)
         {
-            _firePeriod = 2000;
+            _firePeriod = 2250;
             _projectileSpeed = 7;
             _speed = 3;
             _health = 4;
