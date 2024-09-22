@@ -19,25 +19,19 @@ namespace zap_program2024.Entities
         public int _speed;
         public int _xPos;
         public int _yPos;
-        public int _spawnPeriod;
         public bool _onScreen;
         public bool _dead;
 
         public MidEnemyEntity(GameWindow form) : base(form)
         {
-            _difficulty = 2;
             _projectileSpeed = 6;
-            _firePeriod = 2500;
+            _firePeriod = 2000;
             _speed = 4;
             _health = 2;
             _xPos = 0;
             _yPos = 0;
             _dead = false;
             _onScreen = false;
-        }
-        protected override int Difficulty
-        {
-            get => _difficulty;
         }
         protected override int FirePeriod
         {
@@ -69,11 +63,6 @@ namespace zap_program2024.Entities
             get => _yPos; 
             set => _yPos = value;
         }
-        public override int SpawnPeriod
-        {
-            get => _spawnPeriod;
-            set => _spawnPeriod = value;
-        }
         public override bool OnScreen
         {
             get => _onScreen;
@@ -84,7 +73,7 @@ namespace zap_program2024.Entities
             get => _dead;
             set => _dead = value;
         }
-        public override void InitializePicBox()
+        protected override void InitializePicBox()
         {
             icon.Name = "MidEnemyPicbox";
             icon.Tag = "Enemy"; 
@@ -93,10 +82,12 @@ namespace zap_program2024.Entities
         }
         public override void Shoot(object sender, EventArgs e)
         {
-            Projectile projectile = new Projectile(screen);
-            firedProjectiles.Add(projectile);
-            GetRandomTarget();
-            InitializeProjectile(projectile);
+            if (!Dead && IsPositionToShoot())
+            {
+                Projectile projectile = new Projectile(screen);
+                GetRandomTarget();
+                InitializeProjectile(projectile);
+            }
         }
         public override void Move_Tick(object sender, EventArgs e)
         {

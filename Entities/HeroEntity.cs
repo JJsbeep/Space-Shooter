@@ -14,6 +14,7 @@ using Timer = System.Windows.Forms.Timer;
 
 namespace zap_program2024.Entities
 {
+    //name is based on type of enemy and and entries of moveShootVector represents amount of moves to reach target X position and amount of moves of a projectile to reach the target
     public record struct EnemyData(string Name, Vector2d moveShootVector);
 
     public class HeroEntity : AbstractEntity
@@ -43,11 +44,12 @@ namespace zap_program2024.Entities
 
         //Automode variables
         private Dictionary<int, PictureBox> foundEnemies; //values will be vector that determines enenemy's movement
+        private Dictionary<string, int> upgradeCodes;
         private bool canShoot = true;
         private Vector2d moveShoot = new Vector2d(); // Item.1 - Amount of moves(+to the right, -to the left), Item.2 - Amount of moves after which heor shoots
         private int shortestDistance = 0;
-        private int coinXCoord = -1;
-        private const int stepsAhead = 100;
+        private int coinXCoord = -1; //negative value if it is not present on the screen initially
+        private const int critHealthAmount = 3;
         private const string enemyTag = "Enemy";
         private const string enemyProjectileTag = "ProjectileEnemy";
         private static readonly List<string> dangerTags = new List<string>() { enemyTag, enemyProjectileTag};
@@ -56,7 +58,8 @@ namespace zap_program2024.Entities
         private const int shootBound = 5;
         private readonly Vector2d zeroVector = new Vector2d(0, 0);
         private EnemyData closestEnemyData;
-        private int lastEvenlyUpgrade = 0;
+        private int lastEvenlyUpgrade;
+
 
 
         public HeroEntity(GameWindow form) : base(form)
@@ -74,6 +77,13 @@ namespace zap_program2024.Entities
             _autoMode = true;
             foundEnemies = new Dictionary<int, PictureBox>();
             closestEnemyData = new EnemyData("no data", zeroVector);
+            upgradeCodes = new Dictionary<string, int> {
+                {"NoUpgrade", 0 },
+                {"Speed", 1 },
+                {"ProjectileSpeed", 2 },
+                {"Health", 3 },
+            };
+            lastEvenlyUpgrade = upgradeCodes["NoUpgrade"];
         }
         public bool ShootingReady
         {
@@ -123,7 +133,7 @@ namespace zap_program2024.Entities
             get => _dead;
             set => _dead = value;
         }
-        public override void InitializePicBox()
+        protected override void InitializePicBox()
         {
             base.InitializePicBox();
             icon.Name = "HeroPicbox";
@@ -204,10 +214,12 @@ namespace zap_program2024.Entities
             if (GotHit("ProjectileEnemy") || GotHit("Enemy"))
             {
                 Health--;
+                screen.healthBar.Update();
                 if (Health == 0)
                 {
                     Dead = true;
-                    DeleteObject(true);
+                    DeleteObject();
+                    screen.GameOver();
                     return false;
                 }
                 return true;
@@ -219,7 +231,6 @@ namespace zap_program2024.Entities
             if (!Dead)
             {
                 Projectile projectile = new Projectile(screen);
-                firedProjectiles.Add(projectile);
                 InitializeProjectile(projectile);
                 DeleteObject();
             }
@@ -235,6 +246,7 @@ namespace zap_program2024.Entities
         private void UpgradeHealth()
         {
             Health++;
+            screen.healthBar.Update();
         }
         private void UpgradeProjectileSpeed()
         {
@@ -261,7 +273,7 @@ namespace zap_program2024.Entities
         //automode
         private void Action()
         {
-            if (coinAvailable())
+            if (CoinAvailable())
             {
                 MoveForCoin();
             }
@@ -276,7 +288,8 @@ namespace zap_program2024.Entities
         }
         private bool CanShoot()
         {
-            if ((closestEnemyData.moveShootVector.X * Speed / FirePeriod) >= 1 || closestEnemyData.moveShootVector.X < shootBound)
+            if ((closestEnemyData.moveShootVector.X * Speed / FirePeriod) >= 1 ||
+                closestEnemyData.moveShootVector.X < shootBound) //checks if there is enought time to fire a projectile in order to be ready to fire when destination is reached
             {
                 return true;
             }
@@ -310,7 +323,6 @@ namespace zap_program2024.Entities
                 nextMove = FindSafeMove();
             }
             DoMove(nextMove);
-            //icon.Left += nextMove;
         }
         private void DoMove(int move)
         {
@@ -318,10 +330,11 @@ namespace zap_program2024.Entities
             {
                 MoveRight();
             }
-            else
+            else if (move < 0)
             {
                 MoveLeft();
             }
+            else { icon.Left += 0; }
         }
         private void MoveForCoin()
         {
@@ -350,21 +363,10 @@ namespace zap_program2024.Entities
         {
             foreach (var control in screen.Controls)
             {
-                var closest = 4000;
                 if (control is PictureBox pictureBox)
                 {
                     if (pictureBox.Tag is not null && pictureBox.Tag.ToString() == enemyTag)
                     {
-                        /*EnemyData enemyData = new EnemyData
-                        {
-                            Tag = pictureBox.Tag?.ToString(),
-                            Location = new Vector2d(pictureBox.Location.X, pictureBox.Location.Y),
-                        };
-                        if (foundEnemies.Keys.Contains(enemyData) && foundEnemies[key: enemyData] == zeroVector)
-                        {
-                            enemyData.
-                        }
-                        //Vector2d enemyLocation = (pictureBox)*/
                         SetClosestEnemyData(pictureBox);
                         Console.WriteLine("EnemyFound");
                     }
@@ -375,17 +377,8 @@ namespace zap_program2024.Entities
         {
             var newEnemyMoveShootVector = CalculateMoveShootDistance(pictureBox);
             var distanceNewEnemy = GetAbsoluteDistance(newEnemyMoveShootVector);
-            /*if (!foundEnemies.ContainsKey(distanceNewEnemy))
-            {
-                foundEnemies.Add(distanceNewEnemy, pictureBox);
-            }*/
-            /*if (shortestDistance != 0 && foundEnemies[shortestDistance] ==  null)
-            {
-                foundEnemies.Remove(shortestDistance);
-                shortestDistance = 4000;
-            }*/
             
-            if (closestEnemyData.Name == "no data")
+            if (closestEnemyData.Name == "no data") // no focus
             {
                 closestEnemyData.Name = pictureBox.Name;
                 closestEnemyData.moveShootVector = newEnemyMoveShootVector;
@@ -394,15 +387,15 @@ namespace zap_program2024.Entities
             else
             {
                 DislocateDead();
-                if (distanceNewEnemy < GetAbsoluteDistance(closestEnemyData.moveShootVector))
+                if (distanceNewEnemy < GetAbsoluteDistance(closestEnemyData.moveShootVector)) //closer enemy is found
                 {
                     closestEnemyData.moveShootVector = newEnemyMoveShootVector;
                     closestEnemyData.Name = pictureBox.Name;
                     shortestDistance = distanceNewEnemy;
                 }
-                else if (distanceNewEnemy == GetAbsoluteDistance(closestEnemyData.moveShootVector))
+                else if (distanceNewEnemy == GetAbsoluteDistance(closestEnemyData.moveShootVector)) //target as far as found object
                 {
-                    if (closestEnemyData.Name != pictureBox.Name)
+                    if (closestEnemyData.Name != pictureBox.Name) //sets the focus on a stronger enemy
                     {
                         closestEnemyData.Name = CompareEnemies(closestEnemyData.Name, pictureBox.Name);
                         if (closestEnemyData.Name == pictureBox.Name)
@@ -413,7 +406,7 @@ namespace zap_program2024.Entities
                 }
             }
         }
-        private string CompareEnemies(string name1,  string name2)
+        private string CompareEnemies(string name1,  string name2) //compares enemies based on strength
         {
             if (!diffiCultyDict.ContainsKey(name1) || !diffiCultyDict.ContainsKey(name2))
             {
@@ -430,12 +423,12 @@ namespace zap_program2024.Entities
             var result = new Vector2d();
             if (pictureBox.Left >= icon.Right)
             {
-                result.X = ((pictureBox.Left - icon.Right) / Speed) + 2; //+ icon.Width / 3;
+                result.X = ((pictureBox.Left - icon.Right) / Speed) + 2; 
                 Console.WriteLine(result.X);
             }
             else if (pictureBox.Right <= icon.Left)
             {
-                result.X = ((pictureBox.Right - icon.Left ) / Speed) - 2;// - icon.Width / 3;
+                result.X = ((pictureBox.Right - icon.Left ) / Speed) - 2;
                 Console.WriteLine(result.X);
             }
             else if (pictureBox.Right <= icon.Right)
@@ -447,7 +440,6 @@ namespace zap_program2024.Entities
                 result.X = (pictureBox.Left - icon.Left) / Speed;
             }
             result.Y = (icon.Top - pictureBox.Bottom) / ProjectileSpeed + 2;
-            Console.WriteLine("ygkhfkythcgt");
             return result;
         }  
         private int GetAbsoluteDistance(Vector2d moveVector)
@@ -456,7 +448,7 @@ namespace zap_program2024.Entities
             result = Math.Abs(moveVector.X) + Math.Abs(moveVector.Y);
             return result;
         }
-        private void DislocateDead()
+        private void DislocateDead() // sets no focus when focused enemy is shot down
         {
             var focusPoint = new Point(icon.Left + closestEnemyData.moveShootVector.X, icon.Top - closestEnemyData.moveShootVector.Y - 2);
             foreach (var control in screen.Controls)
@@ -473,9 +465,8 @@ namespace zap_program2024.Entities
         }
         private bool AreaSafe(int moveToMake)
         {
-            Point newPoint = new Point();
             PictureBox newIcon = new PictureBox();
-            newIcon.Size = new Size(icon.Size.Width + (Math.Abs(2 * moveToMake)), icon.Size.Height + maxEnemyProjectileSpeed);
+            newIcon.Size = new Size(icon.Size.Width + (Math.Abs(2 * moveToMake)), icon.Size.Height);
             newIcon.Left = icon.Left + moveToMake;
             newIcon.Top = icon.Top + maxEnemyProjectileSpeed;
             if (!DangerInWay(newIcon))
@@ -488,7 +479,7 @@ namespace zap_program2024.Entities
         {
             foreach (var control in screen.Controls)
             {
-                if (control != null && control is PictureBox pictureBox && dangerTags.Contains(pictureBox.Tag?.ToString()))
+                if (control != null && control is PictureBox pictureBox && dangerTags.Contains(item: pictureBox.Tag?.ToString()))
                 {
                     if (pictureBox.Bounds.IntersectsWith(Area.Bounds))
                     {
@@ -498,7 +489,7 @@ namespace zap_program2024.Entities
             }
             return false;
         }
-        private bool coinAvailable()
+        private bool CoinAvailable()
         {
             foreach (var control in screen.Controls)
             {
@@ -510,28 +501,23 @@ namespace zap_program2024.Entities
             }
             return false;
         }
-        private int FindSafeMove()
+        private int FindSafeMove() // check whether it is safe to move to right, left, or stay at place
         {
             var moveVector = zeroVector;
             var move = 0;
-            /*for (int i = 0; i < 30; i++)
-            {*/
-                if (AreaSafe(Speed))
-                {
-                    move = Speed;
-                }
-                else if (AreaSafe(-Speed))
-                {
-                    move = -Speed;
-                }
-                return move;
-            /*}
-
-            closestEnemyData.moveShootVector = moveVector;*/
+            if (AreaSafe(Speed))
+            {
+                move = Speed;
+            }
+            else if (AreaSafe(-Speed))
+            {
+                move = -Speed;
+            }
+            return move;
         }
-        public void AutoUpgrade()
+        public void AutoUpgrade() //auto upgrades ship when a coin is picked up
         {
-            if (Health <= 3)
+            if (Health <= critHealthAmount)
             {
                 UpgradeHealth();
             }
@@ -541,9 +527,9 @@ namespace zap_program2024.Entities
             }
             screen.SetAfterCoinPicked();
         }
-        private void UpgradeEvenly()
+        private void UpgradeEvenly() // upgrades speed and projectile speed evenly
         {
-            if (lastEvenlyUpgrade == 0  || lastEvenlyUpgrade == 1)
+            if (lastEvenlyUpgrade == upgradeCodes["NoUpgrade"] || lastEvenlyUpgrade == upgradeCodes["Speed"])
             {
                 UpgradeProjectileSpeed();
                 return;

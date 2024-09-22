@@ -18,24 +18,18 @@ namespace zap_program2024.Entities
         public int _health;
         public int _xPos;
         public int _yPos;
-        public int _spawnPeriod;
         public bool _onScreen;
         public bool _dead;
         public HardEnemyEntity(GameWindow form) : base(form)
         {
             _firePeriod = 2000;
             _projectileSpeed = 8;
-            _difficulty = 3;
             _speed = 3;
             _health = 3;
             _xPos = 0;
             _yPos = 0;
             _dead = false;
             _onScreen = false;
-        }
-        protected override int Difficulty
-        {
-            get => _difficulty;
         }
         protected override int FirePeriod
         {
@@ -67,11 +61,6 @@ namespace zap_program2024.Entities
             get => _yPos; 
             set => _yPos = value;
         }
-        public override int SpawnPeriod
-        {
-            get => _spawnPeriod;
-            set => _spawnPeriod = value;
-        }
         public override bool OnScreen
         {
             get => _onScreen;
@@ -82,14 +71,14 @@ namespace zap_program2024.Entities
             get => _dead;
             set => _dead = value;
         }
-        public override void InitializePicBox()
+        protected override void InitializePicBox()
         {
             icon.Name = "HardEnemyPicbox";
             icon.Tag = "Enemy";
             icon.Image = Image.FromFile(@"..\..\..\images\HardEnemyShip.png");
             base.InitializePicBox();
         }
-        public override void GetMoveDirection()
+        protected override void GetMoveDirection()
         {
             LocateHero();
             moveDirection.X = heroLocation.X - icon.Location.X;

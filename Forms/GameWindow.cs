@@ -12,6 +12,7 @@ namespace zap_program2024
         public readonly int[] upgradeCodes = { 0, 1, 2, 3 };
         public EnemyController enemyController;
         public ScoreLabel scoreBar;
+        public HealthBar healthBar;
         public UpgradeMessage upgradeMessage;
         public HeroEntity hero;
         public Coin coin;
@@ -25,6 +26,7 @@ namespace zap_program2024
             hero = new HeroEntity(this);
             enemyController = new EnemyController(this);
             scoreBar = new ScoreLabel(this);
+            healthBar = new HealthBar(this);
             upgradeMessage = new UpgradeMessage(this);
             coin = new Coin(this);
         }
@@ -36,11 +38,11 @@ namespace zap_program2024
         {
             hero.Initialize();
             scoreBar.Initialize();
+            healthBar.Initialize();
             enemyController.InitializeController();
             upgradeMessage.Initialize();
             coin.Initilaize();
             enemyController.SpawnInitialEnemyWave();
-            //this.Controls.Add(hero.icon);
         }
         private void MainEvent(object sender, EventArgs e)
         {
@@ -48,9 +50,7 @@ namespace zap_program2024
             scoreBar.CheckUpgrade();
             if (scoreBar.UpgradeReady)
             {
-                 
-                 coinPicked = coin.PickedUp();
-                //scoreBar.Update();
+                coinPicked = coin.PickedUp();
                 if (!coin.Availablable && !coinAppeared)
                 {
                     coin.Appear();
@@ -61,7 +61,6 @@ namespace zap_program2024
                     upgradeMessage.Show();
                     upgradeAvailable = true;
                     hero.AutoUpgrade();
-                    //coinAppeared = false;
                 }
             }
         }
@@ -137,19 +136,11 @@ namespace zap_program2024
             GameTimer.Start();
         }
 
-        private void GameOver()
+        public void GameOver()
         {
+            GameTimer.Stop();
+            enemyController.Stop();
             MessageBox.Show($"GAME OVER\nSCORE: {scoreBar.ScoreCount}");
-        }
-
-        private void ScoreBar_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

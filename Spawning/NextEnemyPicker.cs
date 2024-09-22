@@ -10,7 +10,7 @@ namespace zap_program2024.Spawning
     {
         private Random rnd = new Random();
         private const int requiredProbability = 100;
-        //List in following functions has to be sorted based on probabilities
+        //list in following functions has to be sorted based on probabilities(in decreasing order)
         private int CalculateProbability(List<(int, int)> valueProbabilityDoubles)
         {
             var totalProbability = 0;

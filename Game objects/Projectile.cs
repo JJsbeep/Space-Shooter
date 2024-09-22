@@ -31,11 +31,8 @@ namespace zap_program2024
         public int Speed { get; set; } = 6;
         public PictureBox icon = new PictureBox();
         public Timer projectileSpread = new Timer();
-        public Vector2d travelShifts = new Vector2d();
-        public Vector2d curveCheckpoints = new(1, 12);
-        public Vector2d targetCoords = new Vector2d();
-        public Vector2d directionVector = new Vector2d();
-
+        private Vector2d travelShifts = new Vector2d(); //shift in X and Y position in travel
+        private Vector2d curveCheckpoints = new(1, 12); //size of curves for curvy movement
         public bool Off { get; set; } = false;
 
         private bool GotRightTarget(string targetTag, PictureBox target)
@@ -46,6 +43,7 @@ namespace zap_program2024
             }
             return false;
         }
+        //check if any of pictureboxes has been hit by a projectile and returns true if it hit a target
         private bool GotHit(string targetTag)
         {
             foreach(var control in screen.Controls)
@@ -61,6 +59,7 @@ namespace zap_program2024
             }
             return false;
         }
+        //check if projectile hit a target
         private bool CheckHit(string targetTag)
         {
             if (icon is not null)
@@ -90,7 +89,6 @@ namespace zap_program2024
             Speed = projectileSpeed;
             icon.Location = new Point(coordinates.X, coordinates.Y);
             icon.Size = new Size(size.X, size.Y);
-            //icon.Tag = "Projectile";
             icon.SizeMode = PictureBoxSizeMode.StretchImage;
             icon.BringToFront();
             screen.Controls.Add(icon);
@@ -114,30 +112,7 @@ namespace zap_program2024
             travelShifts.X = shifts.X;
             travelShifts.Y = shifts.Y;
         }
-        public void TravelStraight(object sender, EventArgs e)
-        {
-            /*if (!Off)
-            {
-                hit = CheckHit("Hero");
-                if (hit)
-                {
-                    Delete(true);
-                }
-                else
-                {
-                    icon.Left += travelShifts.X;
-                    icon.Top += travelShifts.Y;
-                    Delete();
-                }
-            }
-            else
-            {
-                projectileSpread?.Stop();
-            }*/
-            icon.Left += travelShifts.X;
-            icon.Top += travelShifts.Y;
-            Delete();
-        }
+        //enemy travel
         public void MoveStraight(object sender, EventArgs e)
         {
             icon.Left += travelShifts.X;
@@ -175,6 +150,7 @@ namespace zap_program2024
             }
             else { counter = 1; }
         }
+        //hero travel
         public void TravelUp(object sender, EventArgs e)
         {
             hit = CheckHit(enemyTag);

@@ -17,7 +17,7 @@ namespace zap_program2024.Entities
         protected const int windowWidth = 1300;
 
         protected Vector2d size = new (77,72);
-        protected Vector2d curveCheckpoints = new (1, 23);
+        protected Vector2d curveCheckpoints = new (1, 23); // size of vertical/horizontal movements
         protected Vector2d shootTargetCoordinates = new Vector2d();
         protected Vector2d moveDestination = new Vector2d();
         protected Vector2d heroLocation = new Vector2d();
@@ -26,23 +26,19 @@ namespace zap_program2024.Entities
         protected Vector2d moveShifts = new Vector2d();
         protected Vector2d shootShifts = new Vector2d();
         
-        public Vector2d spawnCoordinates = new Vector2d();
-        
         protected Random rnd = new Random();
 
         protected int moveDistance;
         protected int shootDistance;
 
-        private int counter = 1;
+        private int counter = 1;//counts horizontal and vertical movements
         private int sign = 1;
         private int aliveCheckPeriod = 1;
-
+        private const int maxShootPos = windowHeight * 3 / 4; // closest position to hero, when it is possible to fire
         protected virtual int FirePeriod { get; set; } = 2000;
         protected virtual int ProjectileSpeed { get; set; }
-        protected virtual int Difficulty { get; set; } = 0;
         public virtual int Speed { get; set; } = 1;
         public virtual int Health { get; set; } = 1;
-        public virtual int SpawnPeriod { get; set; }
         public virtual int XPos { get; set; } = 0;
         public virtual int YPos { get; set; } = 0;
         public virtual bool OnScreen { get; set; }
@@ -54,9 +50,6 @@ namespace zap_program2024.Entities
         public Timer moveTimer = new Timer();
         public Timer aliveTimer = new Timer();
         public GameWindow screen;
-        public List<Projectile> firedProjectiles = new List<Projectile>();
-        const int one = 1;
-
         protected Dictionary<string, int> diffiCultyDict = new Dictionary<string, int>()
         {
             {"BasicEnemyPicbox", 1 },
@@ -69,29 +62,30 @@ namespace zap_program2024.Entities
             screen = form;
         }
 
-        public bool IsOnScreen(PictureBox pictureBox)
+        private bool IsOnScreen(PictureBox pictureBox)
         {
             if (!Dead)
             { 
-                if (windowHeight >= pictureBox.Top && pictureBox.Bottom >= 0 && windowWidth >= pictureBox.Left && pictureBox.Right >= 0)
+                if (windowHeight >= pictureBox.Top && pictureBox.Bottom >= 0 &&
+                    windowWidth >= pictureBox.Left && pictureBox.Right >= 0) //chceckif picturebox fits on a screen
                 {
                     return true;
                 }
             }
             return false;
         }
-        public void GetBackUp()
+
+        //gets projectile back to the top of a screen if it falls out of it
+        private void GetBackUp()
         {
             if (!IsOnScreen(icon))
             {
                 icon.Top = 0;
+                icon.Left = windowWidth - icon.Left;
             }
         }
-
-        public void SetCoordinates(int x, int y)
-        {
-            icon.Location = new Point(x, y);
-        }
+        
+        //checks if given picturebox is hit by an enemy based on enemy tag
         private bool CausedByEnemy(string hitObjectTag, PictureBox pictureBox)
         {
             var tag  = hitObjectTag;
@@ -107,7 +101,8 @@ namespace zap_program2024.Entities
             }
             return false;
         }
-        public bool GotHit(string hitObjectTag)
+        //searches for all pictureboxes and checks if any of them was hit by an enemy based on given tag
+        protected bool GotHit(string hitObjectTag)
         {
             if (!Dead)
             {
@@ -125,25 +120,14 @@ namespace zap_program2024.Entities
             }
             return false;
         }
-        public void DeleteObject(bool force = false)
+        protected void DeleteObject()
         {
-            if (!force) 
-            { 
-                OnScreen = IsOnScreen(icon); 
-            }
-            if (force || !OnScreen)
-            {
-                shootTimer.Stop();
-                shootTimer.Dispose();
-                moveTimer.Stop();
-                moveTimer.Dispose();
-                screen.Controls.Remove(icon);
-                Dead = true;
-            }
-        }
-        public void SpawnEntity()
-        {
-            screen.Controls.Add(icon);
+            shootTimer.Stop();
+            shootTimer.Dispose();
+            moveTimer.Stop();
+            moveTimer.Dispose();
+            screen.Controls.Remove(icon);
+            Dead = true;
         }
         private bool TargetIsHero(PictureBox pictureBox)
         {
@@ -165,7 +149,7 @@ namespace zap_program2024.Entities
                 }
             }
         }
-        protected void AimForHero()
+        private void AimForHero()
         {
             LocateHero();
             shootTargetCoordinates.X = heroLocation.X;
@@ -176,25 +160,25 @@ namespace zap_program2024.Entities
             shootTargetCoordinates.X = rnd.Next(0, windowWidth);
             shootTargetCoordinates.Y = windowHeight;
         }
-        public virtual void GetProjectileDirection(Projectile projectile)
+        private void GetProjectileDirection(Projectile projectile)
         {
             projectileDirection.X = shootTargetCoordinates.X - projectile.icon.Location.X;
             projectileDirection.Y = shootTargetCoordinates.Y - projectile.icon.Location.Y;
         }
-        public virtual void GetMoveDirection()
+        protected virtual void GetMoveDirection()
         {
             if (moveDestination.X < icon.Location.X) { sign = -1; }
             else { sign = 1; }
             moveDirection.X = moveDestination.X - icon.Location.X;
             moveDirection.Y = moveDestination.Y - icon.Location.Y;
         }
-        public virtual void GetRandomMoveDestination()
+        private void GetRandomMoveDestination()
         {
             moveDestination.X = rnd.Next(0, windowWidth);
             moveDestination.Y = windowHeight;
         }
 
-        protected virtual void PrepareMovingToHero()
+        protected void PrepareMovingToHero()
         {
             LocateHero();
             moveDestination.X = heroLocation.X;
@@ -203,13 +187,14 @@ namespace zap_program2024.Entities
             GetDistance(moveDirection);
             moveShifts = GetShifts(moveDistance, Speed, moveDirection);
         }
-        protected int GetDistance(Vector2d directionVector)
+        private int GetDistance(Vector2d directionVector)
         {
             var distance = 0;
             distance = (int)Math.Sqrt(Math.Pow(directionVector.X, 2) + Math.Pow(directionVector.Y, 2));
             return distance;
         }
-        protected Vector2d GetShifts(int distance, int speed, Vector2d directionVector)
+        //returns X and Y shifts of movement
+        private Vector2d GetShifts(int distance, int speed, Vector2d directionVector)
         {
             Vector2d shifts = new Vector2d();
             var movesAmount = 0;
@@ -231,12 +216,19 @@ namespace zap_program2024.Entities
             projectileToSet.projectileSpread.Tick += projectileToSet.MoveStraight;
             projectileToSet.projectileSpread.Start();
         }
+        protected bool IsPositionToShoot()
+        {
+            if (icon.Bottom <= maxShootPos)
+            {
+                return false;
+            }
+            return true;
+        }
         public virtual void Shoot(object sender, EventArgs e)
         {
-            if (!Dead)
+            if (!Dead && IsPositionToShoot())
             {
                 Projectile projectile = new Projectile(screen);
-                firedProjectiles.Add(projectile);
                 AimForHero();
                 InitializeProjectile(projectile);
                 DeleteObject();
@@ -253,22 +245,11 @@ namespace zap_program2024.Entities
                 GetBackUp();
                 DeleteObject();
             }
-            /*else
-            {
-                foreach(var control in screen.Controls)
-                {
-                    if (control is Label label)
-                    {
-                        label.Text = 
-                    }
-                }
-            }*/
         }
         protected virtual void MoveCurvy(PictureBox pictureBox, Vector2d shifts)
         {
             if (IsAlive())
             {
-                //GetMoveDirection();
                 if (curveCheckpoints.X <= counter && counter < curveCheckpoints.Y / 2)
                 {
                     pictureBox.Left += sign * shifts.X;
@@ -295,7 +276,7 @@ namespace zap_program2024.Entities
             moveDistance = GetDistance(moveDirection);
             moveShifts = GetShifts(moveDistance, Speed, moveDirection);
         }
-        protected void InitializeShootingTimer()
+        private void InitializeShootingTimer()
         {
             shootTimer.Interval = FirePeriod;
             shootTimer.Tick += Shoot;
@@ -315,11 +296,10 @@ namespace zap_program2024.Entities
         }
         public virtual void StartOperating()
         {
-            //InitializeLifeTimer();
             InitializeMovingTimer();
             InitializeShootingTimer();
         }
-        protected void AliveCheck_Tick(object sender, EventArgs e)
+        private void AliveCheck_Tick(object sender, EventArgs e)
         {
             IsAlive();
         }
@@ -332,14 +312,14 @@ namespace zap_program2024.Entities
                 {
                     screen.scoreBar.Update();
                     Dead = true;
-                    DeleteObject(true);
+                    DeleteObject();
                     return false;
                 }
                 return true;
             }
             else { return true; }
         }
-        public virtual void InitializePicBox()
+        protected virtual void InitializePicBox()
         {
             icon.Location = new Point(XPos, YPos);
             icon.SizeMode = PictureBoxSizeMode.StretchImage;

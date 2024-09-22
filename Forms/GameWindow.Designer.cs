@@ -41,9 +41,8 @@
             // 
             // GameWindow
             // 
-            //AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            //BackColor = Color.FromArgb(0, 0, 64);
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             ClientSize = new Size(1282, 753);
             Name = "GameWindow";

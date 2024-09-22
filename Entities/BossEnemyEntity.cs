@@ -9,34 +9,27 @@ namespace zap_program2024.Entities
 {
     public class BossEnemyEntity : AbstractEntity
     {
-        public int _difficulty;
-        public int _firePeriod;
-        public int _projectileSpeed;
-        public int _speed;
-        public int _health;
-        public int _xPos;
-        public int _yPos;
-        public int _spawnPeriod;
-        public bool _onScreen;
-        public bool _dead;
-        public Vector2d _projectileSize;
+        private int _firePeriod;
+        private int _projectileSpeed;
+        private int _speed;
+        private int _health;
+        private int _xPos;
+        private int _yPos;
+        private bool _onScreen;
+        private bool _dead;
+        private Vector2d _projectileSize;
 
         public BossEnemyEntity(GameWindow form) : base(form)
         {
-            _firePeriod = 1800;
-            _projectileSpeed = 9;
-            _difficulty = 4;
-            _speed = 5;
-            _health = 6;
+            _firePeriod = 2000;
+            _projectileSpeed = 7;
+            _speed = 3;
+            _health = 4;
             _xPos = 0;
             _yPos = 0;
             _dead = false;
             _onScreen = false;
             _projectileSize = new Vector2d(39, 10);
-        }
-        protected override int Difficulty
-        {
-            get => _difficulty;
         }
         protected override int FirePeriod
         {
@@ -68,11 +61,6 @@ namespace zap_program2024.Entities
             get => _yPos;
             set => _yPos = value;
         }
-        public override int SpawnPeriod
-        {
-            get => _spawnPeriod;
-            set => _spawnPeriod = value;
-        }
         public override bool OnScreen
         {
             get => _onScreen;
@@ -88,14 +76,14 @@ namespace zap_program2024.Entities
             get => _projectileSize;
             set => _projectileSize = value;
         }
-        public override void InitializePicBox()
+        protected override void InitializePicBox()
         {
             icon.Name = "BossEnemyPicbox";
             icon.Tag = "Enemy";
             icon.Image = Image.FromFile(@"..\..\..\images\BossShip.png"); ;
             base.InitializePicBox();
         }
-        public override void GetMoveDirection()
+        protected override void GetMoveDirection()
         {
             LocateHero();
             moveDirection.X = heroLocation.X - icon.Location.X;

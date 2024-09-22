@@ -13,6 +13,7 @@ namespace zap_program2024
 {
     public class Coin
     {
+        
         private const int floorLocation = 657;
         private const string heroTag = "Hero";
         private Random rnd = new Random();
@@ -22,15 +23,19 @@ namespace zap_program2024
         public Vector2d size = new Vector2d(50, 50);
         public Timer pickTimer = new Timer();
         private const int timeToPick = 3200;
+        private int heroWidth;
         public bool Availablable { get; set; } = false;
+        
         public Coin(GameWindow form) 
         {
             screen = form;
+            heroWidth = screen.hero.icon.Size.Width;
         }
+         
         public void GetRandomLocation()
         {
             location.Y = floorLocation;
-            location.X = 1000;//rnd.Next(0, 1000);
+            location.X = rnd.Next(heroWidth, screen.Width - heroWidth);
         }
         public void Initilaize()
         {
@@ -42,7 +47,6 @@ namespace zap_program2024
             icon.Visible = false;
             icon.BackColor = Color.Transparent;
             icon.Size = new Size(size.X, size.Y);
-            //screen.Controls.Add(icon);
         }
         public void Appear()
         {

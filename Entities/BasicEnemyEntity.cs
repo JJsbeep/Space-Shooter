@@ -18,25 +18,18 @@ namespace zap_program2024.Entities
         public int _health;
         public int _xPos;
         public int _yPos;
-        public int _spawnPeriod;
         public bool _onScreen;
         public bool _dead;
 
         
         public BasicEnemyEntity(GameWindow form) : base(form)
         {
-            _difficulty = 1;
             _speed = 4;
             _health = 1;
             _xPos = 0;
             _yPos = 0;
-            _spawnPeriod = 2;
             _onScreen = false;
             _dead = false;
-        }
-        protected override int Difficulty
-        {
-            get => _difficulty;
         }
         public override int Speed
         {
@@ -58,11 +51,6 @@ namespace zap_program2024.Entities
             get => _yPos;
             set => _yPos = value;
         }
-        public override int SpawnPeriod 
-        {
-            get => _spawnPeriod;
-            set => _spawnPeriod = value;
-        }
         public override bool OnScreen
         {
             get => _onScreen;
@@ -73,14 +61,14 @@ namespace zap_program2024.Entities
             get => _dead;
             set => _dead = value;
         }
-        public override void InitializePicBox()
+        protected override void InitializePicBox()
         {
             icon.Name = "BasicEnemyPicbox";
             icon.Tag = "Enemy";
             icon.Image = Image.FromFile(@"..\..\..\images\BasicEnemyShip.png"); ;
             base.InitializePicBox();
         }
-        public override void GetMoveDirection()
+        protected override void GetMoveDirection()
         {
             base.GetMoveDirection();
         }
@@ -91,10 +79,9 @@ namespace zap_program2024.Entities
                 base.MoveStraight(icon, moveShifts);
             }
         }
-        //no shooting overriding since it does not shoot
+        //no shooting since basic type of enemy does not shoot
         public override void StartOperating()
         {
-            //InitializeLifeTimer();
             InitializeMovingTimer();
         }
     }
