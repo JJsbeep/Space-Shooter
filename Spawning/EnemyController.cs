@@ -34,12 +34,12 @@ namespace zap_program2024.Spawning
         private const int LowestAmount = 3;
         private const int WaveAmount = 5;
 
-        private static readonly List<(int, int)> EnemyDifficulutyChanceToSpawn =
+        private static readonly List<(int, int)> EnemyDifficultyChanceToSpawn =
         [
-            (1, 65),
-            (2, 20),
-            (3, 10),
-            (4, 5)
+            (1, 65), //BasicEnemy
+            (2, 20), //MidEnemy
+            (3, 10), //HardEnemy
+            (4, 5)  //BossEnemy
         ];
 
         private Vector2d _spawnCoordinates = new(InitialXpos, InitialYpos);
@@ -213,7 +213,7 @@ namespace zap_program2024.Spawning
         }
         private void Respawn()
         {
-            var newEnemyDifficulty = _nextEnemyPicker.GetBasedOnProbability(EnemyDifficulutyChanceToSpawn);
+            var newEnemyDifficulty = _nextEnemyPicker.GetBasedOnProbability(EnemyDifficultyChanceToSpawn);
             var newEnemy = CreateEnemy(newEnemyDifficulty);
             GetRandomSpawnCoords();
             SpawnEnemy(newEnemy);
@@ -223,20 +223,20 @@ namespace zap_program2024.Spawning
         {
             var j = 0;
             var increment = 3; //value that determines shift in chances of spawning enemy, based on their strength
-            for (var i = 0; i < EnemyDifficulutyChanceToSpawn.Count; i++)
+            for (var i = 0; i < EnemyDifficultyChanceToSpawn.Count; i++)
             {
-                if (EnemyDifficulutyChanceToSpawn[i].Item2 > 0)
+                if (EnemyDifficultyChanceToSpawn[i].Item2 > 0)
                 {
                     j = i;     
-                    if (EnemyDifficulutyChanceToSpawn[i].Item2 < increment)
+                    if (EnemyDifficultyChanceToSpawn[i].Item2 < increment)
                     {
-                        increment = EnemyDifficulutyChanceToSpawn[i].Item2;
+                        increment = EnemyDifficultyChanceToSpawn[i].Item2;
                     }
                     ShiftSpawnChances(i, -increment); //chances to spawn a weaker ship will dencrease
                     break;
                 }
             }
-            for (var i = j + 1; i < EnemyDifficulutyChanceToSpawn.Count; i++)
+            for (var i = j + 1; i < EnemyDifficultyChanceToSpawn.Count; i++)
             {
                 if (increment > 0)
                 {
@@ -250,8 +250,8 @@ namespace zap_program2024.Spawning
         }
         private void ShiftSpawnChances(int index, int shift)
         {
-            var newDifficultyChance = (EnemyDifficulutyChanceToSpawn[index].Item1, EnemyDifficulutyChanceToSpawn[index].Item2 + shift);
-            EnemyDifficulutyChanceToSpawn[index] = newDifficultyChance;
+            var newDifficultyChance = (EnemyDifficultyChanceToSpawn[index].Item1, EnemyDifficultyChanceToSpawn[index].Item2 + shift);
+            EnemyDifficultyChanceToSpawn[index] = newDifficultyChance;
         }
         private void QuickenSpawning()
         {
