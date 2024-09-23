@@ -21,7 +21,7 @@ namespace zap_program2024
 
         private void ExitButton_Click(object sender, EventArgs e)
         {
-            gameWindow.Hide();
+            Application.Exit();
         }
 
         private void ResumeButton_Click(object sender, EventArgs e)
