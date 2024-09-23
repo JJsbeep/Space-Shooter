@@ -26,6 +26,7 @@ namespace zap_program2024.Entities
         public bool moving;
         public bool movingLeft;
 
+
         private bool _autoMode;
 
         public int _firePeriod;
@@ -207,20 +208,32 @@ namespace zap_program2024.Entities
         }
         protected override bool IsAlive()
         {
-            if (GotHit("ProjectileEnemy") || GotHit("Enemy"))
+            if (!screen.gamePaused)
             {
-                Health--;
-                screen.healthBar.Update();
-                if (Health == 0)
+                if (GotHit("ProjectileEnemy") || GotHit("Enemy"))
                 {
-                    Dead = true;
-                    DeleteObject();
-                    screen.GameOver();
-                    return false;
+                    return Death();
                 }
-                return true;
+                else
+                {
+                    return true;
+                }
             }
-            else { return true; }
+            else {return true;}
+        }
+
+        private bool Death()
+        {
+            Health--;
+            screen.healthBar.Update();
+            if (Health == 0)
+            {
+                Dead = true;
+                DeleteObject();
+                screen.GameOver();
+                return false;
+            }
+            return true;
         }
         public void HeroShoot()
         {
@@ -273,17 +286,21 @@ namespace zap_program2024.Entities
         //automode
         private void Action()
         {
-            if (CoinAvailable())
+            if (!screen.gamePaused)
             {
-                MoveForCoin();
-            }
-            else
-            {
-                MoveForEnemy();
-            }
-            if (CanShoot() && FireReady())
-            {
-                HeroShoot();
+                if (CoinAvailable())
+                {
+                    MoveForCoin();
+                }
+                else
+                {
+                    MoveForEnemy();
+                }
+
+                if (CanShoot() && FireReady())
+                {
+                    HeroShoot();
+                }
             }
         }
         private bool CanShoot()

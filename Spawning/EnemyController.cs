@@ -266,5 +266,11 @@ namespace zap_program2024.Spawning
             _spawnControlTimer.Stop();
             _moveControlTimer.Stop();
         }
+
+        public void Resume()
+        {
+            _spawnControlTimer.Start();
+            _moveControlTimer.Start();
+        }
     }
 }

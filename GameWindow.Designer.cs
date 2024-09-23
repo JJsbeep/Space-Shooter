@@ -31,6 +31,7 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameWindow));
             GameTimer = new System.Windows.Forms.Timer(components);
+            button1 = new Button();
             SuspendLayout();
             // 
             // GameTimer
@@ -39,12 +40,26 @@
             GameTimer.Interval = 40;
             GameTimer.Tick += MainEvent;
             // 
+            // button1
+            // 
+            button1.BackColor = Color.Transparent;
+            button1.BackgroundImage = (Image)resources.GetObject("button1.BackgroundImage");
+            button1.Image = (Image)resources.GetObject("button1.Image");
+            button1.Location = new Point(1217, 41);
+            button1.Name = "button1";
+            button1.Size = new Size(29, 30);
+            button1.TabIndex = 0;
+            button1.TextAlign = ContentAlignment.MiddleRight;
+            button1.UseVisualStyleBackColor = false;
+            button1.Click += SettingsButton_Click;
+            // 
             // GameWindow
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             ClientSize = new Size(1282, 753);
+            Controls.Add(button1);
             Name = "GameWindow";
             Text = "Form1";
             Load += spaceship_shooter_Load;
@@ -55,5 +70,6 @@
 
         #endregion
         private System.Windows.Forms.Timer GameTimer;
+        private Button button1;
     }
 }

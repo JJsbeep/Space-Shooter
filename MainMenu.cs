@@ -15,6 +15,8 @@ namespace zap_program2024
         private Button ManualModeButton;
         private Button AutoModeButton;
         private Label GameName;
+        public GameWindow gameWindow;
+        public SettingsForm settingsForm;
 
         private void InitializeComponent()
         {
@@ -73,16 +75,24 @@ namespace zap_program2024
             Controls.Add(ManualModeButton);
             Name = "MainMenu";
             ResumeLayout(false);
+            //
+            // Game Window
+            //
+            gameWindow = new GameWindow();
+            //
+            // Settings Window
+            //
+            
         }
 
         public MainMenu()
         {
             InitializeComponent();
+            
         }
 
         private void ManualModeButton_Click(object sender, EventArgs e)
         {
-            GameWindow gameWindow = new GameWindow();
             Hide();
             gameWindow.SetAutoMode(false);
             gameWindow.ShowDialog();
@@ -91,7 +101,6 @@ namespace zap_program2024
 
         private void AutoModeButton_Click(object sender, EventArgs e)
         {
-            GameWindow gameWindow = new GameWindow();
             Hide();
             gameWindow.SetAutoMode(true);
             gameWindow.ShowDialog();

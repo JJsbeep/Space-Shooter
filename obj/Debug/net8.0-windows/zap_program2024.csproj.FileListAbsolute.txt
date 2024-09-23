@@ -17,3 +17,4 @@ C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\refint\zap_
 C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\zap_program2024.pdb
 C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\zap_program2024.genruntimeconfig.cache
 C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\ref\zap_program2024.dll
+C:\Users\juraj\source\repos\zap_program2024\obj\Debug\net8.0-windows\zap_program2024.SettingsForm.resources

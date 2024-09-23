@@ -17,6 +17,8 @@ namespace zap_program2024
         public bool upgradeAvailable = false;
         public bool coinAppeared = false;
         public bool coinPicked = false;
+        public bool gamePaused = false;
+        public SettingsForm settingsForm;
         public GameWindow()
         {
             InitializeComponent();
@@ -27,6 +29,7 @@ namespace zap_program2024
             healthBar = new HealthBar(this);
             upgradeMessage = new UpgradeMessage(this);
             coin = new Coin(this);
+            settingsForm = new SettingsForm(this);
         }
         public void SetAutoMode(bool isOn)
         {
@@ -58,7 +61,7 @@ namespace zap_program2024
                 {
                     upgradeMessage.Show();
                     upgradeAvailable = true;
-                    if (hero.AutoModeOn) 
+                    if (hero.AutoModeOn)
                     {
                         hero.AutoUpgrade();
                     }
@@ -131,12 +134,26 @@ namespace zap_program2024
                 hero.movingLeft = false;
             }
         }
-
         public void GameOver()
         {
             GameTimer.Stop();
             enemyController.Stop();
             MessageBox.Show($"GAME OVER\nSCORE: {scoreBar.ScoreCount}");
+        }
+
+        private void SettingsButton_Click(object sender, EventArgs e)
+        {
+            settingsForm.Show();
+            gamePaused = true;
+            enemyController.Stop();
+            coin.pickTimer.Stop();
+        }
+
+        public void Resume()
+        {
+            gamePaused = false;
+            enemyController.Resume();
+            coin.pickTimer.Start();
         }
     }
 }
