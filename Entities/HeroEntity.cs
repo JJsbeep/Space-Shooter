@@ -273,10 +273,10 @@ namespace zap_program2024.Entities
                     UpgradeSpeed();
                     break;
                 case 2:
-                    UpgradeHealth();
+                    UpgradeProjectileSpeed();
                     break;
                 case 3:
-                    UpgradeProjectileSpeed();
+                    UpgradeHealth();
                     break;
                 default:
                     throw new Exception("No upgrade for given code");

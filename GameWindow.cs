@@ -30,6 +30,7 @@ namespace zap_program2024
             upgradeMessage = new UpgradeMessage(this);
             coin = new Coin(this);
             settingsForm = new SettingsForm(this);
+            this.Focus();
         }
         public void SetAutoMode(bool isOn)
         {
@@ -68,16 +69,15 @@ namespace zap_program2024
                 }
             }
         }
-
-        private void KeyIsDown(object? sender, KeyEventArgs e)
+        public void KeyIsDown(object sender, KeyEventArgs e)
         {
             if (hero.AutoModeOn) { return; }
-            if (e.KeyCode is Keys.D or Keys.Right)
+            if (e.KeyCode == Keys.D || e.KeyCode == Keys.Right)
             {
                 hero.moving = true;
                 hero.movingLeft = false;
             }
-            if (e.KeyCode is Keys.A or Keys.Left)
+            if (e.KeyCode == Keys.A || e.KeyCode ==  Keys.Left)
             {
                 hero.moving = true;
                 hero.movingLeft = true;
@@ -90,7 +90,7 @@ namespace zap_program2024
                     hero.HeroShoot();
                 }
             }
-            if (e.KeyCode is Keys.D1 or Keys.NumPad1)
+            if (e.KeyCode == Keys.D1 || e.KeyCode == Keys.NumPad1)
             {
                 if (scoreBar.UpgradeReady && upgradeAvailable)
                 {
@@ -98,7 +98,7 @@ namespace zap_program2024
                     SetAfterCoinPicked();
                 }
             }
-            if (e.KeyCode is Keys.D2 or Keys.NumPad2)
+            if (e.KeyCode == Keys.D2 || e.KeyCode == Keys.NumPad2)
             {
                 if (scoreBar.UpgradeReady && upgradeAvailable)
                 {
@@ -106,7 +106,7 @@ namespace zap_program2024
                     SetAfterCoinPicked();
                 }
             }
-            if (e.KeyCode is Keys.D3 or Keys.NumPad3)
+            if (e.KeyCode == Keys.D3 || e.KeyCode == Keys.NumPad3)
             {
                 if (scoreBar.UpgradeReady && upgradeAvailable)
                 {
@@ -123,12 +123,12 @@ namespace zap_program2024
         }
         private void KeyIsUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode is Keys.D or Keys.Right)
+            if (e.KeyCode == Keys.D || e.KeyCode == Keys.Right)
             {
                 hero.moving = false;
                 hero.movingLeft = false;
             }
-            if (e.KeyCode is Keys.A or Keys.Left)
+            if (e.KeyCode == Keys.A || e.KeyCode == Keys.Left)
             {
                 hero.moving = false;
                 hero.movingLeft = false;
@@ -141,19 +141,33 @@ namespace zap_program2024
             MessageBox.Show($"GAME OVER\nSCORE: {scoreBar.ScoreCount}");
         }
 
-        private void SettingsButton_Click(object sender, EventArgs e)
+        public void Resume()
+        {
+            gamePaused = false; 
+            enemyController.Resume();
+            coin.pickTimer.Start();
+        }
+
+        private void SettingsButtonClick(object sender, EventArgs e)
         {
             settingsForm.Show();
             gamePaused = true;
             enemyController.Stop();
             coin.pickTimer.Stop();
         }
-
-        public void Resume()
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            gamePaused = false;
-            enemyController.Resume();
-            coin.pickTimer.Start();
+            if (keyData == Keys.D || keyData == Keys.Right ||
+                keyData == Keys.A || keyData == Keys.Left ||
+                keyData == Keys.Space ||
+                keyData == Keys.D1 || keyData == Keys.NumPad1 ||
+                keyData == Keys.D2 || keyData == Keys.NumPad2 ||
+                keyData == Keys.D3 || keyData == Keys.NumPad3)
+            {
+                KeyIsDown(this, new KeyEventArgs(keyData));
+                return true; // Indicate that the key event was handled
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
     }
 }

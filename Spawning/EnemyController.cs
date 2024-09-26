@@ -38,7 +38,7 @@ namespace zap_program2024.Spawning
         [
             (1, 65), //BasicEnemy
             (2, 20), //MidEnemy
-            (3, 10), //HardEnemy
+            (3, 10), //HardEnemy  
             (4, 5)  //BossEnemy
         ];
 
