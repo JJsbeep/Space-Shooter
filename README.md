@@ -1,8 +1,14 @@
-**Názov:**
-Vesmírna strieľačka
+**Title:**
+Space Shooter
 
-**Autor:**
+**Author:**
 Juraj Serafin
 
-**Popis:**
-2D strieľačka vesmírnych lodí. Po spustení sa zobrazí okno s možnosťou výberu herného módu. Hráčova loď sa pohybuje v spodnej časti obrazovky po X-ovej osi a strieľa projektily na flotily nepriateľských lodí nad ňou. Úlohou hráča je jednotlivé lode ničiť prostredníctvom vystrelených projektilov a tým zvyšovať svoje skóre, a zbierať hernú menu. Po nadobudnutí určitých mét skóre má hráč možnosť svoju loď vylepšovať v rôznych aspektoch za získanú menu. Hra beží donekonečna, skončí sa po vyčerpaní počtu životov po zásahoch nepriateľských lodí, prípadne ukončením aplikácie po stlačení tlačidla Exit, ktoré sa zobrazí po stlačení tlačidla s nastaveniami.
+**Description:**
+A 2D shooter game. The player's ship moves along the X-axis at the bottom of the screen, 
+firing projectiles at fleets of enemy ships above it. The player's task is to destroy each
+ship through the projectiles fired, thereby increasing his score and collecting in-game currency. 
+After gaining certain score metrics, the player has the option to upgrade his ship in various 
+aspects with the earned currency. The game runs indefinitely, ending after running out of lives 
+after hitting enemy ships, or by quitting the application by pressing the Exit button, which 
+appears after pressing the settings button.
